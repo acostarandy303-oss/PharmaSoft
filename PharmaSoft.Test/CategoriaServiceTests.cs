@@ -12,8 +12,16 @@ public class CategoriaServiceTests
 {
     private DbContextOptions<PharmaContext> CrearOpciones()
     {
+        // GitHub Actions automáticamente establece esta variable en "true"
+        bool enGitHub = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
+
+        // Si estamos en GitHub usa LocalDB, si estamos en tu PC usa SqlExpress
+        string servidor = enGitHub ? "(localdb)\\MSSQLLocalDB" : ".\\SqlExpress";
+
+        string connectionString = $"Data Source={servidor};Database=PharmaDb_Tests;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;";
+
         return new DbContextOptionsBuilder<PharmaContext>()
-            .UseSqlServer("Data Source=.\\SqlExpress;Database=PharmaDb_Tests;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;")
+            .UseSqlServer(connectionString)
             .Options;
     }
 
