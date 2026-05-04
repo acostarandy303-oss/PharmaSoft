@@ -1,0 +1,83 @@
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PharmaSoft.Data.Context;
+using PharmaSoft.Data.Models;
+using PharmaSoft.Services;
+
+namespace PharmaSoft.Tests;
+
+public class PagosClienteServiceTests
+{
+    private DbContextOptions<PharmaContext> CrearOpciones() =>
+        new DbContextOptionsBuilder<PharmaContext>()
+            .UseSqlServer("Data Source=.\\SqlExpress;Database=PharmaDb_Tests;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;")
+            .Options;
+
+    public PagosClienteServiceTests()
+    {
+        using var contexto = new PharmaContext(CrearOpciones());
+        contexto.Database.EnsureDeleted();
+        contexto.Database.EnsureCreated();
+    }
+
+    [Fact]
+    public async Task Guardar_NuevoPago_DebeInsertarCorrectamente()
+    {
+        var opciones = CrearOpciones();
+        using var contexto = new PharmaContext(opciones);
+
+        var cliente = new Cliente { Nombre = "Deudor" };
+        var venta = new Venta { Total = 1000m };
+        contexto.Clientes.Add(cliente);
+        contexto.Ventas.Add(venta);
+        await contexto.SaveChangesAsync();
+
+        var cxc = new CuentasPorCobrar { ClienteId = cliente.ClienteId, VentaId = venta.VentaId, MontoInicial = 1000m, SaldoPendiente = 1000m, FechaVencimiento = DateOnly.FromDateTime(DateTime.Now) };
+        contexto.CuentasPorCobrars.Add(cxc);
+        await contexto.SaveChangesAsync();
+
+        var servicio = new PagosClienteService(contexto);
+        var nuevoPago = new PagosCliente
+        {
+            CxCid = cxc.CxCid,
+            FechaPago = DateTime.Now,
+            MontoPagado = 500m,
+            MetodoPago = "Transferencia"
+        };
+
+        var resultado = await servicio.Guardar(nuevoPago);
+
+        Assert.True(resultado);
+        Assert.Equal(1, contexto.PagosClientes.Count());
+        Assert.Equal(500m, contexto.PagosClientes.First().MontoPagado);
+    }
+
+    [Fact]
+    public async Task Eliminar_PagoExistente_DebeRetornarTrue()
+    {
+        var opciones = CrearOpciones();
+        using var contexto = new PharmaContext(opciones);
+
+        var cliente = new Cliente { Nombre = "C" };
+        var venta = new Venta { Total = 100 };
+        contexto.Clientes.Add(cliente);
+        contexto.Ventas.Add(venta);
+        await contexto.SaveChangesAsync();
+
+        var cxc = new CuentasPorCobrar { ClienteId = cliente.ClienteId, VentaId = venta.VentaId, MontoInicial = 100, SaldoPendiente = 100, FechaVencimiento = DateOnly.FromDateTime(DateTime.Now) };
+        contexto.CuentasPorCobrars.Add(cxc);
+        await contexto.SaveChangesAsync();
+
+        var pago = new PagosCliente { CxCid = cxc.CxCid, MontoPagado = 50 };
+        contexto.PagosClientes.Add(pago);
+        await contexto.SaveChangesAsync();
+
+        var servicio = new PagosClienteService(contexto);
+        var resultadoEliminar = await servicio.Eliminar(pago.PagoClienteId);
+
+        Assert.True(resultadoEliminar);
+        Assert.Empty(contexto.PagosClientes);
+    }
+}
