@@ -2,42 +2,28 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PharmaSoft.Data.Context;
 using PharmaSoft.Data.Models;
 using PharmaSoft.Services;
+using PharmaSoft.Test.Infraestructura;
+using Xunit;
 
-namespace PharmaSoft.Tests;
+namespace PharmaSoft.Test;
 
 public class ProveedoreServiceTests
 {
-    private DbContextOptions<PharmaContext> CrearOpciones()
-    {
-        // GitHub Actions automáticamente establece esta variable en "true"
-        bool enGitHub = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
-
-        // Si estamos en GitHub usa LocalDB, si estamos en tu PC usa SqlExpress
-        string servidor = enGitHub ? "(localdb)\\MSSQLLocalDB" : ".\\SqlExpress";
-
-        string connectionString = $"Data Source={servidor};Database=PharmaDb_Tests;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;";
-
-        return new DbContextOptionsBuilder<PharmaContext>()
-            .UseSqlServer(connectionString)
-            .Options;
-    }
-
-    public ProveedoreServiceTests()
-    {
-        using var contexto = new PharmaContext(CrearOpciones());
-        contexto.Database.EnsureDeleted();
-        contexto.Database.EnsureCreated();
-    }
-
     [Fact]
     public async Task Guardar_NuevoProveedor_DebeInsertarCorrectamente()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
-        var servicio = new ProveedoreService(contexto);
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            // seed nothing; service will insert
+            await seedContext.SaveChangesAsync();
+        }
+
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var servicio = new ProveedoreService(context);
 
         var nuevoProveedor = new Proveedore
         {
@@ -46,28 +32,36 @@ public class ProveedoreServiceTests
             Telefono = "809-123-4567"
         };
 
+        // Act
         var resultado = await servicio.Guardar(nuevoProveedor);
 
+        // Assert
         Assert.True(resultado);
-        Assert.Equal(1, contexto.Proveedores.Count());
-        Assert.Equal("Distribuidora Nacional", contexto.Proveedores.First().NombreEmpresa);
+        Assert.Equal(1, context.Proveedores.Count());
+        Assert.Equal("Distribuidora Nacional", context.Proveedores.First().NombreEmpresa);
     }
 
     [Fact]
     public async Task Eliminar_ProveedorExistente_DebeRetornarTrue()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            var proveedorPrueba = new Proveedore { NombreEmpresa = "Laboratorios Z" };
+            seedContext.Proveedores.Add(proveedorPrueba);
+            await seedContext.SaveChangesAsync();
+        }
 
-        var proveedorPrueba = new Proveedore { NombreEmpresa = "Laboratorios Z" };
-        contexto.Proveedores.Add(proveedorPrueba);
-        await contexto.SaveChangesAsync();
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var servicio = new ProveedoreService(context);
+        var proveedorGuardado = await context.Proveedores.FirstAsync();
 
-        var servicio = new ProveedoreService(contexto);
+        // Act
+        var resultadoEliminar = await servicio.Eliminar(proveedorGuardado.ProveedorId);
 
-        var resultadoEliminar = await servicio.Eliminar(proveedorPrueba.ProveedorId);
-
+        // Assert
         Assert.True(resultadoEliminar);
-        Assert.Empty(contexto.Proveedores);
+        Assert.Empty(context.Proveedores);
     }
 }

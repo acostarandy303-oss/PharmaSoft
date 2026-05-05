@@ -1,74 +1,157 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PharmaSoft.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
 using PharmaSoft.Data.Models;
 using PharmaSoft.Services;
+using System;
+using System.Threading.Tasks;
+using PharmaSoft.Test.Infraestructura;
+using Xunit;
 
-namespace PharmaSoft.Tests;
+namespace PharmaSoft.Test;
 
 public class ClienteServiceTests
 {
-    private DbContextOptions<PharmaContext> CrearOpciones()
-    {
-        // GitHub Actions automáticamente establece esta variable en "true"
-        bool enGitHub = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
-
-        // Si estamos en GitHub usa LocalDB, si estamos en tu PC usa SqlExpress
-        string servidor = enGitHub ? "(localdb)\\MSSQLLocalDB" : ".\\SqlExpress";
-
-        string connectionString = $"Data Source={servidor};Database=PharmaDb_Tests;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;";
-
-        return new DbContextOptionsBuilder<PharmaContext>()
-            .UseSqlServer(connectionString)
-            .Options;
-    }
-
-    public ClienteServiceTests()
-    {
-        using var contexto = new PharmaContext(CrearOpciones());
-        contexto.Database.EnsureDeleted();
-        contexto.Database.EnsureCreated();
-    }
-
     [Fact]
-    public async Task Guardar_NuevoCliente_DebeInsertarCorrectamente()
+    public async Task Buscar_CuandoExisteCliente_RetornaEntidad()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
-        var servicio = new ClienteService(contexto);
-
-        var nuevoCliente = new Cliente
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
         {
-            Nombre = "Juan Pérez",
-            RncCedula = "402-0000000-1",
-            Telefono = "809-555-5555",
-            LimiteCredito = 5000.00m
-        };
+            seedContext.Clientes.Add(CreateCliente(id: 1, nombre: "Juan Pérez"));
+            await seedContext.SaveChangesAsync();
+        }
 
-        var resultado = await servicio.Guardar(nuevoCliente);
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var service = new ClienteService(context);
 
-        Assert.True(resultado);
-        Assert.Equal(1, contexto.Clientes.Count());
-        Assert.Equal("Juan Pérez", contexto.Clientes.First().Nombre);
+        // Act
+        var result = await service.Buscar(1);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(1, result!.ClienteId);
+        Assert.Equal("Juan Pérez", result.Nombre);
+        Assert.Empty(context.ChangeTracker.Entries());
     }
 
     [Fact]
-    public async Task Eliminar_ClienteExistente_DebeRetornarTrue()
+    public async Task Buscar_CuandoNoExisteCliente_RetornaNull()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
+        // Arrange
+        await using var context = TestDbContextFactory.CreateContext(TestDbContextFactory.NewDataBaseName());
+        var service = new ClienteService(context);
 
-        var clientePrueba = new Cliente { Nombre = "Maria Lopez", RncCedula = "001-0000000-2" };
-        contexto.Clientes.Add(clientePrueba);
-        await contexto.SaveChangesAsync();
+        // Act
+        var result = await service.Buscar(99);
 
-        var servicio = new ClienteService(contexto);
+        // Assert
+        Assert.Null(result);
+    }
 
-        var resultadoEliminar = await servicio.Eliminar(clientePrueba.ClienteId);
+    [Fact]
+    public async Task Listar_CuandoSeFiltraPorNombre_RetornaCoincidencias()
+    {
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            seedContext.Clientes.AddRange(
+                CreateCliente(id: 1, nombre: "Ana"),
+                CreateCliente(id: 2, nombre: "Antonio"),
+                CreateCliente(id: 3, nombre: "Beatriz")
+            );
+            await seedContext.SaveChangesAsync();
+        }
 
-        Assert.True(resultadoEliminar);
-        Assert.Empty(contexto.Clientes);
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var service = new ClienteService(context);
+
+        // Act
+        var result = await service.GetList(c => c.Nombre.StartsWith("An"));
+
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, c => c.ClienteId == 1);
+        Assert.Contains(result, c => c.ClienteId == 2);
+    }
+
+    [Fact]
+    public async Task Guardar_CuandoClienteNoExiste_InsertaYRetornaTrue()
+    {
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var service = new ClienteService(context);
+        var nuevo = CreateCliente(id: 0, nombre: "Carlos"); // ID 0 para insertar
+
+        // Act
+        var result = await service.Guardar(nuevo);
+
+        // Assert
+        Assert.True(result);
+        var saved = await context.Clientes.FirstOrDefaultAsync(c => c.Nombre == "Carlos");
+        Assert.NotNull(saved);
+        Assert.Equal("Carlos", saved!.Nombre);
+    }
+
+    [Fact]
+    public async Task Guardar_CuandoClienteExiste_ModificaYRetornaTrue()
+    {
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            seedContext.Clientes.Add(CreateCliente(id: 20, nombre: "Original"));
+            await seedContext.SaveChangesAsync();
+        }
+
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var service = new ClienteService(context);
+        var updated = CreateCliente(id: 20, nombre: "Modificado");
+
+        // Act
+        var result = await service.Guardar(updated);
+
+        // Assert
+        Assert.True(result);
+        var saved = await context.Clientes.FirstOrDefaultAsync(c => c.ClienteId == 20);
+        Assert.NotNull(saved);
+        Assert.Equal("Modificado", saved!.Nombre);
+    }
+
+    [Fact]
+    public async Task Eliminar_CuandoExisteCliente_LoBorraYRetornaTrue()
+    {
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            seedContext.Clientes.Add(CreateCliente(id: 30, nombre: "ParaBorrar"));
+            await seedContext.SaveChangesAsync();
+        }
+
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var service = new ClienteService(context);
+
+        // Act
+        var result = await service.Eliminar(30);
+
+        // Assert
+        Assert.True(result);
+        var eliminado = await context.Clientes.FindAsync(30);
+        Assert.Null(eliminado);
+    }
+
+    private static Cliente CreateCliente(int id, string nombre)
+    {
+        return new Cliente
+        {
+            ClienteId = id,
+            Nombre = nombre,
+            RncCedula = "",
+            Telefono = "",
+            Direccion = "",
+            LimiteCredito = 0m
+        };
     }
 }

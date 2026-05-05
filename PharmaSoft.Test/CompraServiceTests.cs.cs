@@ -2,87 +2,147 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PharmaSoft.Data.Context;
 using PharmaSoft.Data.Models;
 using PharmaSoft.Services;
+using PharmaSoft.Test.Infraestructura;
+using Xunit;
 
-namespace PharmaSoft.Tests;
+namespace PharmaSoft.Test;
 
 public class CompraServiceTests
 {
-    private DbContextOptions<PharmaContext> CrearOpciones()
-    {
-        // GitHub Actions automáticamente establece esta variable en "true"
-        bool enGitHub = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
-
-        // Si estamos en GitHub usa LocalDB, si estamos en tu PC usa SqlExpress
-        string servidor = enGitHub ? "(localdb)\\MSSQLLocalDB" : ".\\SqlExpress";
-
-        string connectionString = $"Data Source={servidor};Database=PharmaDb_Tests;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;";
-
-        return new DbContextOptionsBuilder<PharmaContext>()
-            .UseSqlServer(connectionString)
-            .Options;
-    }
-
-    public CompraServiceTests()
-    {
-        using var contexto = new PharmaContext(CrearOpciones());
-        contexto.Database.EnsureDeleted();
-        contexto.Database.EnsureCreated();
-    }
-
     [Fact]
     public async Task Guardar_NuevaCompra_DebeInsertarCorrectamente()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            var proveedor = CreateProveedor(nombre: "Distribuidora Salud");
+            seedContext.Proveedores.Add(proveedor);
+            await seedContext.SaveChangesAsync();
+        }
 
-        // 1. Crear dependencia (Proveedor)
-        var proveedor = new Proveedore { NombreEmpresa = "Distribuidora Salud" };
-        contexto.Proveedores.Add(proveedor);
-        await contexto.SaveChangesAsync();
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var proveedorGuardado = await context.Proveedores.FirstAsync();
+        var servicio = new CompraService(context);
 
-        var servicio = new CompraService(contexto);
         var nuevaCompra = new Compra
         {
-            ProveedorId = proveedor.ProveedorId,
+            ProveedorId = proveedorGuardado.ProveedorId,
             FechaCompra = DateTime.Now,
             TotalCompra = 15000.50m,
             TipoPago = "Crédito",
             NumeroFacturaProveedor = "FACT-001"
         };
 
+        // Act
         var resultado = await servicio.Guardar(nuevaCompra);
 
+        // Assert
         Assert.True(resultado);
-        Assert.Equal(1, contexto.Compras.Count());
-        Assert.Equal(15000.50m, contexto.Compras.First().TotalCompra);
+        Assert.Equal(1, context.Compras.Count());
+        Assert.Equal(15000.50m, context.Compras.First().TotalCompra);
     }
 
     [Fact]
     public async Task Eliminar_CompraExistente_DebeRetornarTrue()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
-
-        var proveedor = new Proveedore { NombreEmpresa = "Laboratorios X" };
-        contexto.Proveedores.Add(proveedor);
-        await contexto.SaveChangesAsync();
-
-        var compraPrueba = new Compra
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
         {
-            ProveedorId = proveedor.ProveedorId,
-            TotalCompra = 5000m
-        };
-        contexto.Compras.Add(compraPrueba);
-        await contexto.SaveChangesAsync();
+            var proveedor = CreateProveedor(nombre: "Laboratorios X");
+            seedContext.Proveedores.Add(proveedor);
+            await seedContext.SaveChangesAsync();
 
-        var servicio = new CompraService(contexto);
+            var compraPrueba = new Compra
+            {
+                ProveedorId = proveedor.ProveedorId,
+                TotalCompra = 5000m
+            };
+            seedContext.Compras.Add(compraPrueba);
+            await seedContext.SaveChangesAsync();
+        }
 
-        var resultadoEliminar = await servicio.Eliminar(compraPrueba.CompraId);
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var servicio = new CompraService(context);
 
+        var compraGuardada = await context.Compras.FirstAsync();
+
+        // Act
+        var resultadoEliminar = await servicio.Eliminar(compraGuardada.CompraId);
+
+        // Assert
         Assert.True(resultadoEliminar);
-        Assert.Empty(contexto.Compras);
+        Assert.Empty(context.Compras);
+    }
+
+    [Fact]
+    public async Task Buscar_CuandoExisteCompra_RetornaEntidad()
+    {
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            var proveedor = CreateProveedor(nombre: "Proveedor A");
+            seedContext.Proveedores.Add(proveedor);
+            await seedContext.SaveChangesAsync();
+
+            seedContext.Compras.Add(new Compra { ProveedorId = proveedor.ProveedorId, TotalCompra = 1234.56m });
+            await seedContext.SaveChangesAsync();
+        }
+
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var servicio = new CompraService(context);
+
+        // Act
+        var compra = await servicio.Buscar(1);
+
+        // Assert
+        Assert.NotNull(compra);
+        Assert.Equal(1, compra!.CompraId);
+        Assert.Equal(1234.56m, compra.TotalCompra);
+        Assert.Empty(context.ChangeTracker.Entries());
+    }
+
+    [Fact]
+    public async Task Listar_CuandoSeFiltraPorTotal_RetornaCoincidencias()
+    {
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            var proveedor = CreateProveedor(nombre: "Prov");
+            seedContext.Proveedores.Add(proveedor);
+            await seedContext.SaveChangesAsync();
+
+            seedContext.Compras.AddRange(
+                new Compra { ProveedorId = proveedor.ProveedorId, TotalCompra = 100m },
+                new Compra { ProveedorId = proveedor.ProveedorId, TotalCompra = 5000m },
+                new Compra { ProveedorId = proveedor.ProveedorId, TotalCompra = 10000m }
+            );
+            await seedContext.SaveChangesAsync();
+        }
+
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var servicio = new CompraService(context);
+
+        // Act
+        var resultado = await servicio.GetList(c => c.TotalCompra >= 5000m);
+
+        // Assert
+        Assert.Equal(2, resultado.Count);
+    }
+
+    private static Proveedore CreateProveedor(string nombre)
+    {
+        return new Proveedore
+        {
+            NombreEmpresa = nombre,
+            Contacto = string.Empty,
+            Telefono = string.Empty,
+            Email = string.Empty
+        };
     }
 }

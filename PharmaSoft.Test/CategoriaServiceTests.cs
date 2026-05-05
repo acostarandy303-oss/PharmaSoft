@@ -1,72 +1,154 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PharmaSoft.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
 using PharmaSoft.Data.Models;
 using PharmaSoft.Services;
+using System;
+using System.Threading.Tasks;
+using PharmaSoft.Test.Infraestructura;
+using Xunit;
 
-namespace PharmaSoft.Tests;
+namespace PharmaSoft.Test;
 
 public class CategoriaServiceTests
 {
-    private DbContextOptions<PharmaContext> CrearOpciones()
-    {
-        // GitHub Actions automáticamente establece esta variable en "true"
-        bool enGitHub = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
-
-        // Si estamos en GitHub usa LocalDB, si estamos en tu PC usa SqlExpress
-        string servidor = enGitHub ? "(localdb)\\MSSQLLocalDB" : ".\\SqlExpress";
-
-        string connectionString = $"Data Source={servidor};Database=PharmaDb_Tests;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;";
-
-        return new DbContextOptionsBuilder<PharmaContext>()
-            .UseSqlServer(connectionString)
-            .Options;
-    }
-
-    public CategoriaServiceTests()
-    {
-        using var contexto = new PharmaContext(CrearOpciones());
-        contexto.Database.EnsureDeleted();
-        contexto.Database.EnsureCreated();
-    }
-
     [Fact]
-    public async Task Guardar_NuevaCategoria_DebeInsertarCorrectamente()
+    public async Task Buscar_CuandoExisteCategoria_RetornaEntidad()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
-        var servicio = new CategoriaService(contexto);
-
-        var nuevaCategoria = new Categoria
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
         {
-            Nombre = "Vitaminas y Suplementos",
-            Descripcion = "Complejos vitamínicos diarios"
-        };
+            seedContext.Categorias.Add(CreateCategoria(id: 1, nombre: "Analgésicos"));
+            await seedContext.SaveChangesAsync();
+        }
 
-        var resultado = await servicio.Guardar(nuevaCategoria);
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var service = new CategoriaService(context);
 
-        Assert.True(resultado);
-        Assert.Equal(1, contexto.Categorias.Count());
-        Assert.Equal("Vitaminas y Suplementos", contexto.Categorias.First().Nombre);
+        // Act
+        var result = await service.Buscar(1);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(1, result!.CategoriaId);
+        Assert.Equal("Analgésicos", result.Nombre);
+        Assert.Empty(context.ChangeTracker.Entries());
     }
 
     [Fact]
-    public async Task Eliminar_CategoriaExistente_DebeRetornarTrue()
+    public async Task Buscar_CuandoNoExisteCategoria_RetornaNull()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
+        // Arrange
+        await using var context = TestDbContextFactory.CreateContext(TestDbContextFactory.NewDataBaseName());
+        var service = new CategoriaService(context);
 
-        var categoriaPrueba = new Categoria { Nombre = "Cuidado Personal" };
-        contexto.Categorias.Add(categoriaPrueba);
-        await contexto.SaveChangesAsync();
+        // Act
+        var result = await service.Buscar(99);
 
-        var servicio = new CategoriaService(contexto);
+        // Assert
+        Assert.Null(result);
+    }
 
-        var resultadoEliminar = await servicio.Eliminar(categoriaPrueba.CategoriaId);
+    [Fact]
+    public async Task Listar_CuandoSeFiltraPorNombre_RetornaCoincidencias()
+    {
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            seedContext.Categorias.AddRange(
+                CreateCategoria(id: 1, nombre: "Analgésicos"),
+                CreateCategoria(id: 2, nombre: "Antiinflamatorios"),
+                CreateCategoria(id: 3, nombre: "Antibióticos")
+            );
+            await seedContext.SaveChangesAsync();
+        }
 
-        Assert.True(resultadoEliminar);
-        Assert.Empty(contexto.Categorias);
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var service = new CategoriaService(context);
+
+        // Act
+        var result = await service.GetList(c => c.Nombre.StartsWith("Anti"));
+
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, c => c.CategoriaId == 2);
+        Assert.Contains(result, c => c.CategoriaId == 3);
+    }
+
+    [Fact]
+    public async Task Guardar_CuandoCategoriaNoExiste_InsertaYRetornaTrue()
+    {
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var service = new CategoriaService(context);
+        var nuevaCategoria = CreateCategoria(id: 0, nombre: "Vitaminas"); // ID 0 para insertar
+
+        // Act
+        var result = await service.Guardar(nuevaCategoria);
+
+        // Assert
+        Assert.True(result);
+        var saved = await context.Categorias.FirstOrDefaultAsync(c => c.Nombre == "Vitaminas");
+        Assert.NotNull(saved);
+        Assert.Equal("Vitaminas", saved!.Nombre);
+    }
+
+    [Fact]
+    public async Task Guardar_CuandoCategoriaExiste_ModificaYRetornaTrue()
+    {
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            seedContext.Categorias.Add(CreateCategoria(id: 20, nombre: "Original"));
+            await seedContext.SaveChangesAsync();
+        }
+
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var service = new CategoriaService(context);
+        var updated = CreateCategoria(id: 20, nombre: "Modificado");
+
+        // Act
+        var result = await service.Guardar(updated);
+
+        // Assert
+        Assert.True(result);
+        var saved = await context.Categorias.FirstOrDefaultAsync(c => c.CategoriaId == 20);
+        Assert.NotNull(saved);
+        Assert.Equal("Modificado", saved!.Nombre);
+    }
+
+    [Fact]
+    public async Task Eliminar_CuandoExisteCategoria_LoBorraYRetornaTrue()
+    {
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            seedContext.Categorias.Add(CreateCategoria(id: 30, nombre: "ParaBorrar"));
+            await seedContext.SaveChangesAsync();
+        }
+
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var service = new CategoriaService(context);
+
+        // Act
+        var result = await service.Eliminar(30);
+
+        // Assert
+        Assert.True(result);
+        var eliminado = await context.Categorias.FindAsync(30);
+        Assert.Null(eliminado);
+    }
+
+    private static Categoria CreateCategoria(int id, string nombre)
+    {
+        return new Categoria
+        {
+            CategoriaId = id,
+            Nombre = nombre,
+            Descripcion = "Descripcion de prueba"
+        };
     }
 }

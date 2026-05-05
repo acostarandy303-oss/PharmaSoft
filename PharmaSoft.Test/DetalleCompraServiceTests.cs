@@ -2,95 +2,111 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PharmaSoft.Data.Context;
 using PharmaSoft.Data.Models;
 using PharmaSoft.Services;
+using PharmaSoft.Test.Infraestructura;
+using Xunit;
 
-namespace PharmaSoft.Tests;
+namespace PharmaSoft.Test;
 
 public class DetalleCompraServiceTests
 {
-    private DbContextOptions<PharmaContext> CrearOpciones()
-    {
-        // GitHub Actions automáticamente establece esta variable en "true"
-        bool enGitHub = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
-
-        // Si estamos en GitHub usa LocalDB, si estamos en tu PC usa SqlExpress
-        string servidor = enGitHub ? "(localdb)\\MSSQLLocalDB" : ".\\SqlExpress";
-
-        string connectionString = $"Data Source={servidor};Database=PharmaDb_Tests;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;";
-
-        return new DbContextOptionsBuilder<PharmaContext>()
-            .UseSqlServer(connectionString)
-            .Options;
-    }
-
-    public DetalleCompraServiceTests()
-    {
-        using var contexto = new PharmaContext(CrearOpciones());
-        contexto.Database.EnsureDeleted();
-        contexto.Database.EnsureCreated();
-    }
-
     [Fact]
     public async Task Guardar_NuevoDetalle_DebeInsertarCorrectamente()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            var categoria = new Categoria { Nombre = "Cat" };
+            var proveedor = new Proveedore { NombreEmpresa = "Prov" };
+            seedContext.Categorias.Add(categoria);
+            seedContext.Proveedores.Add(proveedor);
+            await seedContext.SaveChangesAsync();
 
-        var categoria = new Categoria { Nombre = "Cat" };
-        var proveedor = new Proveedore { NombreEmpresa = "Prov" };
-        contexto.Categorias.Add(categoria);
-        contexto.Proveedores.Add(proveedor);
-        await contexto.SaveChangesAsync();
+            var medicamento = new Medicamento
+            {
+                Nombre = "Med",
+                CategoriaId = categoria.CategoriaId,
+                ProveedorId = proveedor.ProveedorId,
+                PrecioCompra = 10m,
+                PrecioVenta = 20m
+            };
 
-        var medicamento = new Medicamento { Nombre = "Med", CategoriaId = categoria.CategoriaId, ProveedorId = proveedor.ProveedorId, PrecioCompra = 10, PrecioVenta = 20 };
-        var compra = new Compra { ProveedorId = proveedor.ProveedorId, TotalCompra = 100m };
-        contexto.Medicamentos.Add(medicamento);
-        contexto.Compras.Add(compra);
-        await contexto.SaveChangesAsync();
+            var compra = new Compra { ProveedorId = proveedor.ProveedorId, TotalCompra = 100m };
+            seedContext.Medicamentos.Add(medicamento);
+            seedContext.Compras.Add(compra);
+            await seedContext.SaveChangesAsync();
+        }
 
-        var servicio = new DetalleCompraService(contexto);
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var compraGuardada = await context.Compras.FirstAsync();
+        var medicamentoGuardado = await context.Medicamentos.FirstAsync();
+        var servicio = new DetalleCompraService(context);
+
         var detalle = new DetalleCompra
         {
-            CompraId = compra.CompraId,
-            MedicamentoId = medicamento.MedicamentoId,
+            CompraId = compraGuardada.CompraId,
+            MedicamentoId = medicamentoGuardado.MedicamentoId,
             Cantidad = 10,
             PrecioCostoUnitario = 10m
         };
 
+        // Act
         var resultado = await servicio.Guardar(detalle);
 
+        // Assert
         Assert.True(resultado);
-        Assert.Equal(1, contexto.DetalleCompras.Count());
+        Assert.Equal(1, context.DetalleCompras.Count());
     }
 
     [Fact]
     public async Task Eliminar_DetalleExistente_DebeRetornarTrue()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            var categoria = new Categoria { Nombre = "C" };
+            var proveedor = new Proveedore { NombreEmpresa = "P" };
+            seedContext.Categorias.Add(categoria);
+            seedContext.Proveedores.Add(proveedor);
+            await seedContext.SaveChangesAsync();
 
-        var categoria = new Categoria { Nombre = "C" };
-        var proveedor = new Proveedore { NombreEmpresa = "P" };
-        contexto.Categorias.Add(categoria);
-        contexto.Proveedores.Add(proveedor);
-        await contexto.SaveChangesAsync();
+            var medicamento = new Medicamento
+            {
+                Nombre = "M",
+                CategoriaId = categoria.CategoriaId,
+                ProveedorId = proveedor.ProveedorId,
+                PrecioCompra = 1m,
+                PrecioVenta = 2m
+            };
 
-        var medicamento = new Medicamento { Nombre = "M", CategoriaId = categoria.CategoriaId, ProveedorId = proveedor.ProveedorId, PrecioCompra = 1, PrecioVenta = 2 };
-        var compra = new Compra { ProveedorId = proveedor.ProveedorId, TotalCompra = 10 };
-        contexto.Medicamentos.Add(medicamento);
-        contexto.Compras.Add(compra);
-        await contexto.SaveChangesAsync();
+            var compra = new Compra { ProveedorId = proveedor.ProveedorId, TotalCompra = 10m };
+            seedContext.Medicamentos.Add(medicamento);
+            seedContext.Compras.Add(compra);
+            await seedContext.SaveChangesAsync();
 
-        var detalle = new DetalleCompra { CompraId = compra.CompraId, MedicamentoId = medicamento.MedicamentoId, Cantidad = 1, PrecioCostoUnitario = 10 };
-        contexto.DetalleCompras.Add(detalle);
-        await contexto.SaveChangesAsync();
+            var detalle = new DetalleCompra
+            {
+                CompraId = compra.CompraId,
+                MedicamentoId = medicamento.MedicamentoId,
+                Cantidad = 1,
+                PrecioCostoUnitario = 10m
+            };
+            seedContext.DetalleCompras.Add(detalle);
+            await seedContext.SaveChangesAsync();
+        }
 
-        var servicio = new DetalleCompraService(contexto);
-        var resultadoEliminar = await servicio.Eliminar(detalle.DetalleCompraId);
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var servicio = new DetalleCompraService(context);
+        var detalleGuardado = await context.DetalleCompras.FirstAsync();
 
+        // Act
+        var resultadoEliminar = await servicio.Eliminar(detalleGuardado.DetalleCompraId);
+
+        // Assert
         Assert.True(resultadoEliminar);
-        Assert.Empty(contexto.DetalleCompras);
+        Assert.Empty(context.DetalleCompras);
     }
 }

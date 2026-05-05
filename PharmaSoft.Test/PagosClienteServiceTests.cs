@@ -2,92 +2,99 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PharmaSoft.Data.Context;
 using PharmaSoft.Data.Models;
 using PharmaSoft.Services;
+using PharmaSoft.Test.Infraestructura;
+using Xunit;
 
-namespace PharmaSoft.Tests;
+namespace PharmaSoft.Test;
 
 public class PagosClienteServiceTests
 {
-    private DbContextOptions<PharmaContext> CrearOpciones()
-    {
-        // GitHub Actions automáticamente establece esta variable en "true"
-        bool enGitHub = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
-
-        // Si estamos en GitHub usa LocalDB, si estamos en tu PC usa SqlExpress
-        string servidor = enGitHub ? "(localdb)\\MSSQLLocalDB" : ".\\SqlExpress";
-
-        string connectionString = $"Data Source={servidor};Database=PharmaDb_Tests;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;";
-
-        return new DbContextOptionsBuilder<PharmaContext>()
-            .UseSqlServer(connectionString)
-            .Options;
-    }
-
-    public PagosClienteServiceTests()
-    {
-        using var contexto = new PharmaContext(CrearOpciones());
-        contexto.Database.EnsureDeleted();
-        contexto.Database.EnsureCreated();
-    }
-
     [Fact]
     public async Task Guardar_NuevoPago_DebeInsertarCorrectamente()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            var cliente = new Cliente { Nombre = "Deudor" };
+            var venta = new Venta { Total = 1000m };
+            seedContext.Clientes.Add(cliente);
+            seedContext.Ventas.Add(venta);
+            await seedContext.SaveChangesAsync();
 
-        var cliente = new Cliente { Nombre = "Deudor" };
-        var venta = new Venta { Total = 1000m };
-        contexto.Clientes.Add(cliente);
-        contexto.Ventas.Add(venta);
-        await contexto.SaveChangesAsync();
+            var cxc = new CuentasPorCobrar
+            {
+                ClienteId = cliente.ClienteId,
+                VentaId = venta.VentaId,
+                MontoInicial = 1000m,
+                SaldoPendiente = 1000m,
+                FechaVencimiento = DateOnly.FromDateTime(DateTime.Now)
+            };
+            seedContext.CuentasPorCobrars.Add(cxc);
+            await seedContext.SaveChangesAsync();
+        }
 
-        var cxc = new CuentasPorCobrar { ClienteId = cliente.ClienteId, VentaId = venta.VentaId, MontoInicial = 1000m, SaldoPendiente = 1000m, FechaVencimiento = DateOnly.FromDateTime(DateTime.Now) };
-        contexto.CuentasPorCobrars.Add(cxc);
-        await contexto.SaveChangesAsync();
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var cxcGuardada = await context.CuentasPorCobrars.FirstAsync();
+        var servicio = new PagosClienteService(context);
 
-        var servicio = new PagosClienteService(contexto);
         var nuevoPago = new PagosCliente
         {
-            CxCid = cxc.CxCid,
+            CxCid = cxcGuardada.CxCid,
             FechaPago = DateTime.Now,
             MontoPagado = 500m,
             MetodoPago = "Transferencia"
         };
 
+        // Act
         var resultado = await servicio.Guardar(nuevoPago);
 
+        // Assert
         Assert.True(resultado);
-        Assert.Equal(1, contexto.PagosClientes.Count());
-        Assert.Equal(500m, contexto.PagosClientes.First().MontoPagado);
+        Assert.Equal(1, context.PagosClientes.Count());
+        Assert.Equal(500m, context.PagosClientes.First().MontoPagado);
     }
 
     [Fact]
     public async Task Eliminar_PagoExistente_DebeRetornarTrue()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            var cliente = new Cliente { Nombre = "C" };
+            var venta = new Venta { Total = 100m };
+            seedContext.Clientes.Add(cliente);
+            seedContext.Ventas.Add(venta);
+            await seedContext.SaveChangesAsync();
 
-        var cliente = new Cliente { Nombre = "C" };
-        var venta = new Venta { Total = 100 };
-        contexto.Clientes.Add(cliente);
-        contexto.Ventas.Add(venta);
-        await contexto.SaveChangesAsync();
+            var cxc = new CuentasPorCobrar
+            {
+                ClienteId = cliente.ClienteId,
+                VentaId = venta.VentaId,
+                MontoInicial = 100m,
+                SaldoPendiente = 100m,
+                FechaVencimiento = DateOnly.FromDateTime(DateTime.Now)
+            };
+            seedContext.CuentasPorCobrars.Add(cxc);
+            await seedContext.SaveChangesAsync();
 
-        var cxc = new CuentasPorCobrar { ClienteId = cliente.ClienteId, VentaId = venta.VentaId, MontoInicial = 100, SaldoPendiente = 100, FechaVencimiento = DateOnly.FromDateTime(DateTime.Now) };
-        contexto.CuentasPorCobrars.Add(cxc);
-        await contexto.SaveChangesAsync();
+            var pago = new PagosCliente { CxCid = cxc.CxCid, MontoPagado = 50m };
+            seedContext.PagosClientes.Add(pago);
+            await seedContext.SaveChangesAsync();
+        }
 
-        var pago = new PagosCliente { CxCid = cxc.CxCid, MontoPagado = 50 };
-        contexto.PagosClientes.Add(pago);
-        await contexto.SaveChangesAsync();
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var servicio = new PagosClienteService(context);
+        var pagoGuardado = await context.PagosClientes.FirstAsync();
 
-        var servicio = new PagosClienteService(contexto);
-        var resultadoEliminar = await servicio.Eliminar(pago.PagoClienteId);
+        // Act
+        var resultadoEliminar = await servicio.Eliminar(pagoGuardado.PagoClienteId);
 
+        // Assert
         Assert.True(resultadoEliminar);
-        Assert.Empty(contexto.PagosClientes);
+        Assert.Empty(context.PagosClientes);
     }
 }

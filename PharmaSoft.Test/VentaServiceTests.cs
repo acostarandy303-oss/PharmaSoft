@@ -2,42 +2,28 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PharmaSoft.Data.Context;
 using PharmaSoft.Data.Models;
 using PharmaSoft.Services;
+using PharmaSoft.Test.Infraestructura;
+using Xunit;
 
-namespace PharmaSoft.Tests;
+namespace PharmaSoft.Test;
 
 public class VentaServiceTests
 {
-    private DbContextOptions<PharmaContext> CrearOpciones()
-    {
-        // GitHub Actions automáticamente establece esta variable en "true"
-        bool enGitHub = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
-
-        // Si estamos en GitHub usa LocalDB, si estamos en tu PC usa SqlExpress
-        string servidor = enGitHub ? "(localdb)\\MSSQLLocalDB" : ".\\SqlExpress";
-
-        string connectionString = $"Data Source={servidor};Database=PharmaDb_Tests;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;";
-
-        return new DbContextOptionsBuilder<PharmaContext>()
-            .UseSqlServer(connectionString)
-            .Options;
-    }
-
-    public VentaServiceTests()
-    {
-        using var contexto = new PharmaContext(CrearOpciones());
-        contexto.Database.EnsureDeleted();
-        contexto.Database.EnsureCreated();
-    }
-
     [Fact]
     public async Task Guardar_NuevaVenta_DebeInsertarCorrectamente()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
-        var servicio = new VentaService(contexto);
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            // no dependencies to seed
+            await seedContext.SaveChangesAsync();
+        }
+
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var servicio = new VentaService(context);
 
         var nuevaVenta = new Venta
         {
@@ -46,28 +32,36 @@ public class VentaServiceTests
             MetodoPago = "Efectivo"
         };
 
+        // Act
         var resultado = await servicio.Guardar(nuevaVenta);
 
+        // Assert
         Assert.True(resultado);
-        Assert.Equal(1, contexto.Ventas.Count());
-        Assert.Equal(1250.75m, contexto.Ventas.First().Total);
+        Assert.Equal(1, context.Ventas.Count());
+        Assert.Equal(1250.75m, context.Ventas.First().Total);
     }
 
     [Fact]
     public async Task Eliminar_VentaExistente_DebeRetornarTrue()
     {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
+        // Arrange
+        var dbName = TestDbContextFactory.NewDataBaseName();
+        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        {
+            var ventaPrueba = new Venta { Total = 300m, MetodoPago = "Tarjeta" };
+            seedContext.Ventas.Add(ventaPrueba);
+            await seedContext.SaveChangesAsync();
+        }
 
-        var ventaPrueba = new Venta { Total = 300m, MetodoPago = "Tarjeta" };
-        contexto.Ventas.Add(ventaPrueba);
-        await contexto.SaveChangesAsync();
+        await using var context = TestDbContextFactory.CreateContext(dbName);
+        var servicio = new VentaService(context);
+        var ventaGuardada = await context.Ventas.FirstAsync();
 
-        var servicio = new VentaService(contexto);
+        // Act
+        var resultadoEliminar = await servicio.Eliminar(ventaGuardada.VentaId);
 
-        var resultadoEliminar = await servicio.Eliminar(ventaPrueba.VentaId);
-
+        // Assert
         Assert.True(resultadoEliminar);
-        Assert.Empty(contexto.Ventas);
+        Assert.Empty(context.Ventas);
     }
 }

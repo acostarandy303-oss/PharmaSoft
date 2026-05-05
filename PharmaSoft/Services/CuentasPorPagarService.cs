@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PharmaSoft.Data.Context;
 using PharmaSoft.Data.Models;
+using Aplicada1.Core;   
+
 
 namespace PharmaSoft.Services;
 
@@ -33,10 +35,12 @@ public class CuentasPorPagarService(PharmaContext contexto) : IService<CuentasPo
 
     public async Task<bool> Eliminar(int id)
     {
-        var eliminados = await contexto.CuentasPorPagars
-            .Where(c => c.CxPid == id)
-            .ExecuteDeleteAsync();
+        var cuentas = await contexto.CuentasPorPagars.FindAsync(id);
+        if (cuentas == null)
+            return false;
 
+        contexto.CuentasPorPagars.Remove(cuentas);
+        var eliminados = await contexto.SaveChangesAsync();
         return eliminados > 0;
     }
 
@@ -47,7 +51,7 @@ public class CuentasPorPagarService(PharmaContext contexto) : IService<CuentasPo
             .FirstOrDefaultAsync(c => c.CxPid == id);
     }
 
-    public async Task<List<CuentasPorPagar>> Listar(Expression<Func<CuentasPorPagar, bool>> criterio)
+    public async Task<List<CuentasPorPagar>> GetList(Expression<Func<CuentasPorPagar, bool>> criterio)
     {
         return await contexto.CuentasPorPagars
             .AsNoTracking()

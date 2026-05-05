@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PharmaSoft.Data.Context;
 using PharmaSoft.Data.Models;
+using Aplicada1.Core;
 
 namespace PharmaSoft.Services;
 
@@ -33,10 +34,12 @@ public class VentaService(PharmaContext contexto) : IService<Venta, int>
 
     public async Task<bool> Eliminar(int id)
     {
-        var eliminados = await contexto.Ventas
-            .Where(v => v.VentaId == id)
-            .ExecuteDeleteAsync();
+        var venta = await contexto.Ventas.FindAsync(id);
+        if (venta == null)
+            return false;
 
+        contexto.Ventas.Remove(venta);
+        var eliminados = await contexto.SaveChangesAsync();
         return eliminados > 0;
     }
 
@@ -47,7 +50,9 @@ public class VentaService(PharmaContext contexto) : IService<Venta, int>
             .FirstOrDefaultAsync(v => v.VentaId == id);
     }
 
-    public async Task<List<Venta>> Listar(Expression<Func<Venta, bool>> criterio)
+   
+
+    public async  Task<List<Venta>> GetList(Expression<Func<Venta, bool>> criterio)
     {
         return await contexto.Ventas
             .AsNoTracking()
