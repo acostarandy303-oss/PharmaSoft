@@ -63,6 +63,7 @@
             label14 = new Label();
             button10 = new Button();
             button11 = new Button();
+            label15 = new Label();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             panel3.SuspendLayout();
@@ -72,17 +73,17 @@
             // 
             // label1
             // 
-            label1.BackColor = SystemColors.GradientInactiveCaption;
+            label1.BackColor = SystemColors.ActiveCaption;
             label1.Font = new Font("Segoe UI Black", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.Location = new Point(28, 17);
             label1.Name = "label1";
             label1.Size = new Size(255, 65);
             label1.TabIndex = 0;
-            label1.Text = "PharmaSoft";
+            label1.Text = "🏪PharmaSoft";
             // 
             // panel1
             // 
-            panel1.BackColor = SystemColors.ActiveCaption;
+            panel1.BackColor = SystemColors.ControlLightLight;
             panel1.Controls.Add(panel2);
             panel1.Controls.Add(button5);
             panel1.Controls.Add(button4);
@@ -98,104 +99,113 @@
             // button1
             // 
             button1.BackColor = SystemColors.ControlLightLight;
+            button1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button1.Location = new Point(28, 100);
             button1.Name = "button1";
-            button1.Size = new Size(141, 34);
+            button1.Size = new Size(186, 34);
             button1.TabIndex = 1;
-            button1.Text = "Inventario";
+            button1.Text = "📦Inventario";
             button1.TextAlign = ContentAlignment.TopLeft;
             button1.UseVisualStyleBackColor = false;
             // 
             // button2
             // 
             button2.BackColor = SystemColors.ControlLightLight;
+            button2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button2.Location = new Point(28, 140);
             button2.Name = "button2";
-            button2.Size = new Size(141, 34);
+            button2.Size = new Size(186, 34);
             button2.TabIndex = 2;
-            button2.Text = "Medicamentos";
+            button2.Text = "💊 Medicamentos";
             button2.TextAlign = ContentAlignment.TopLeft;
             button2.UseVisualStyleBackColor = false;
             // 
             // button3
             // 
             button3.BackColor = SystemColors.ControlLightLight;
+            button3.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button3.Location = new Point(28, 180);
             button3.Name = "button3";
-            button3.Size = new Size(141, 34);
+            button3.Size = new Size(186, 39);
             button3.TabIndex = 3;
-            button3.Text = "Categorias";
+            button3.Text = "🏷️Categorias";
             button3.TextAlign = ContentAlignment.TopLeft;
             button3.UseVisualStyleBackColor = false;
             // 
             // button4
             // 
             button4.BackColor = SystemColors.ControlLightLight;
+            button4.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button4.Location = new Point(28, 225);
             button4.Name = "button4";
-            button4.Size = new Size(141, 34);
+            button4.Size = new Size(186, 34);
             button4.TabIndex = 4;
-            button4.Text = "Lotes";
+            button4.Text = "\U0001f9f3Lotes";
             button4.TextAlign = ContentAlignment.TopLeft;
             button4.UseVisualStyleBackColor = false;
             // 
             // button5
             // 
-            button5.BackColor = SystemColors.HotTrack;
+            button5.BackColor = SystemColors.ControlLightLight;
+            button5.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button5.Location = new Point(28, 265);
             button5.Name = "button5";
-            button5.Size = new Size(141, 47);
+            button5.Size = new Size(186, 38);
             button5.TabIndex = 5;
-            button5.Text = "Ventas";
+            button5.Text = "📝Ventas";
             button5.TextAlign = ContentAlignment.TopLeft;
             button5.UseVisualStyleBackColor = false;
             // 
             // panel2
             // 
-            panel2.BackColor = SystemColors.HotTrack;
+            panel2.BackColor = Color.FromArgb(0, 192, 192);
             panel2.Controls.Add(button9);
             panel2.Controls.Add(button8);
             panel2.Controls.Add(button7);
             panel2.Controls.Add(button6);
-            panel2.Location = new Point(11, 318);
+            panel2.Location = new Point(11, 306);
             panel2.Name = "panel2";
-            panel2.Size = new Size(300, 305);
+            panel2.Size = new Size(300, 317);
             panel2.TabIndex = 6;
             // 
             // button6
             // 
+            button6.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button6.Location = new Point(26, 15);
             button6.Name = "button6";
-            button6.Size = new Size(132, 34);
+            button6.Size = new Size(177, 34);
             button6.TabIndex = 0;
-            button6.Text = "Clientes";
+            button6.Text = "\U0001f9d1‍\U0001f91d‍\U0001f9d1Clientes";
             button6.UseVisualStyleBackColor = true;
             // 
             // button7
             // 
+            button7.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button7.Location = new Point(26, 61);
             button7.Name = "button7";
-            button7.Size = new Size(132, 34);
+            button7.Size = new Size(177, 34);
             button7.TabIndex = 1;
-            button7.Text = "Compras";
+            button7.Text = "\U0001f6d2Compras";
             button7.UseVisualStyleBackColor = true;
             // 
             // button8
             // 
+            button8.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button8.Location = new Point(26, 112);
             button8.Name = "button8";
-            button8.Size = new Size(132, 34);
+            button8.Size = new Size(177, 34);
             button8.TabIndex = 2;
-            button8.Text = "Proveedores";
+            button8.Text = "🚛Proveedores";
             button8.UseVisualStyleBackColor = true;
             // 
             // button9
             // 
+            button9.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button9.Location = new Point(26, 164);
             button9.Name = "button9";
-            button9.Size = new Size(132, 34);
+            button9.Size = new Size(177, 34);
             button9.TabIndex = 3;
-            button9.Text = "Finanzas";
+            button9.Text = "💰Finanzas";
             button9.UseVisualStyleBackColor = true;
             // 
             // label2
@@ -222,6 +232,7 @@
             // panel3
             // 
             panel3.BackColor = SystemColors.ControlLightLight;
+            panel3.Controls.Add(label15);
             panel3.Controls.Add(dataGridView1);
             panel3.Controls.Add(label5);
             panel3.Controls.Add(textBox1);
@@ -424,6 +435,16 @@
             button11.Text = "Cancelar Venta";
             button11.UseVisualStyleBackColor = false;
             // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.BackColor = SystemColors.ActiveCaption;
+            label15.Location = new Point(373, 63);
+            label15.Name = "label15";
+            label15.Size = new Size(37, 25);
+            label15.TabIndex = 4;
+            label15.Text = "🔍";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -485,5 +506,6 @@
         private Label label13;
         private Button button11;
         private Button button10;
+        private Label label15;
     }
 }
