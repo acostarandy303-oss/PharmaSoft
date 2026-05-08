@@ -173,7 +173,6 @@
             button5.Text = "📝Ventas";
             button5.TextAlign = ContentAlignment.TopLeft;
             button5.UseVisualStyleBackColor = false;
-            button5.Click += button5_Click;
             // 
             // button4
             // 
