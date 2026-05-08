@@ -13,7 +13,9 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // Esta es la cadena de conexión a tu SQL Server local
-        optionsBuilder.UseSqlServer("Server=.;Database=PharmaSoftDB;Trusted_Connection=True;TrustServerCertificate=True;");
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer("Server=.;Database=PharmaSoftDB;Trusted_Connection=True;TrustServerCertificate=True;");
+        }
     }
 }
