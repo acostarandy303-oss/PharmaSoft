@@ -44,11 +44,14 @@
             label2 = new Label();
             label3 = new Label();
             panel3 = new Panel();
-            label15 = new Label();
             dataGridView1 = new DataGridView();
             label5 = new Label();
-            textBox1 = new TextBox();
             label4 = new Label();
+            textBoxBuscar = new TextBox();
+            btnBuscar = new Button();
+            btnAgregar = new Button();
+            btnEditar = new Button();
+            btnEliminar = new Button();
             panel4 = new Panel();
             button11 = new Button();
             button10 = new Button();
@@ -64,11 +67,22 @@
             label7 = new Label();
             label6 = new Label();
             contextMenuStrip1 = new ContextMenuStrip(components);
+            verInventarioToolStripMenuItem = new ToolStripMenuItem();
+            buscarProductoToolStripMenuItem = new ToolStripMenuItem();
+            agregarMedicamentoToolStripMenuItem = new ToolStripMenuItem();
+            editarProductoToolStripMenuItem = new ToolStripMenuItem();
+            eliminarProductoToolStripMenuItem = new ToolStripMenuItem();
+            ajusteStockToolStripMenuItem = new ToolStripMenuItem();
+            entradaMercanciaToolStripMenuItem = new ToolStripMenuItem();
+            salidaMercanciaToolStripMenuItem = new ToolStripMenuItem();
+            productosAgotadosToolStripMenuItem = new ToolStripMenuItem();
+            proximosAVencerToolStripMenuItem = new ToolStripMenuItem();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             panel4.SuspendLayout();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -195,6 +209,7 @@
             button2.Text = "💊 Medicamentos";
             button2.TextAlign = ContentAlignment.TopLeft;
             button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
             // 
             // btnInventario
             // 
@@ -233,35 +248,29 @@
             // panel3
             // 
             panel3.BackColor = SystemColors.ControlLightLight;
-            panel3.Controls.Add(label15);
             panel3.Controls.Add(dataGridView1);
             panel3.Controls.Add(label5);
-            panel3.Controls.Add(textBox1);
             panel3.Controls.Add(label4);
+            panel3.Controls.Add(textBoxBuscar);
+            panel3.Controls.Add(btnBuscar);
+            panel3.Controls.Add(btnAgregar);
+            panel3.Controls.Add(btnEditar);
+            panel3.Controls.Add(btnEliminar);
             panel3.Location = new Point(388, 190);
             panel3.Name = "panel3";
-            panel3.Size = new Size(552, 458);
+            panel3.Size = new Size(878, 458);
             panel3.TabIndex = 4;
-            // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.BackColor = SystemColors.ActiveCaption;
-            label15.Location = new Point(373, 63);
-            label15.Name = "label15";
-            label15.Size = new Size(37, 25);
-            label15.TabIndex = 4;
-            label15.Text = "🔍";
             // 
             // dataGridView1
             // 
             dataGridView1.BackgroundColor = SystemColors.ControlLightLight;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(13, 144);
+            dataGridView1.Location = new Point(13, 159);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 62;
-            dataGridView1.Size = new Size(523, 299);
+            dataGridView1.Size = new Size(823, 284);
             dataGridView1.TabIndex = 3;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick_1;
             // 
             // label5
             // 
@@ -272,13 +281,6 @@
             label5.Size = new Size(133, 28);
             label5.TabIndex = 2;
             label5.Text = "Venta Actual";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(13, 60);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(354, 31);
-            textBox1.TabIndex = 1;
             // 
             // label4
             // 
@@ -291,6 +293,49 @@
             label4.TabIndex = 0;
             label4.Text = "Punto de Venta";
             label4.Click += label4_Click;
+            // 
+            // textBoxBuscar
+            // 
+            textBoxBuscar.Location = new Point(13, 57);
+            textBoxBuscar.Name = "textBoxBuscar";
+            textBoxBuscar.Size = new Size(354, 31);
+            textBoxBuscar.TabIndex = 5;
+            // 
+            // btnBuscar
+            // 
+            btnBuscar.Location = new Point(373, 58);
+            btnBuscar.Name = "btnBuscar";
+            btnBuscar.Size = new Size(75, 33);
+            btnBuscar.TabIndex = 6;
+            btnBuscar.Text = "🔍Buscar medicamento";
+            btnBuscar.Click += btnBuscar_Click;
+            // 
+            // btnAgregar
+            // 
+            btnAgregar.Location = new Point(373, 14);
+            btnAgregar.Name = "btnAgregar";
+            btnAgregar.Size = new Size(75, 32);
+            btnAgregar.TabIndex = 7;
+            btnAgregar.Text = "➕ Agregar";
+            btnAgregar.Click += agregarMedicamentoToolStripMenuItem_Click;
+            // 
+            // btnEditar
+            // 
+            btnEditar.Location = new Point(463, 14);
+            btnEditar.Name = "btnEditar";
+            btnEditar.Size = new Size(75, 32);
+            btnEditar.TabIndex = 8;
+            btnEditar.Text = "✏ Editar";
+            btnEditar.Click += editarProductoToolStripMenuItem_Click;
+            // 
+            // btnEliminar
+            // 
+            btnEliminar.Location = new Point(561, 14);
+            btnEliminar.Name = "btnEliminar";
+            btnEliminar.Size = new Size(75, 31);
+            btnEliminar.TabIndex = 9;
+            btnEliminar.Text = "🗑 Eliminar";
+            btnEliminar.Click += eliminarProductoToolStripMenuItem_Click;
             // 
             // panel4
             // 
@@ -308,7 +353,7 @@
             panel4.Controls.Add(comboBox1);
             panel4.Controls.Add(label7);
             panel4.Controls.Add(label6);
-            panel4.Location = new Point(986, 190);
+            panel4.Location = new Point(1338, 155);
             panel4.Name = "panel4";
             panel4.Size = new Size(362, 443);
             panel4.TabIndex = 5;
@@ -443,25 +488,79 @@
             // contextMenuStrip1
             // 
             contextMenuStrip1.ImageScalingSize = new Size(24, 24);
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { verInventarioToolStripMenuItem, buscarProductoToolStripMenuItem, agregarMedicamentoToolStripMenuItem, editarProductoToolStripMenuItem, eliminarProductoToolStripMenuItem, ajusteStockToolStripMenuItem, entradaMercanciaToolStripMenuItem, salidaMercanciaToolStripMenuItem, productosAgotadosToolStripMenuItem, proximosAVencerToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 70);
+            contextMenuStrip1.Size = new Size(316, 324);
             // 
-            // ingresarProductoToolStripMenuItem
+            // verInventarioToolStripMenuItem
             // 
-            ingresarProductoToolStripMenuItem = new ToolStripMenuItem();
-            listaProductosToolStripMenuItem = new ToolStripMenuItem();
-            ingresarProductoToolStripMenuItem.Name = "ingresarProductoToolStripMenuItem";
-            ingresarProductoToolStripMenuItem.Size = new Size(180, 22);
-            ingresarProductoToolStripMenuItem.Text = "Ingresar producto";
-            ingresarProductoToolStripMenuItem.Click += ingresarProductoToolStripMenuItem_Click;
-            listaProductosToolStripMenuItem.Name = "listaProductosToolStripMenuItem";
-            listaProductosToolStripMenuItem.Size = new Size(180, 22);
-            listaProductosToolStripMenuItem.Text = "Lista productos";
-            listaProductosToolStripMenuItem.Click += listaProductosToolStripMenuItem_Click;
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] {
-                ingresarProductoToolStripMenuItem,
-                listaProductosToolStripMenuItem
-            });
+            verInventarioToolStripMenuItem.Name = "verInventarioToolStripMenuItem";
+            verInventarioToolStripMenuItem.Size = new Size(315, 32);
+            verInventarioToolStripMenuItem.Text = "Ver inventario general";
+            verInventarioToolStripMenuItem.Click += verInventarioToolStripMenuItem_Click;
+            // 
+            // buscarProductoToolStripMenuItem
+            // 
+            buscarProductoToolStripMenuItem.Name = "buscarProductoToolStripMenuItem";
+            buscarProductoToolStripMenuItem.Size = new Size(315, 32);
+            buscarProductoToolStripMenuItem.Text = "Buscar producto";
+            buscarProductoToolStripMenuItem.Click += buscarProductoToolStripMenuItem_Click;
+            // 
+            // agregarMedicamentoToolStripMenuItem
+            // 
+            agregarMedicamentoToolStripMenuItem.Name = "agregarMedicamentoToolStripMenuItem";
+            agregarMedicamentoToolStripMenuItem.Size = new Size(315, 32);
+            agregarMedicamentoToolStripMenuItem.Text = "Agregar medicamento";
+            agregarMedicamentoToolStripMenuItem.Click += agregarMedicamentoToolStripMenuItem_Click;
+            // 
+            // editarProductoToolStripMenuItem
+            // 
+            editarProductoToolStripMenuItem.Name = "editarProductoToolStripMenuItem";
+            editarProductoToolStripMenuItem.Size = new Size(315, 32);
+            editarProductoToolStripMenuItem.Text = "Editar producto";
+            editarProductoToolStripMenuItem.Click += editarProductoToolStripMenuItem_Click;
+            // 
+            // eliminarProductoToolStripMenuItem
+            // 
+            eliminarProductoToolStripMenuItem.Name = "eliminarProductoToolStripMenuItem";
+            eliminarProductoToolStripMenuItem.Size = new Size(315, 32);
+            eliminarProductoToolStripMenuItem.Text = "Eliminar producto";
+            eliminarProductoToolStripMenuItem.Click += eliminarProductoToolStripMenuItem_Click;
+            // 
+            // ajusteStockToolStripMenuItem
+            // 
+            ajusteStockToolStripMenuItem.Name = "ajusteStockToolStripMenuItem";
+            ajusteStockToolStripMenuItem.Size = new Size(315, 32);
+            ajusteStockToolStripMenuItem.Text = "Ajuste de stock";
+            ajusteStockToolStripMenuItem.Click += ajusteStockToolStripMenuItem_Click;
+            // 
+            // entradaMercanciaToolStripMenuItem
+            // 
+            entradaMercanciaToolStripMenuItem.Name = "entradaMercanciaToolStripMenuItem";
+            entradaMercanciaToolStripMenuItem.Size = new Size(315, 32);
+            entradaMercanciaToolStripMenuItem.Text = "Entrada de mercancía";
+            entradaMercanciaToolStripMenuItem.Click += entradaMercanciaToolStripMenuItem_Click;
+            // 
+            // salidaMercanciaToolStripMenuItem
+            // 
+            salidaMercanciaToolStripMenuItem.Name = "salidaMercanciaToolStripMenuItem";
+            salidaMercanciaToolStripMenuItem.Size = new Size(315, 32);
+            salidaMercanciaToolStripMenuItem.Text = "Salida de mercancía";
+            salidaMercanciaToolStripMenuItem.Click += salidaMercanciaToolStripMenuItem_Click;
+            // 
+            // productosAgotadosToolStripMenuItem
+            // 
+            productosAgotadosToolStripMenuItem.Name = "productosAgotadosToolStripMenuItem";
+            productosAgotadosToolStripMenuItem.Size = new Size(315, 32);
+            productosAgotadosToolStripMenuItem.Text = "Productos agotados";
+            productosAgotadosToolStripMenuItem.Click += productosAgotadosToolStripMenuItem_Click;
+            // 
+            // proximosAVencerToolStripMenuItem
+            // 
+            proximosAVencerToolStripMenuItem.Name = "proximosAVencerToolStripMenuItem";
+            proximosAVencerToolStripMenuItem.Size = new Size(315, 32);
+            proximosAVencerToolStripMenuItem.Text = "Productos próximos a vencer";
+            proximosAVencerToolStripMenuItem.Click += proximosAVencerToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -484,6 +583,7 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -505,16 +605,30 @@
         private Label label2;
         private Label label3;
         private Panel panel3;
-        private TextBox textBox1;
         private Label label4;
         private DataGridView dataGridView1;
         private Label label5;
+        private TextBox textBoxBuscar;
+        private Button btnBuscar;
+        private Button btnAgregar;
+        private Button btnEditar;
+        private Button btnEliminar;
         private Panel panel4;
         private Label label6;
         private Label label8;
         private ComboBox comboBox1;
         private Label label7;
         private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem verInventarioToolStripMenuItem;
+        private ToolStripMenuItem buscarProductoToolStripMenuItem;
+        private ToolStripMenuItem agregarMedicamentoToolStripMenuItem;
+        private ToolStripMenuItem editarProductoToolStripMenuItem;
+        private ToolStripMenuItem eliminarProductoToolStripMenuItem;
+        private ToolStripMenuItem ajusteStockToolStripMenuItem;
+        private ToolStripMenuItem entradaMercanciaToolStripMenuItem;
+        private ToolStripMenuItem salidaMercanciaToolStripMenuItem;
+        private ToolStripMenuItem productosAgotadosToolStripMenuItem;
+        private ToolStripMenuItem proximosAVencerToolStripMenuItem;
         private ToolStripMenuItem ingresarProductoToolStripMenuItem;
         private ToolStripMenuItem listaProductosToolStripMenuItem;
         private Label label9;
@@ -526,6 +640,5 @@
         private Label label13;
         private Button button11;
         private Button button10;
-        private Label label15;
     }
 }

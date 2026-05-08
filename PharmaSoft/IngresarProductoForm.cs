@@ -39,14 +39,15 @@ namespace PharmaSoft
             var lblCategoria = new Label { Text = "Categoría:", Left = 10, Top = 100, Width = 100 };
             cbCategoria = new ComboBox { Left = 120, Top = 100, Width = 240, DropDownStyle = ComboBoxStyle.DropDownList };
 
-            var lblPrecioCompra = new Label { Text = "Precio Compra:", Left = 10, Top = 140, Width = 100 };
-            nudPrecioCompra = new NumericUpDown { Left = 120, Top = 140, Width = 120, DecimalPlaces = 2, Maximum = 1000000 };
+            var lblPrecio = new Label { Text = "Precio:", Left = 10, Top = 140, Width = 100 };
+            nudPrecioVenta = new NumericUpDown { Left = 120, Top = 140, Width = 120, DecimalPlaces = 2, Maximum = 1000000 };
 
-            var lblPrecioVenta = new Label { Text = "Precio Venta:", Left = 10, Top = 180, Width = 100 };
-            nudPrecioVenta = new NumericUpDown { Left = 120, Top = 180, Width = 120, DecimalPlaces = 2, Maximum = 1000000 };
+            var lblCantidad = new Label { Text = "Cantidad:", Left = 10, Top = 180, Width = 100 };
+            nudStockMinimo = new NumericUpDown { Left = 120, Top = 180, Width = 120, Maximum = 100000 };
 
-            var lblStock = new Label { Text = "Stock Min:", Left = 10, Top = 220, Width = 100 };
-            nudStockMinimo = new NumericUpDown { Left = 120, Top = 220, Width = 120, Maximum = 100000 };
+            var lblVenc = new Label { Text = "Fecha vencimiento:", Left = 10, Top = 220, Width = 100 };
+            var dtpVenc = new DateTimePicker { Left = 120, Top = 220, Width = 160, Format = DateTimePickerFormat.Short };
+            dtpVenc.Name = "dtpVencimiento";
 
             btnGuardar = new Button { Text = "Guardar", Left = 120, Top = 260, Width = 100 };
             btnCancelar = new Button { Text = "Cancelar", Left = 240, Top = 260, Width = 100 };
@@ -60,12 +61,12 @@ namespace PharmaSoft
             Controls.Add(txtCodigo);
             Controls.Add(lblCategoria);
             Controls.Add(cbCategoria);
-            Controls.Add(lblPrecioCompra);
-            Controls.Add(nudPrecioCompra);
-            Controls.Add(lblPrecioVenta);
+            Controls.Add(lblPrecio);
             Controls.Add(nudPrecioVenta);
-            Controls.Add(lblStock);
+            Controls.Add(lblCantidad);
             Controls.Add(nudStockMinimo);
+            Controls.Add(lblVenc);
+            Controls.Add(dtpVenc);
             Controls.Add(btnGuardar);
             Controls.Add(btnCancelar);
         }
@@ -133,13 +134,26 @@ namespace PharmaSoft
                     Nombre = txtNombre.Text.Trim(),
                     CodigoBarras = string.IsNullOrWhiteSpace(txtCodigo.Text) ? null : txtCodigo.Text.Trim(),
                     CategoriaId = categoriaId,
-                    PrecioCompra = nudPrecioCompra.Value,
+                    PrecioCompra = 0m,
                     PrecioVenta = nudPrecioVenta.Value,
                     StockMinimo = (int)nudStockMinimo.Value,
-                    ProveedorId = proveedor.ProveedorId
+                    ProveedorId = proveedor.ProveedorId,
+                    FechaVencimiento = Controls.Find("dtpVencimiento", true).FirstOrDefault() is DateTimePicker dtp ? DateOnly.FromDateTime(dtp.Value.Date) : null
                 };
 
                 db.Medicamentos.Add(medicamento);
+                db.SaveChanges();
+
+                // Crear lote inicial con la cantidad y fecha de vencimiento
+                var lote = new LotesInventario
+                {
+                    MedicamentoId = medicamento.MedicamentoId,
+                    NumeroLote = "LoteInicial",
+                    CantidadActual = (int)nudStockMinimo.Value,
+                    FechaVencimiento = medicamento.FechaVencimiento ?? DateOnly.FromDateTime(DateTime.Today),
+                    FechaIngreso = DateTime.Now
+                };
+                db.LotesInventarios.Add(lote);
                 db.SaveChanges();
 
                 MessageBox.Show($"Producto guardado con ID {medicamento.MedicamentoId}", "Éxito",
