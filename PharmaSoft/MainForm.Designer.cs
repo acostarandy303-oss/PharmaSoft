@@ -122,7 +122,7 @@
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(959, 449);
             Name = "MainForm";
@@ -130,6 +130,7 @@
             Load += Form1_Load;
             contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
