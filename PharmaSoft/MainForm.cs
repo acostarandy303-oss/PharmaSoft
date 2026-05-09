@@ -469,5 +469,92 @@ namespace PharmaSoft
                 MessageBox.Show($"Error cargando resumen de ventas: {ex.Message}", "Error");
             }
         }
+
+        private void BtnClickCategorias(object sender, EventArgs e)
+        {
+            // Evento para el botón de Categorías
+        }
+private void btnClickCategorias(object sender, EventArgs e)
+        {
+            try
+            {
+                // 1. Configuración de la Interfaz:
+                // En categorías quizás no necesites todos los botones del inventario.
+                // Aquí los activamos/desactivamos según tu necesidad:
+                if (textBoxBuscar != null) textBoxBuscar.Visible = true;
+                if (btnBuscar != null) btnBuscar.Visible = true;
+
+                // Si tienes botones específicos para agregar/editar categorías, úsalos.
+                // Si usas los mismos del inventario, asegúrate de que su lógica cambie.
+                if (btnAgregar != null) btnAgregar.Visible = true;
+                if (btnEditar != null) btnEditar.Visible = true;
+                if (btnEliminar != null) btnEliminar.Visible = true;
+
+                // 2. Cargar los datos desde la base de datos:
+                LoadCategorias();
+
+                // Opcional: Cambiar el título o algún label para indicar que estamos en "Categorías"
+                // this.Text = "PharmaSoft - Gestión de Categorías";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar las categorías: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Botón Clientes: mostrar lista de clientes registrados
+        private void VerClientesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using var db = new PharmaContext();
+                var clientes = db.Clientes
+                    .Select(c => new
+                    {
+                        c.ClienteId,
+                        c.Nombre,
+                        c.RncCedula,
+                        c.Telefono,
+                        c.Direccion,
+                        c.LimiteCredito,
+                        CuentasPendientes = c.CuentasPorCobrars.Where(cx => cx.Estado == "Pendiente").Sum(cx => cx.SaldoPendiente)
+                    })
+                    .ToList();
+
+                dataGridView1.Columns.Clear();
+                dataGridView1.AutoGenerateColumns = false;
+
+                // Id (oculto)
+                var colId = new DataGridViewTextBoxColumn()
+                {
+                    Name = "ClienteId",
+                    DataPropertyName = "ClienteId",
+                    Visible = false
+                };
+                dataGridView1.Columns.Add(colId);
+
+                // Columnas visibles
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "Nombre", DataPropertyName = "Nombre", HeaderText = "Nombre", Width = 200 });
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "RncCedula", DataPropertyName = "RncCedula", HeaderText = "RNC/Cédula", Width = 120 });
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "Telefono", DataPropertyName = "Telefono", HeaderText = "Teléfono", Width = 120 });
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "Direccion", DataPropertyName = "Direccion", HeaderText = "Dirección", Width = 200 });
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "LimiteCredito", DataPropertyName = "LimiteCredito", HeaderText = "Límite Crédito", Width = 120 });
+                var colCuentas = new DataGridViewTextBoxColumn { Name = "CuentasPendientes", DataPropertyName = "CuentasPendientes", HeaderText = "Pendiente", Width = 120 };
+                colCuentas.DefaultCellStyle.Format = "C2";
+                dataGridView1.Columns.Add(colCuentas);
+
+                dataGridView1.DataSource = clientes;
+
+                label3.Text = $"Clientes Registrados - Total: {clientes.Count}";
+                label4.Text = "Lista de Clientes";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error cargando clientes: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
+
+
 }

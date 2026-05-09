@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using PharmaSoft.Data.Context;
 using PharmaSoft.Data.Models;
+using PharmaSoft.Services;
 
 namespace PharmaSoft
 {
@@ -16,7 +17,9 @@ namespace PharmaSoft
         private Button btnAgregarVenta;
         private Button btnFinalizarVenta;
         private Button btnCancelar;
+        private TextBox txtNombreCliente;
         private decimal totalVentaTemp = 0m;
+        private int? clienteSeleccionadoId = null;
 
         public VentasForm()
         {
@@ -29,29 +32,35 @@ namespace PharmaSoft
         {
             Text = "Registro de Ventas del Día";
             Width = 700;
-            Height = 500;
+            Height = 550;
             StartPosition = FormStartPosition.CenterParent;
 
             var lblTitulo = new Label { Text = "VENTAS DEL DÍA", Left = 20, Top = 10, Width = 300, Font = new Font("Arial", 14, FontStyle.Bold) };
 
-            var lblProducto = new Label { Text = "Producto:", Left = 20, Top = 50, Width = 100 };
-            cbProducto = new ComboBox { Left = 130, Top = 50, Width = 300, DropDownStyle = ComboBoxStyle.DropDownList };
+            // Cliente
+            var lblCliente = new Label { Text = "Cliente:", Left = 20, Top = 50, Width = 100 };
+            txtNombreCliente = new TextBox { Left = 130, Top = 50, Width = 300 };
+            var btnBuscarCliente = new Button { Text = "🔍 Buscar", Left = 440, Top = 50, Width = 80 };
+            btnBuscarCliente.Click += BtnBuscarCliente_Click;
 
-            var lblCantidad = new Label { Text = "Cantidad:", Left = 440, Top = 50, Width = 80 };
-            nudCantidad = new NumericUpDown { Left = 530, Top = 50, Width = 80, Minimum = 1, Maximum = 10000 };
+            var lblProducto = new Label { Text = "Producto:", Left = 20, Top = 90, Width = 100 };
+            cbProducto = new ComboBox { Left = 130, Top = 90, Width = 300, DropDownStyle = ComboBoxStyle.DropDownList };
 
-            var lblPrecioT = new Label { Text = "Precio Unitario:", Left = 20, Top = 90, Width = 100 };
-            lblPrecio = new Label { Text = "0", Left = 130, Top = 90, Width = 100, BorderStyle = BorderStyle.FixedSingle };
+            var lblCantidad = new Label { Text = "Cantidad:", Left = 440, Top = 90, Width = 80 };
+            nudCantidad = new NumericUpDown { Left = 530, Top = 90, Width = 80, Minimum = 1, Maximum = 10000 };
 
-            var lblSubtotalT = new Label { Text = "Subtotal:", Left = 440, Top = 90, Width = 80 };
-            lblSubtotal = new Label { Text = "0", Left = 530, Top = 90, Width = 80, BorderStyle = BorderStyle.FixedSingle };
+            var lblPrecioT = new Label { Text = "Precio Unitario:", Left = 20, Top = 130, Width = 100 };
+            lblPrecio = new Label { Text = "0", Left = 130, Top = 130, Width = 100, BorderStyle = BorderStyle.FixedSingle };
 
-            btnAgregarVenta = new Button { Text = "➕ Agregar a Venta", Left = 130, Top = 130, Width = 150 };
+            var lblSubtotalT = new Label { Text = "Subtotal:", Left = 440, Top = 130, Width = 80 };
+            lblSubtotal = new Label { Text = "0", Left = 530, Top = 130, Width = 80, BorderStyle = BorderStyle.FixedSingle };
+
+            btnAgregarVenta = new Button { Text = "➕ Agregar a Venta", Left = 130, Top = 170, Width = 150 };
             btnAgregarVenta.Click += BtnAgregarVenta_Click;
 
-            var lblResumen = new Label { Text = "Resumen de Ventas del Día:", Left = 20, Top = 170, Width = 300, Font = new Font("Arial", 12, FontStyle.Bold) };
+            var lblResumen = new Label { Text = "Resumen de Ventas del Día:", Left = 20, Top = 210, Width = 300, Font = new Font("Arial", 12, FontStyle.Bold) };
 
-            dataGridVentasTemp = new DataGridView { Left = 20, Top = 200, Width = 640, Height = 200, ReadOnly = true, AllowUserToAddRows = false };
+            dataGridVentasTemp = new DataGridView { Left = 20, Top = 240, Width = 640, Height = 160, ReadOnly = true, AllowUserToAddRows = false };
 
             var lblTotalVenta = new Label { Text = "Total de Ventas del Día:", Left = 20, Top = 410, Width = 200, Font = new Font("Arial", 11, FontStyle.Bold) };
             var lblTotalVentaValue = new Label { Text = "0", Left = 230, Top = 410, Width = 100, Font = new Font("Arial", 11, FontStyle.Bold), BackColor = System.Drawing.Color.LightGreen };
@@ -64,6 +73,9 @@ namespace PharmaSoft
             btnCancelar.Click += (s, e) => DialogResult = DialogResult.Cancel;
 
             Controls.Add(lblTitulo);
+            Controls.Add(lblCliente);
+            Controls.Add(txtNombreCliente);
+            Controls.Add(btnBuscarCliente);
             Controls.Add(lblProducto);
             Controls.Add(cbProducto);
             Controls.Add(lblCantidad);
@@ -173,9 +185,47 @@ namespace PharmaSoft
             MessageBox.Show("Producto agregado a la venta.");
         }
 
+        private void BtnBuscarCliente_Click(object? sender, EventArgs e)
+        {
+            var nombreBusqueda = txtNombreCliente.Text.Trim();
+            if (string.IsNullOrEmpty(nombreBusqueda))
+            {
+                MessageBox.Show("Ingresa el nombre del cliente");
+                return;
+            }
+
+            try
+            {
+                using var db = new PharmaContext();
+                var cliente = db.Clientes.FirstOrDefault(c => c.Nombre == nombreBusqueda);
+                if (cliente != null)
+                {
+                    clienteSeleccionadoId = cliente.ClienteId;
+                    MessageBox.Show($"Cliente encontrado: {cliente.Nombre}", "Éxito");
+                }
+                else
+                {
+                    var crearNuevo = MessageBox.Show($"Cliente '{nombreBusqueda}' no existe. ¿Crear nuevo cliente?", "Cliente no encontrado", MessageBoxButtons.YesNo);
+                    if (crearNuevo == DialogResult.Yes)
+                    {
+                        var nuevoCliente = new Cliente { Nombre = nombreBusqueda };
+                        db.Clientes.Add(nuevoCliente);
+                        db.SaveChanges();
+                        clienteSeleccionadoId = nuevoCliente.ClienteId;
+                        MessageBox.Show($"Cliente creado: {nombreBusqueda}", "Éxito");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error buscando cliente: {ex.Message}");
+            }
+        }
+
         private void BtnFinalizarVenta_Click(object? sender, EventArgs e)
         {
             if (dataGridVentasTemp.Rows.Count == 0) { MessageBox.Show("Agrega productos a la venta"); return; }
+            if (!clienteSeleccionadoId.HasValue) { MessageBox.Show("Selecciona un cliente antes de finalizar"); return; }
 
             try
             {
@@ -189,6 +239,18 @@ namespace PharmaSoft
                 };
                 db.Ventas.Add(venta);
                 db.SaveChanges();
+
+                // Crear CuentasPorCobrar para vincular Cliente con Venta
+                var cuentaPorCobrar = new CuentasPorCobrar
+                {
+                    VentaId = venta.VentaId,
+                    ClienteId = clienteSeleccionadoId.Value,
+                    MontoInicial = totalVentaTemp,
+                    SaldoPendiente = totalVentaTemp,
+                    FechaVencimiento = DateOnly.FromDateTime(DateTime.Now.AddDays(30)),
+                    Estado = "Pendiente"
+                };
+                db.CuentasPorCobrars.Add(cuentaPorCobrar);
 
                 // Agregar DetalleVentas y restar stock
                 foreach (DataGridViewRow row in dataGridVentasTemp.Rows)
@@ -206,7 +268,8 @@ namespace PharmaSoft
                         VentaId = venta.VentaId,
                         LoteId = medicamento.LotesInventarios.FirstOrDefault()?.LoteId ?? 0,
                         Cantidad = cantidad,
-                        PrecioUnitario = precio
+                        PrecioUnitario = precio,
+                        Subtotal = precio * cantidad
                     };
                     db.DetalleVentas.Add(detalleVenta);
 
@@ -219,7 +282,7 @@ namespace PharmaSoft
                 }
 
                 db.SaveChanges();
-                MessageBox.Show($"Venta registrada exitosamente. Total: {totalVentaTemp:C2}", "Éxito");
+                MessageBox.Show($"Venta registrada exitosamente. Cliente: {txtNombreCliente.Text}, Total: {totalVentaTemp:C2}", "Éxito");
                 DialogResult = DialogResult.OK;
             }
             catch (Exception ex)

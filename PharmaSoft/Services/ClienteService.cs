@@ -59,4 +59,10 @@ public class ClienteService(PharmaContext contexto) : IService<Cliente, int>
             .Where(criterio)
             .ToListAsync();
     }
+
+    public async Task<Cliente?> BuscarPorNombre(string nombre)
+    {
+        return await contexto.Clientes
+            .FirstOrDefaultAsync(c => c.Nombre == nombre);
+    }
 }

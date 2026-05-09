@@ -38,7 +38,7 @@
             button6 = new Button();
             button5 = new Button();
             button4 = new Button();
-            button3 = new Button();
+            btnCategoria = new Button();
             button2 = new Button();
             btnInventario = new Button();
             label2 = new Label();
@@ -101,7 +101,7 @@
             panel1.Controls.Add(panel2);
             panel1.Controls.Add(button5);
             panel1.Controls.Add(button4);
-            panel1.Controls.Add(button3);
+            panel1.Controls.Add(btnCategoria);
             panel1.Controls.Add(button2);
             panel1.Controls.Add(btnInventario);
             panel1.Controls.Add(label1);
@@ -187,17 +187,18 @@
             button4.TextAlign = ContentAlignment.TopLeft;
             button4.UseVisualStyleBackColor = false;
             // 
-            // button3
+            // btnCategoria
             // 
-            button3.BackColor = SystemColors.ControlLightLight;
-            button3.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button3.Location = new Point(28, 180);
-            button3.Name = "button3";
-            button3.Size = new Size(186, 39);
-            button3.TabIndex = 3;
-            button3.Text = "🏷️Categorias";
-            button3.TextAlign = ContentAlignment.TopLeft;
-            button3.UseVisualStyleBackColor = false;
+            btnCategoria.BackColor = SystemColors.ControlLightLight;
+            btnCategoria.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnCategoria.Location = new Point(28, 180);
+            btnCategoria.Name = "btnCategoria";
+            btnCategoria.Size = new Size(186, 39);
+            btnCategoria.TabIndex = 3;
+            btnCategoria.Text = "🏷️Categorias";
+            btnCategoria.TextAlign = ContentAlignment.TopLeft;
+            btnCategoria.UseVisualStyleBackColor = false;
+            btnCategoria.Click += btnClickCategorias;
             // 
             // button2
             // 
@@ -641,5 +642,6 @@
         private Label label13;
         private Button button11;
         private Button button10;
+        private Button btnCategoria;
     }
 }
