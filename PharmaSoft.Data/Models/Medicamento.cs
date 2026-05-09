@@ -22,6 +22,22 @@ public partial class Medicamento
     [StringLength(150)]
     public string? PrincipioActivo { get; set; }
 
+    [StringLength(500)]
+    [NotMapped]
+    public string? Descripcion { get; set; }
+
+    [StringLength(150)]
+    [NotMapped]
+    public string? Presentacion { get; set; }
+
+    [StringLength(150)]
+    [NotMapped]
+    public string? Laboratorio { get; set; }
+
+    [StringLength(100)]
+    [NotMapped]
+    public string? Dosis { get; set; }
+
     [Column("CategoriaID")]
     public int CategoriaId { get; set; }
 
@@ -29,6 +45,9 @@ public partial class Medicamento
     public int ProveedorId { get; set; }
 
     public bool? RequiereReceta { get; set; }
+
+    [NotMapped]
+    public DateOnly? FechaVencimiento { get; set; }
 
     [Column(TypeName = "decimal(10, 2)")]
     public decimal PrecioCompra { get; set; }

@@ -1,7 +1,5 @@
 <Solution>
   <Project Path="PharmaSoft.Data/PharmaSoft.Data.csproj" />
   <Project Path="PharmaSoft.Test/PharmaSoft.Test.csproj" />
-  <Project Path="PharmaSoft/PharmaSoft.csproj">
-    <Build Solution="Debug|*" Project="false" />
-  </Project>
+  <Project Path="PharmaSoft/PharmaSoft.csproj" />
 </Solution>

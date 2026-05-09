@@ -1,11 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ImplicitUsings>enable</ImplicitUsings>
+	<TargetFramework>net10.0-windows</TargetFramework>
+	<OutputType>WinExe</OutputType>
+	<UseWindowsForms>true</UseWindowsForms>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
   </PropertyGroup>
-
+  <ItemGroup>
+	<ProjectReference Include="..\PharmaSoft.Data\PharmaSoft.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+	<PackageReference Include="Aplicada1.Core" Version="1.0.0" />
+  </ItemGroup>
 </Project>
