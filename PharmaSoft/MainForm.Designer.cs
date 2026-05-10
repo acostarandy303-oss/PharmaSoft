@@ -4,13 +4,11 @@
     {
         private System.ComponentModel.IContainer components = null;
 
-        // Paneles principales
         private System.Windows.Forms.Panel panelLateral;
         private System.Windows.Forms.Panel panelCabecera;
         private System.Windows.Forms.Panel panelEstado;
         private System.Windows.Forms.Panel panelContenido;
 
-        // Elementos del menú lateral
         private System.Windows.Forms.Label lblLogo;
         private System.Windows.Forms.Button btnInicio;
         private System.Windows.Forms.Button btnInventario;
@@ -28,7 +26,6 @@
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Label lblTotalProductos;
 
-        // Elementos del contenido principal (Inventario)
         private System.Windows.Forms.Label lblTituloSeccion;
         private System.Windows.Forms.TextBox txtBuscar;
         private System.Windows.Forms.Button btnAnadir;
@@ -36,7 +33,6 @@
         private System.Windows.Forms.Button btnEliminar;
         private System.Windows.Forms.DataGridView dgvInventario;
 
-        // Columnas del DataGridView
         private System.Windows.Forms.DataGridViewTextBoxColumn colCodigo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNombre;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLaboratorio;
