@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PharmaSoft.Data.Models;
 
 namespace PharmaSoft.Data.Context;
@@ -46,8 +44,8 @@ public partial class PharmaContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-            optionsBuilder.UseSqlServer("Data Source=.\\SqlExpress;Database=PharmaDb;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Command Timeout=30");
+            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["PharmaDb"]?.ConnectionString;
+            optionsBuilder.UseSqlServer(connectionString);
         }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
