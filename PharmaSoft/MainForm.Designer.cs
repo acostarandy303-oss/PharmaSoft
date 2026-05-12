@@ -31,12 +31,12 @@
         private System.Windows.Forms.Button btnEliminar;
         private System.Windows.Forms.DataGridView dgvInventario;
 
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCodigo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNombre;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colLaboratorio;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCantidad;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPrecio;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCaducidad;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CodigoBarras;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Nombre;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Laboratorio;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cantidad;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PrecioVenta;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Caducidad;
 
         protected override void Dispose(bool disposing)
         {
@@ -51,339 +51,413 @@
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.panelLateral = new System.Windows.Forms.Panel();
-            this.btnConfiguracion = new System.Windows.Forms.Button();
-            this.btnReportes = new System.Windows.Forms.Button();
-            this.btnCompras = new System.Windows.Forms.Button();
-            this.btnRecetas = new System.Windows.Forms.Button();
-            this.btnClientes = new System.Windows.Forms.Button();
-            this.btnVentas = new System.Windows.Forms.Button();
-            this.btnInventario = new System.Windows.Forms.Button();
-            this.btnInicio = new System.Windows.Forms.Button();
-            this.lblLogo = new System.Windows.Forms.Label();
-            this.panelCabecera = new System.Windows.Forms.Panel();
-            this.lblTituloCabecera = new System.Windows.Forms.Label();
-            this.panelEstado = new System.Windows.Forms.Panel();
-            this.lblTotalProductos = new System.Windows.Forms.Label();
-            this.lblUsuario = new System.Windows.Forms.Label();
-            this.panelContenido = new System.Windows.Forms.Panel();
-            this.dgvInventario = new System.Windows.Forms.DataGridView();
-            this.colCodigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colLaboratorio = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPrecio = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCaducidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnEliminar = new System.Windows.Forms.Button();
-            this.btnEditar = new System.Windows.Forms.Button();
-            this.btnAnadir = new System.Windows.Forms.Button();
-            this.txtBuscar = new System.Windows.Forms.TextBox();
-            this.lblTituloSeccion = new System.Windows.Forms.Label();
-            this.panelLateral.SuspendLayout();
-            this.panelCabecera.SuspendLayout();
-            this.panelEstado.SuspendLayout();
-            this.panelContenido.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvInventario)).BeginInit();
-            this.SuspendLayout();
-
-            this.panelLateral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(249)))), ((int)(((byte)(250)))));
-            this.panelLateral.Controls.Add(this.btnConfiguracion);
-            this.panelLateral.Controls.Add(this.btnReportes);
-            this.panelLateral.Controls.Add(this.btnCompras);
-            this.panelLateral.Controls.Add(this.btnRecetas);
-            this.panelLateral.Controls.Add(this.btnClientes);
-            this.panelLateral.Controls.Add(this.btnVentas);
-            this.panelLateral.Controls.Add(this.btnInventario);
-            this.panelLateral.Controls.Add(this.btnInicio);
-            this.panelLateral.Controls.Add(this.lblLogo);
-            this.panelLateral.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelLateral.Location = new System.Drawing.Point(0, 0);
-            this.panelLateral.Name = "panelLateral";
-            this.panelLateral.Size = new System.Drawing.Size(220, 600);
-            this.panelLateral.TabIndex = 0;
-
-            this.btnConfiguracion.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnConfiguracion.FlatAppearance.BorderSize = 0;
-            this.btnConfiguracion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnConfiguracion.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnConfiguracion.Location = new System.Drawing.Point(0, 430);
-            this.btnConfiguracion.Name = "btnConfiguracion";
-            this.btnConfiguracion.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnConfiguracion.Size = new System.Drawing.Size(220, 45);
-            this.btnConfiguracion.Text = "  Configuración";
-            this.btnConfiguracion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnConfiguracion.UseVisualStyleBackColor = true;
-
-            this.btnReportes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnReportes.FlatAppearance.BorderSize = 0;
-            this.btnReportes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReportes.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnReportes.Location = new System.Drawing.Point(0, 385);
-            this.btnReportes.Name = "btnReportes";
-            this.btnReportes.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnReportes.Size = new System.Drawing.Size(220, 45);
-            this.btnReportes.Text = "  Reportes";
-            this.btnReportes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReportes.UseVisualStyleBackColor = true;
-
-            this.btnCompras.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnCompras.FlatAppearance.BorderSize = 0;
-            this.btnCompras.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCompras.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnCompras.Location = new System.Drawing.Point(0, 340);
-            this.btnCompras.Name = "btnCompras";
-            this.btnCompras.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnCompras.Size = new System.Drawing.Size(220, 45);
-            this.btnCompras.Text = "  Compras";
-            this.btnCompras.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCompras.UseVisualStyleBackColor = true;
-
-            this.btnRecetas.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnRecetas.FlatAppearance.BorderSize = 0;
-            this.btnRecetas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRecetas.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnRecetas.Location = new System.Drawing.Point(0, 295);
-            this.btnRecetas.Name = "btnRecetas";
-            this.btnRecetas.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnRecetas.Size = new System.Drawing.Size(220, 45);
-            this.btnRecetas.Text = "  Recetas";
-            this.btnRecetas.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRecetas.UseVisualStyleBackColor = true;
-
-            this.btnClientes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnClientes.FlatAppearance.BorderSize = 0;
-            this.btnClientes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClientes.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnClientes.Location = new System.Drawing.Point(0, 250);
-            this.btnClientes.Name = "btnClientes";
-            this.btnClientes.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnClientes.Size = new System.Drawing.Size(220, 45);
-            this.btnClientes.Text = "  Clientes";
-            this.btnClientes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClientes.UseVisualStyleBackColor = true;
-            
-
-            this.btnVentas.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnVentas.FlatAppearance.BorderSize = 0;
-            this.btnVentas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnVentas.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnVentas.Location = new System.Drawing.Point(0, 205);
-            this.btnVentas.Name = "btnVentas";
-            this.btnVentas.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnVentas.Size = new System.Drawing.Size(220, 45);
-            this.btnVentas.Text = "  Ventas (Point of Sale)";
-            this.btnVentas.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnVentas.UseVisualStyleBackColor = true;
-            
-            this.btnInventario.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.btnInventario.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnInventario.FlatAppearance.BorderSize = 0;
-            this.btnInventario.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInventario.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnInventario.ForeColor = System.Drawing.Color.White;
-            this.btnInventario.Location = new System.Drawing.Point(0, 160);
-            this.btnInventario.Name = "btnInventario";
-            this.btnInventario.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnInventario.Size = new System.Drawing.Size(220, 45);
-            this.btnInventario.Text = "  Inventario";
-            this.btnInventario.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnInventario.UseVisualStyleBackColor = false;
-            
-            this.btnInicio.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnInicio.FlatAppearance.BorderSize = 0;
-            this.btnInicio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInicio.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnInicio.Location = new System.Drawing.Point(0, 115);
-            this.btnInicio.Name = "btnInicio";
-            this.btnInicio.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnInicio.Size = new System.Drawing.Size(220, 45);
-            this.btnInicio.Text = "  Inicio";
-            this.btnInicio.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnInicio.UseVisualStyleBackColor = true;
-            
-            this.lblLogo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblLogo.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblLogo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(51)))), ((int)(((byte)(100)))));
-            this.lblLogo.Location = new System.Drawing.Point(0, 0);
-            this.lblLogo.Name = "lblLogo";
-            this.lblLogo.Size = new System.Drawing.Size(220, 115);
-            this.lblLogo.Text = "+ PharmaSoft";
-            this.lblLogo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            
-            this.panelCabecera.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.panelCabecera.Controls.Add(this.lblTituloCabecera);
-            this.panelCabecera.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCabecera.Location = new System.Drawing.Point(220, 0);
-            this.panelCabecera.Name = "panelCabecera";
-            this.panelCabecera.Size = new System.Drawing.Size(830, 60);
-             
-            this.lblTituloCabecera.AutoSize = true;
-            this.lblTituloCabecera.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblTituloCabecera.ForeColor = System.Drawing.Color.White;
-            this.lblTituloCabecera.Location = new System.Drawing.Point(20, 15);
-            this.lblTituloCabecera.Name = "lblTituloCabecera";
-            this.lblTituloCabecera.Size = new System.Drawing.Size(185, 30);
-            this.lblTituloCabecera.Text = "Panel de Control";
-            
-            this.panelEstado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.panelEstado.Controls.Add(this.lblTotalProductos);
-            this.panelEstado.Controls.Add(this.lblUsuario);
-            this.panelEstado.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelEstado.Location = new System.Drawing.Point(0, 600);
-            this.panelEstado.Name = "panelEstado";
-            this.panelEstado.Size = new System.Drawing.Size(1050, 30);
-            
-            this.lblTotalProductos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblTotalProductos.AutoSize = true;
-            this.lblTotalProductos.ForeColor = System.Drawing.Color.White;
-            this.lblTotalProductos.Location = new System.Drawing.Point(880, 8);
-            this.lblTotalProductos.Name = "lblTotalProductos";
-            this.lblTotalProductos.Size = new System.Drawing.Size(150, 15);
-            this.lblTotalProductos.Text = "Total Productos: 1450";
-            
-            this.lblUsuario.AutoSize = true;
-            this.lblUsuario.ForeColor = System.Drawing.Color.White;
-            this.lblUsuario.Location = new System.Drawing.Point(10, 8);
-            this.lblUsuario.Name = "lblUsuario";
-            this.lblUsuario.Size = new System.Drawing.Size(190, 15);
-            this.lblUsuario.Text = "Usuario: Admin (Farmacia Central)";
-             
-            this.panelContenido.BackColor = System.Drawing.Color.White;
-            this.panelContenido.Controls.Add(this.dgvInventario);
-            this.panelContenido.Controls.Add(this.btnEliminar);
-            this.panelContenido.Controls.Add(this.btnEditar);
-            this.panelContenido.Controls.Add(this.btnAnadir);
-            this.panelContenido.Controls.Add(this.txtBuscar);
-            this.panelContenido.Controls.Add(this.lblTituloSeccion);
-            this.panelContenido.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContenido.Location = new System.Drawing.Point(220, 60);
-            this.panelContenido.Name = "panelContenido";
-            this.panelContenido.Padding = new System.Windows.Forms.Padding(20);
-            this.panelContenido.Size = new System.Drawing.Size(830, 540);
-             
-            this.dgvInventario.AllowUserToAddRows = false;
-            this.dgvInventario.AllowUserToDeleteRows = false;
-            this.dgvInventario.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvInventario.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvInventario.BackgroundColor = System.Drawing.Color.White;
-            this.dgvInventario.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dgvInventario.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            this.dgvInventario.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvInventario.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvInventario.ColumnHeadersHeight = 35;
-            this.dgvInventario.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colCodigo,
-            this.colNombre,
-            this.colLaboratorio,
-            this.colCantidad,
-            this.colPrecio,
-            this.colCaducidad});
-            this.dgvInventario.EnableHeadersVisualStyles = false;
-            this.dgvInventario.Location = new System.Drawing.Point(23, 110);
-            this.dgvInventario.Name = "dgvInventario";
-            this.dgvInventario.ReadOnly = true;
-            this.dgvInventario.RowHeadersVisible = false;
-            this.dgvInventario.RowTemplate.Height = 30;
-            this.dgvInventario.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvInventario.Size = new System.Drawing.Size(784, 407);
-             
-            this.colCodigo.HeaderText = "Código";
-            this.colCodigo.Name = "colCodigo";
-            this.colCodigo.ReadOnly = true;
-            
-            this.colNombre.HeaderText = "Nombre";
-            this.colNombre.Name = "colNombre";
-            this.colNombre.ReadOnly = true;
-            
-            this.colLaboratorio.HeaderText = "Laboratorio";
-            this.colLaboratorio.Name = "colLaboratorio";
-            this.colLaboratorio.ReadOnly = true;
-             
-            this.colCantidad.HeaderText = "Cantidad";
-            this.colCantidad.Name = "colCantidad";
-            this.colCantidad.ReadOnly = true;
-             
-            this.colPrecio.HeaderText = "Precio Venta";
-            this.colPrecio.Name = "colPrecio";
-            this.colPrecio.ReadOnly = true;
-            
-            this.colCaducidad.HeaderText = "Caducidad";
-            this.colCaducidad.Name = "colCaducidad";
-            this.colCaducidad.ReadOnly = true;
-            
-            this.btnEliminar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEliminar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
-            this.btnEliminar.FlatAppearance.BorderSize = 0;
-            this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnEliminar.ForeColor = System.Drawing.Color.White;
-            this.btnEliminar.Location = new System.Drawing.Point(717, 65);
-            this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(90, 30);
-            this.btnEliminar.Text = "Eliminar";
-            this.btnEliminar.UseVisualStyleBackColor = false;
-            
-            this.btnEditar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEditar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
-            this.btnEditar.FlatAppearance.BorderSize = 0;
-            this.btnEditar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnEditar.ForeColor = System.Drawing.Color.White;
-            this.btnEditar.Location = new System.Drawing.Point(621, 65);
-            this.btnEditar.Name = "btnEditar";
-            this.btnEditar.Size = new System.Drawing.Size(90, 30);
-            this.btnEditar.Text = "Editar";
-            this.btnEditar.UseVisualStyleBackColor = false;
-             
-            this.btnAnadir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAnadir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.btnAnadir.FlatAppearance.BorderSize = 0;
-            this.btnAnadir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAnadir.ForeColor = System.Drawing.Color.White;
-            this.btnAnadir.Location = new System.Drawing.Point(525, 65);
-            this.btnAnadir.Name = "btnAnadir";
-            this.btnAnadir.Size = new System.Drawing.Size(90, 30);
-            this.btnAnadir.Text = "Añadir";
-            this.btnAnadir.UseVisualStyleBackColor = false;
-                        this.txtBuscar.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtBuscar.Location = new System.Drawing.Point(23, 67);
-            this.txtBuscar.Name = "txtBuscar";
-            this.txtBuscar.PlaceholderText = " Buscar...";
-            this.txtBuscar.Size = new System.Drawing.Size(300, 27);
-             
-            this.lblTituloSeccion.AutoSize = true;
-            this.lblTituloSeccion.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblTituloSeccion.Location = new System.Drawing.Point(18, 20);
-            this.lblTituloSeccion.Name = "lblTituloSeccion";
-            this.lblTituloSeccion.Size = new System.Drawing.Size(232, 25);
-            this.lblTituloSeccion.Text = "Inventario de Productos";
-             
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1050, 630);
-            this.Controls.Add(this.panelContenido);
-            this.Controls.Add(this.panelCabecera);
-            this.Controls.Add(this.panelLateral);
-            this.Controls.Add(this.panelEstado);
-            this.MinimumSize = new System.Drawing.Size(800, 500);
-            this.Name = "PharmaSoft";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PharmaSoft - Gestión de Farmacia [v1.0]";
-            this.panelLateral.ResumeLayout(false);
-            this.panelCabecera.PerformLayout();
-            this.panelEstado.PerformLayout();
-            this.panelContenido.ResumeLayout(false);
-            this.panelContenido.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvInventario)).EndInit();
-            this.ResumeLayout(false);
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            panelLateral = new Panel();
+            btnConfiguracion = new Button();
+            btnReportes = new Button();
+            btnCompras = new Button();
+            btnRecetas = new Button();
+            btnClientes = new Button();
+            btnVentas = new Button();
+            btnInventario = new Button();
+            btnInicio = new Button();
+            lblLogo = new Label();
+            panelCabecera = new Panel();
+            lblTituloCabecera = new Label();
+            panelEstado = new Panel();
+            lblTotalProductos = new Label();
+            lblUsuario = new Label();
+            panelContenido = new Panel();
+            dgvInventario = new DataGridView();
+            CodigoBarras = new DataGridViewTextBoxColumn();
+            Nombre = new DataGridViewTextBoxColumn();
+            Laboratorio = new DataGridViewTextBoxColumn();
+            Cantidad = new DataGridViewTextBoxColumn();
+            PrecioVenta = new DataGridViewTextBoxColumn();
+            Caducidad = new DataGridViewTextBoxColumn();
+            btnEliminar = new Button();
+            btnEditar = new Button();
+            btnAnadir = new Button();
+            txtBuscar = new TextBox();
+            lblTituloSeccion = new Label();
+            panelLateral.SuspendLayout();
+            panelCabecera.SuspendLayout();
+            panelEstado.SuspendLayout();
+            panelContenido.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvInventario).BeginInit();
+            SuspendLayout();
+            // 
+            // panelLateral
+            // 
+            panelLateral.BackColor = Color.FromArgb(248, 249, 250);
+            panelLateral.Controls.Add(btnConfiguracion);
+            panelLateral.Controls.Add(btnReportes);
+            panelLateral.Controls.Add(btnCompras);
+            panelLateral.Controls.Add(btnRecetas);
+            panelLateral.Controls.Add(btnClientes);
+            panelLateral.Controls.Add(btnVentas);
+            panelLateral.Controls.Add(btnInventario);
+            panelLateral.Controls.Add(btnInicio);
+            panelLateral.Controls.Add(lblLogo);
+            panelLateral.Dock = DockStyle.Left;
+            panelLateral.Location = new Point(0, 0);
+            panelLateral.Name = "panelLateral";
+            panelLateral.Size = new Size(220, 600);
+            panelLateral.TabIndex = 0;
+            // 
+            // btnConfiguracion
+            // 
+            btnConfiguracion.Dock = DockStyle.Top;
+            btnConfiguracion.FlatAppearance.BorderSize = 0;
+            btnConfiguracion.FlatStyle = FlatStyle.Flat;
+            btnConfiguracion.Font = new Font("Segoe UI", 10F);
+            btnConfiguracion.Location = new Point(0, 430);
+            btnConfiguracion.Name = "btnConfiguracion";
+            btnConfiguracion.Padding = new Padding(20, 0, 0, 0);
+            btnConfiguracion.Size = new Size(220, 45);
+            btnConfiguracion.TabIndex = 0;
+            btnConfiguracion.Text = "  Configuración";
+            btnConfiguracion.TextAlign = ContentAlignment.MiddleLeft;
+            btnConfiguracion.UseVisualStyleBackColor = true;
+            // 
+            // btnReportes
+            // 
+            btnReportes.Dock = DockStyle.Top;
+            btnReportes.FlatAppearance.BorderSize = 0;
+            btnReportes.FlatStyle = FlatStyle.Flat;
+            btnReportes.Font = new Font("Segoe UI", 10F);
+            btnReportes.Location = new Point(0, 385);
+            btnReportes.Name = "btnReportes";
+            btnReportes.Padding = new Padding(20, 0, 0, 0);
+            btnReportes.Size = new Size(220, 45);
+            btnReportes.TabIndex = 1;
+            btnReportes.Text = "  Reportes";
+            btnReportes.TextAlign = ContentAlignment.MiddleLeft;
+            btnReportes.UseVisualStyleBackColor = true;
+            // 
+            // btnCompras
+            // 
+            btnCompras.Dock = DockStyle.Top;
+            btnCompras.FlatAppearance.BorderSize = 0;
+            btnCompras.FlatStyle = FlatStyle.Flat;
+            btnCompras.Font = new Font("Segoe UI", 10F);
+            btnCompras.Location = new Point(0, 340);
+            btnCompras.Name = "btnCompras";
+            btnCompras.Padding = new Padding(20, 0, 0, 0);
+            btnCompras.Size = new Size(220, 45);
+            btnCompras.TabIndex = 2;
+            btnCompras.Text = "  Compras";
+            btnCompras.TextAlign = ContentAlignment.MiddleLeft;
+            btnCompras.UseVisualStyleBackColor = true;
+            // 
+            // btnRecetas
+            // 
+            btnRecetas.Dock = DockStyle.Top;
+            btnRecetas.FlatAppearance.BorderSize = 0;
+            btnRecetas.FlatStyle = FlatStyle.Flat;
+            btnRecetas.Font = new Font("Segoe UI", 10F);
+            btnRecetas.Location = new Point(0, 295);
+            btnRecetas.Name = "btnRecetas";
+            btnRecetas.Padding = new Padding(20, 0, 0, 0);
+            btnRecetas.Size = new Size(220, 45);
+            btnRecetas.TabIndex = 3;
+            btnRecetas.Text = "  Recetas";
+            btnRecetas.TextAlign = ContentAlignment.MiddleLeft;
+            btnRecetas.UseVisualStyleBackColor = true;
+            // 
+            // btnClientes
+            // 
+            btnClientes.Dock = DockStyle.Top;
+            btnClientes.FlatAppearance.BorderSize = 0;
+            btnClientes.FlatStyle = FlatStyle.Flat;
+            btnClientes.Font = new Font("Segoe UI", 10F);
+            btnClientes.Location = new Point(0, 250);
+            btnClientes.Name = "btnClientes";
+            btnClientes.Padding = new Padding(20, 0, 0, 0);
+            btnClientes.Size = new Size(220, 45);
+            btnClientes.TabIndex = 4;
+            btnClientes.Text = "  Clientes";
+            btnClientes.TextAlign = ContentAlignment.MiddleLeft;
+            btnClientes.UseVisualStyleBackColor = true;
+            // 
+            // btnVentas
+            // 
+            btnVentas.Dock = DockStyle.Top;
+            btnVentas.FlatAppearance.BorderSize = 0;
+            btnVentas.FlatStyle = FlatStyle.Flat;
+            btnVentas.Font = new Font("Segoe UI", 10F);
+            btnVentas.Location = new Point(0, 205);
+            btnVentas.Name = "btnVentas";
+            btnVentas.Padding = new Padding(20, 0, 0, 0);
+            btnVentas.Size = new Size(220, 45);
+            btnVentas.TabIndex = 5;
+            btnVentas.Text = "  Ventas (Point of Sale)";
+            btnVentas.TextAlign = ContentAlignment.MiddleLeft;
+            btnVentas.UseVisualStyleBackColor = true;
+            // 
+            // btnInventario
+            // 
+            btnInventario.BackColor = Color.FromArgb(25, 118, 210);
+            btnInventario.Dock = DockStyle.Top;
+            btnInventario.FlatAppearance.BorderSize = 0;
+            btnInventario.FlatStyle = FlatStyle.Flat;
+            btnInventario.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnInventario.ForeColor = Color.White;
+            btnInventario.Location = new Point(0, 160);
+            btnInventario.Name = "btnInventario";
+            btnInventario.Padding = new Padding(20, 0, 0, 0);
+            btnInventario.Size = new Size(220, 45);
+            btnInventario.TabIndex = 6;
+            btnInventario.Text = "  Inventario";
+            btnInventario.TextAlign = ContentAlignment.MiddleLeft;
+            btnInventario.UseVisualStyleBackColor = false;
+            btnInventario.Click += btnInventario_Click;
+            // 
+            // btnInicio
+            // 
+            btnInicio.Dock = DockStyle.Top;
+            btnInicio.FlatAppearance.BorderSize = 0;
+            btnInicio.FlatStyle = FlatStyle.Flat;
+            btnInicio.Font = new Font("Segoe UI", 10F);
+            btnInicio.Location = new Point(0, 115);
+            btnInicio.Name = "btnInicio";
+            btnInicio.Padding = new Padding(20, 0, 0, 0);
+            btnInicio.Size = new Size(220, 45);
+            btnInicio.TabIndex = 7;
+            btnInicio.Text = "  Inicio";
+            btnInicio.TextAlign = ContentAlignment.MiddleLeft;
+            btnInicio.UseVisualStyleBackColor = true;
+            // 
+            // lblLogo
+            // 
+            lblLogo.Dock = DockStyle.Top;
+            lblLogo.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblLogo.ForeColor = Color.FromArgb(11, 51, 100);
+            lblLogo.Location = new Point(0, 0);
+            lblLogo.Name = "lblLogo";
+            lblLogo.Size = new Size(220, 115);
+            lblLogo.TabIndex = 8;
+            lblLogo.Text = "+ PharmaSoft";
+            lblLogo.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // panelCabecera
+            // 
+            panelCabecera.BackColor = Color.FromArgb(25, 118, 210);
+            panelCabecera.Controls.Add(lblTituloCabecera);
+            panelCabecera.Dock = DockStyle.Top;
+            panelCabecera.Location = new Point(220, 0);
+            panelCabecera.Name = "panelCabecera";
+            panelCabecera.Size = new Size(830, 60);
+            panelCabecera.TabIndex = 1;
+            // 
+            // lblTituloCabecera
+            // 
+            lblTituloCabecera.AutoSize = true;
+            lblTituloCabecera.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblTituloCabecera.ForeColor = Color.White;
+            lblTituloCabecera.Location = new Point(20, 15);
+            lblTituloCabecera.Name = "lblTituloCabecera";
+            lblTituloCabecera.Size = new Size(184, 30);
+            lblTituloCabecera.TabIndex = 0;
+            lblTituloCabecera.Text = "Panel de Control";
+            // 
+            // panelEstado
+            // 
+            panelEstado.BackColor = Color.FromArgb(25, 118, 210);
+            panelEstado.Controls.Add(lblTotalProductos);
+            panelEstado.Controls.Add(lblUsuario);
+            panelEstado.Dock = DockStyle.Bottom;
+            panelEstado.Location = new Point(0, 600);
+            panelEstado.Name = "panelEstado";
+            panelEstado.Size = new Size(1050, 30);
+            panelEstado.TabIndex = 2;
+            // 
+            // lblTotalProductos
+            // 
+            lblTotalProductos.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblTotalProductos.AutoSize = true;
+            lblTotalProductos.ForeColor = Color.White;
+            lblTotalProductos.Location = new Point(880, 8);
+            lblTotalProductos.Name = "lblTotalProductos";
+            lblTotalProductos.Size = new Size(119, 15);
+            lblTotalProductos.TabIndex = 0;
+            lblTotalProductos.Text = "Total Productos: 1450";
+            // 
+            // lblUsuario
+            // 
+            lblUsuario.AutoSize = true;
+            lblUsuario.ForeColor = Color.White;
+            lblUsuario.Location = new Point(10, 8);
+            lblUsuario.Name = "lblUsuario";
+            lblUsuario.Size = new Size(189, 15);
+            lblUsuario.TabIndex = 1;
+            lblUsuario.Text = "Usuario: Admin (Farmacia Central)";
+            // 
+            // panelContenido
+            // 
+            panelContenido.BackColor = Color.White;
+            panelContenido.Controls.Add(dgvInventario);
+            panelContenido.Controls.Add(btnEliminar);
+            panelContenido.Controls.Add(btnEditar);
+            panelContenido.Controls.Add(btnAnadir);
+            panelContenido.Controls.Add(txtBuscar);
+            panelContenido.Controls.Add(lblTituloSeccion);
+            panelContenido.Dock = DockStyle.Fill;
+            panelContenido.Location = new Point(220, 60);
+            panelContenido.Name = "panelContenido";
+            panelContenido.Padding = new Padding(20);
+            panelContenido.Size = new Size(830, 540);
+            panelContenido.TabIndex = 0;
+            // 
+            // dgvInventario
+            // 
+            dgvInventario.AllowUserToAddRows = false;
+            dgvInventario.AllowUserToDeleteRows = false;
+            dgvInventario.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvInventario.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvInventario.BackgroundColor = Color.White;
+            dgvInventario.BorderStyle = BorderStyle.Fixed3D;
+            dgvInventario.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvInventario.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(240, 240, 240);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvInventario.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dgvInventario.ColumnHeadersHeight = 35;
+            dgvInventario.Columns.AddRange(new DataGridViewColumn[] { CodigoBarras, Nombre, Laboratorio, Cantidad, PrecioVenta, Caducidad });
+            dgvInventario.EnableHeadersVisualStyles = false;
+            dgvInventario.Location = new Point(23, 110);
+            dgvInventario.Name = "dgvInventario";
+            dgvInventario.ReadOnly = true;
+            dgvInventario.RowHeadersVisible = false;
+            dgvInventario.RowTemplate.Height = 30;
+            dgvInventario.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvInventario.Size = new Size(784, 407);
+            dgvInventario.TabIndex = 0;
+            // 
+            // CodigoBarras
+            // 
+            CodigoBarras.HeaderText = "Código";
+            CodigoBarras.Name = "CodigoBarras";
+            CodigoBarras.ReadOnly = true;
+            // 
+            // Nombre
+            // 
+            Nombre.HeaderText = "Nombre";
+            Nombre.Name = "Nombre";
+            Nombre.ReadOnly = true;
+            // 
+            // Laboratorio
+            // 
+            Laboratorio.HeaderText = "Laboratorio";
+            Laboratorio.Name = "Laboratorio";
+            Laboratorio.ReadOnly = true;
+            // 
+            // Cantidad
+            // 
+            Cantidad.HeaderText = "Cantidad";
+            Cantidad.Name = "Cantidad";
+            Cantidad.ReadOnly = true;
+            // 
+            // PrecioVenta
+            // 
+            PrecioVenta.HeaderText = "Precio Venta";
+            PrecioVenta.Name = "PrecioVenta";
+            PrecioVenta.ReadOnly = true;
+            // 
+            // Caducidad
+            // 
+            Caducidad.HeaderText = "Caducidad";
+            Caducidad.Name = "Caducidad";
+            Caducidad.ReadOnly = true;
+            // 
+            // btnEliminar
+            // 
+            btnEliminar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnEliminar.BackColor = Color.FromArgb(220, 53, 69);
+            btnEliminar.FlatAppearance.BorderSize = 0;
+            btnEliminar.FlatStyle = FlatStyle.Flat;
+            btnEliminar.ForeColor = Color.White;
+            btnEliminar.Location = new Point(717, 65);
+            btnEliminar.Name = "btnEliminar";
+            btnEliminar.Size = new Size(90, 30);
+            btnEliminar.TabIndex = 1;
+            btnEliminar.Text = "Eliminar";
+            btnEliminar.UseVisualStyleBackColor = false;
+            // 
+            // btnEditar
+            // 
+            btnEditar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnEditar.BackColor = Color.FromArgb(40, 167, 69);
+            btnEditar.FlatAppearance.BorderSize = 0;
+            btnEditar.FlatStyle = FlatStyle.Flat;
+            btnEditar.ForeColor = Color.White;
+            btnEditar.Location = new Point(621, 65);
+            btnEditar.Name = "btnEditar";
+            btnEditar.Size = new Size(90, 30);
+            btnEditar.TabIndex = 2;
+            btnEditar.Text = "Editar";
+            btnEditar.UseVisualStyleBackColor = false;
+            // 
+            // btnAnadir
+            // 
+            btnAnadir.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnAnadir.BackColor = Color.FromArgb(25, 118, 210);
+            btnAnadir.FlatAppearance.BorderSize = 0;
+            btnAnadir.FlatStyle = FlatStyle.Flat;
+            btnAnadir.ForeColor = Color.White;
+            btnAnadir.Location = new Point(525, 65);
+            btnAnadir.Name = "btnAnadir";
+            btnAnadir.Size = new Size(90, 30);
+            btnAnadir.TabIndex = 3;
+            btnAnadir.Text = "Añadir";
+            btnAnadir.UseVisualStyleBackColor = false;
+            // 
+            // txtBuscar
+            // 
+            txtBuscar.Font = new Font("Segoe UI", 11F);
+            txtBuscar.Location = new Point(23, 67);
+            txtBuscar.Name = "txtBuscar";
+            txtBuscar.PlaceholderText = " Buscar...";
+            txtBuscar.Size = new Size(300, 27);
+            txtBuscar.TabIndex = 4;
+            // 
+            // lblTituloSeccion
+            // 
+            lblTituloSeccion.AutoSize = true;
+            lblTituloSeccion.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTituloSeccion.Location = new Point(18, 20);
+            lblTituloSeccion.Name = "lblTituloSeccion";
+            lblTituloSeccion.Size = new Size(228, 25);
+            lblTituloSeccion.TabIndex = 5;
+            lblTituloSeccion.Text = "Inventario de Productos";
+            // 
+            // PharmaSoft
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1050, 630);
+            Controls.Add(panelContenido);
+            Controls.Add(panelCabecera);
+            Controls.Add(panelLateral);
+            Controls.Add(panelEstado);
+            MinimumSize = new Size(800, 500);
+            Name = "PharmaSoft";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "PharmaSoft - Gestión de Farmacia [v1.0]";
+            panelLateral.ResumeLayout(false);
+            panelCabecera.ResumeLayout(false);
+            panelCabecera.PerformLayout();
+            panelEstado.ResumeLayout(false);
+            panelEstado.PerformLayout();
+            panelContenido.ResumeLayout(false);
+            panelContenido.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvInventario).EndInit();
+            ResumeLayout(false);
 
         }
 
