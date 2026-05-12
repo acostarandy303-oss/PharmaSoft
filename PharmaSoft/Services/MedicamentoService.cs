@@ -24,6 +24,7 @@ public class MedicamentoService(PharmaContext contexto) : IService<Medicamento, 
     {
         contexto.Medicamentos.Add(medicamento);
         return await contexto.SaveChangesAsync() > 0;
+
     }
 
     private async Task<bool> Modificar(Medicamento medicamento)
