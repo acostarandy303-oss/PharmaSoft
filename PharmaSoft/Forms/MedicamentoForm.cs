@@ -17,7 +17,7 @@ public partial class MedicamentoForm : Form
     public Medicamento Medicamento { get; private set; }
     public LotesInventario? Lote { get; private set; }
 
-    public MedicamentoForm(Medicamento? medicamento = null)
+    public MedicamentoForm(Medicamento? medicamento = null) //CONSTRUCTOR
     {
         InitializeComponent();
         _context = new PharmaContext();
@@ -25,9 +25,10 @@ public partial class MedicamentoForm : Form
         _proveedorService = new ProveedoreService(_context);
         _medicamentoService = new MedicamentoService(_context);
         _lotesService = new LotesInventarioService(_context);
+
+        this.Load += MedicamentoForm_Load;
+
         Medicamento = medicamento ?? new Medicamento();
-        //CargarCombos();
-        //CargarInventario();
         if (medicamento != null)
         {
             CargarDatos(medicamento);
@@ -75,7 +76,7 @@ public partial class MedicamentoForm : Form
         cmbCategoria.ValueMember = "CategoriaId";
 
         cmbProveedor.DataSource = proveedores;
-        cmbProveedor.DisplayMember = "Nombre";
+        cmbProveedor.DisplayMember = "NombreEmpresa";
         cmbProveedor.ValueMember = "ProveedorId";
     }
 
@@ -83,16 +84,14 @@ public partial class MedicamentoForm : Form
     {
         txtCodigoBarras.Text = m.CodigoBarras;
         txtNombre.Text = m.Nombre;
-
-        txtPresentacion.Text = m.Presentacion;
+        txtDescripcion.Text = m.Descripcion;
         txtLaboratorio.Text = m.Laboratorio;
-        txtDosis.Text = m.Dosis;
         nudPrecioCompra.Value = m.PrecioCompra;
         nudPrecioVenta.Value = m.PrecioVenta;
         nudStockMinimo.Value = m.StockMinimo ?? 10;
-        chkRequiereReceta.Checked = m.RequiereReceta ?? false;
         cmbCategoria.SelectedValue = m.CategoriaId;
         cmbProveedor.SelectedValue = m.ProveedorId;
+        
     }
 
     private void btnGuardar_Click(object sender, EventArgs e)
@@ -103,16 +102,17 @@ public partial class MedicamentoForm : Form
             return;
         }
 
+      
+
         Medicamento.CodigoBarras = txtCodigoBarras.Text.Trim();
         Medicamento.Nombre = txtNombre.Text.Trim();
 
-        Medicamento.Presentacion = txtPresentacion.Text.Trim();
         Medicamento.Laboratorio = txtLaboratorio.Text.Trim();
-        Medicamento.Dosis = txtDosis.Text.Trim();
         Medicamento.PrecioCompra = nudPrecioCompra.Value;
         Medicamento.PrecioVenta = nudPrecioVenta.Value;
+        Medicamento.Laboratorio = txtLaboratorio.Text.Trim();
+        Medicamento.Descripcion = txtDescripcion.Text.Trim();
         Medicamento.StockMinimo = (int)nudStockMinimo.Value;
-        Medicamento.RequiereReceta = chkRequiereReceta.Checked;
         Medicamento.CategoriaId = cmbCategoria.SelectedValue is int catId ? catId : 0;
         Medicamento.ProveedorId = cmbProveedor.SelectedValue is int provId ? provId : 0;
 

@@ -11,12 +11,15 @@ namespace PharmaSoft.Forms
         private System.Windows.Forms.Label lblNombre;
         private System.Windows.Forms.TextBox txtNombre;
 
-        private System.Windows.Forms.Label lblPresentacion;
-        private System.Windows.Forms.TextBox txtPresentacion;
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+       //private System.Windows.Forms.Label lblPresentacion;
+        //private System.Windows.Forms.TextBox txtPresentacion;
         private System.Windows.Forms.Label lblLaboratorio;
         private System.Windows.Forms.TextBox txtLaboratorio;
-        private System.Windows.Forms.Label lblDosis;
-        private System.Windows.Forms.TextBox txtDosis;
+        private System.Windows.Forms.Label lblDescripcion;
+        private System.Windows.Forms.TextBox txtDescripcion;
         private System.Windows.Forms.Label lblCategoria;
         private System.Windows.Forms.ComboBox cmbCategoria;
         private System.Windows.Forms.Label lblProveedor;
@@ -61,12 +64,15 @@ namespace PharmaSoft.Forms
             this.txtCodigoBarras = new System.Windows.Forms.TextBox();
             this.lblNombre = new System.Windows.Forms.Label();
             this.txtNombre = new System.Windows.Forms.TextBox();
-            this.lblPresentacion = new System.Windows.Forms.Label();
-            this.txtPresentacion = new System.Windows.Forms.TextBox();
+
+            this.lblDescripcion = new System.Windows.Forms.Label();
+            this.txtDescripcion = new System.Windows.Forms.TextBox();
+            //this.lblPresentacion = new System.Windows.Forms.Label();
+            //this.txtPresentacion = new System.Windows.Forms.TextBox();
             this.lblLaboratorio = new System.Windows.Forms.Label();
             this.txtLaboratorio = new System.Windows.Forms.TextBox();
-            this.lblDosis = new System.Windows.Forms.Label();
-            this.txtDosis = new System.Windows.Forms.TextBox();
+            //this.lblDosis = new System.Windows.Forms.Label();
+            //this.txtDosis = new System.Windows.Forms.TextBox();
             this.lblCategoria = new System.Windows.Forms.Label();
             this.cmbCategoria = new System.Windows.Forms.ComboBox();
             this.lblProveedor = new System.Windows.Forms.Label();
@@ -102,13 +108,15 @@ namespace PharmaSoft.Forms
             this.panelScroll.Controls.Add(this.txtCodigoBarras);
             this.panelScroll.Controls.Add(this.lblNombre);
             this.panelScroll.Controls.Add(this.txtNombre);
+            this.panelScroll.Controls.Add(this.lblDescripcion);
+            this.panelScroll.Controls.Add(this.txtDescripcion);
 
-            this.panelScroll.Controls.Add(this.lblPresentacion);
-            this.panelScroll.Controls.Add(this.txtPresentacion);
+           // this.panelScroll.Controls.Add(this.lblPresentacion);
+            //this.panelScroll.Controls.Add(this.txtPresentacion);
             this.panelScroll.Controls.Add(this.lblLaboratorio);
             this.panelScroll.Controls.Add(this.txtLaboratorio);
-            this.panelScroll.Controls.Add(this.lblDosis);
-            this.panelScroll.Controls.Add(this.txtDosis);
+            //this.panelScroll.Controls.Add(this.lblDosis);
+            //this.panelScroll.Controls.Add(this.txtDosis);
             this.panelScroll.Controls.Add(this.lblCategoria);
             this.panelScroll.Controls.Add(this.cmbCategoria);
             this.panelScroll.Controls.Add(this.lblProveedor);
@@ -155,12 +163,20 @@ namespace PharmaSoft.Forms
             this.txtNombre.Location = new System.Drawing.Point(140, y);
             this.txtNombre.Size = new System.Drawing.Size(240, 23);
 
+            y += 30;
+            this.lblDescripcion.Location = new System.Drawing.Point(20, y);
+            this.lblDescripcion.Size = new System.Drawing.Size(100, 20);
+            this.lblDescripcion.Text = "Descripción:";
 
-            this.lblPresentacion.Size = new System.Drawing.Size(100, 20);
-            this.lblPresentacion.Text = "Presentación:";
+            this.txtDescripcion.Location = new System.Drawing.Point(140, y);
+            this.txtDescripcion.Size = new System.Drawing.Size(240, 23);
 
-            this.txtPresentacion.Location = new System.Drawing.Point(140, y);
-            this.txtPresentacion.Size = new System.Drawing.Size(240, 23);
+
+           // this.lblPresentacion.Size = new System.Drawing.Size(100, 20);
+            //this.lblPresentacion.Text = "Presentación:";
+
+            //this.txtPresentacion.Location = new System.Drawing.Point(140, y);
+           // this.txtPresentacion.Size = new System.Drawing.Size(240, 23);
 
             y += 30;
             this.lblLaboratorio.Location = new System.Drawing.Point(20, y);
@@ -171,12 +187,12 @@ namespace PharmaSoft.Forms
             this.txtLaboratorio.Size = new System.Drawing.Size(240, 23);
 
             y += 30;
-            this.lblDosis.Location = new System.Drawing.Point(20, y);
-            this.lblDosis.Size = new System.Drawing.Size(100, 20);
-            this.lblDosis.Text = "Dosis:";
+           // this.lblDosis.Location = new System.Drawing.Point(20, y);
+            //this.lblDosis.Size = new System.Drawing.Size(100, 20);
+           // this.lblDosis.Text = "Dosis:";
 
-            this.txtDosis.Location = new System.Drawing.Point(140, y);
-            this.txtDosis.Size = new System.Drawing.Size(240, 23);
+           // this.txtDosis.Location = new System.Drawing.Point(140, y);
+            //this.txtDosis.Size = new System.Drawing.Size(240, 23);
 
             y += 30;
             this.lblCategoria.Location = new System.Drawing.Point(20, y);

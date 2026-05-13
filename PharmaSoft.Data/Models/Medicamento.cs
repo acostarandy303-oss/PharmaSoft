@@ -19,32 +19,17 @@ public partial class Medicamento
     [StringLength(150)]
     public string Nombre { get; set; } = null!;
 
-    [StringLength(500)]
-    [NotMapped]
-    public string? Descripcion { get; set; }
-
     [StringLength(150)]
-    [NotMapped]
-    public string? Presentacion { get; set; }
-
-    [StringLength(150)]
-    [NotMapped]
     public string? Laboratorio { get; set; }
 
-    [StringLength(100)]
-    [NotMapped]
-    public string? Dosis { get; set; }
+    [StringLength(500)]
+    public string? Descripcion { get; set; }
 
     [Column("CategoriaID")]
     public int CategoriaId { get; set; }
 
     [Column("ProveedorID")]
     public int ProveedorId { get; set; }
-
-    public bool? RequiereReceta { get; set; }
-
-    [NotMapped]
-    public DateOnly? FechaVencimiento { get; set; }
 
     [Column(TypeName = "decimal(10, 2)")]
     public decimal PrecioCompra { get; set; }
@@ -54,17 +39,19 @@ public partial class Medicamento
 
     public int? StockMinimo { get; set; }
 
+    // --- Propiedades de Navegación (Relaciones) ---
+
     [ForeignKey("CategoriaId")]
     [InverseProperty("Medicamentos")]
     public virtual Categoria Categoria { get; set; } = null!;
+
+    [ForeignKey("ProveedorId")]
+    [InverseProperty("Medicamentos")]
+    public virtual Proveedore Proveedor { get; set; } = null!;
 
     [InverseProperty("Medicamento")]
     public virtual ICollection<DetalleCompra> DetalleCompras { get; set; } = new List<DetalleCompra>();
 
     [InverseProperty("Medicamento")]
     public virtual ICollection<LotesInventario> LotesInventarios { get; set; } = new List<LotesInventario>();
-
-    [ForeignKey("ProveedorId")]
-    [InverseProperty("Medicamentos")]
-    public virtual Proveedore Proveedor { get; set; } = null!;
 }

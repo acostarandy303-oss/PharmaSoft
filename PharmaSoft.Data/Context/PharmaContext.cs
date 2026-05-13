@@ -149,7 +149,7 @@ public partial class PharmaContext : DbContext
         {
             entity.HasKey(e => e.MedicamentoId).HasName("PK__Medicame__003D65F308DB0ECC");
 
-            entity.Property(e => e.RequiereReceta).HasDefaultValue(false);
+            //entity.Property(e => e.RequiereReceta).HasDefaultValue(false);
             entity.Property(e => e.StockMinimo).HasDefaultValue(10);
 
             entity.HasOne(d => d.Categoria).WithMany(p => p.Medicamentos)
