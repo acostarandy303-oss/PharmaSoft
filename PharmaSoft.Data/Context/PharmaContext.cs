@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PharmaSoft.Data.Models;
 
 namespace PharmaSoft.Data.Context;
@@ -44,7 +45,11 @@ public partial class PharmaContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["PharmaDb"]?.ConnectionString;
+            IConfigurationRoot config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+            var connectionString = config.GetConnectionString("PharmaDb");
             optionsBuilder.UseSqlServer(connectionString);
         }
     }

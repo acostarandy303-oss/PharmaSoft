@@ -19,9 +19,6 @@ public partial class Medicamento
     [StringLength(150)]
     public string Nombre { get; set; } = null!;
 
-    [StringLength(150)]
-    public string? PrincipioActivo { get; set; }
-
     [StringLength(500)]
     [NotMapped]
     public string? Descripcion { get; set; }

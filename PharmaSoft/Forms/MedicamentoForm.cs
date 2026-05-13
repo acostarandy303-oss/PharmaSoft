@@ -1,14 +1,18 @@
 using PharmaSoft.Data.Context;
 using PharmaSoft.Data.Models;
 using PharmaSoft.Services;
+using System.Diagnostics;
 
 namespace PharmaSoft.Forms;
 
+[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public partial class MedicamentoForm : Form
 {
     private readonly PharmaContext _context;
     private readonly CategoriaService _categoriaService;
     private readonly ProveedoreService _proveedorService;
+    private readonly MedicamentoService _medicamentoService;
+    private readonly LotesInventarioService _lotesService;
 
     public Medicamento Medicamento { get; private set; }
     public LotesInventario? Lote { get; private set; }
@@ -19,15 +23,49 @@ public partial class MedicamentoForm : Form
         _context = new PharmaContext();
         _categoriaService = new CategoriaService(_context);
         _proveedorService = new ProveedoreService(_context);
+        _medicamentoService = new MedicamentoService(_context);
+        _lotesService = new LotesInventarioService(_context);
         Medicamento = medicamento ?? new Medicamento();
-        CargarCombos();
+        //CargarCombos();
+        //CargarInventario();
         if (medicamento != null)
         {
             CargarDatos(medicamento);
         }
     }
 
-    private async void CargarCombos()
+    private async void MedicamentoForm_Load(object sender, EventArgs e)
+    {
+        await CargarCombos();
+
+        await CargarInventario();
+    }
+
+    private async Task CargarInventario()
+    {
+        var medicamentos = await _medicamentoService.GetList(m => true);
+        var lotes = await _lotesService.GetList(l => true);
+
+        var inventario = medicamentos.Select(m => new
+        {
+            m.MedicamentoId,
+            m.CodigoBarras,
+            m.Nombre,
+            m.Laboratorio,
+            Cantidad = lotes.Where(l => l.MedicamentoId == m.MedicamentoId).Sum(l => l.CantidadActual),
+            m.PrecioVenta
+        }).ToList();
+
+        dgvMedicamentos.DataSource = inventario;
+        dgvMedicamentos.Columns["MedicamentoId"].Visible = false;
+        dgvMedicamentos.Columns["CodigoBarras"].HeaderText = "Código";
+        dgvMedicamentos.Columns["Nombre"].HeaderText = "Nombre";
+        dgvMedicamentos.Columns["Laboratorio"].HeaderText = "Laboratorio";
+        dgvMedicamentos.Columns["Cantidad"].HeaderText = "Cantidad";
+        dgvMedicamentos.Columns["PrecioVenta"].HeaderText = "Precio";
+    }
+
+    private async Task CargarCombos()
     {
         var categorias = await _categoriaService.GetList(c => true);
         var proveedores = await _proveedorService.GetList(p => true);
@@ -45,7 +83,7 @@ public partial class MedicamentoForm : Form
     {
         txtCodigoBarras.Text = m.CodigoBarras;
         txtNombre.Text = m.Nombre;
-        txtPrincipioActivo.Text = m.PrincipioActivo;
+
         txtPresentacion.Text = m.Presentacion;
         txtLaboratorio.Text = m.Laboratorio;
         txtDosis.Text = m.Dosis;
@@ -67,7 +105,7 @@ public partial class MedicamentoForm : Form
 
         Medicamento.CodigoBarras = txtCodigoBarras.Text.Trim();
         Medicamento.Nombre = txtNombre.Text.Trim();
-        Medicamento.PrincipioActivo = txtPrincipioActivo.Text.Trim();
+
         Medicamento.Presentacion = txtPresentacion.Text.Trim();
         Medicamento.Laboratorio = txtLaboratorio.Text.Trim();
         Medicamento.Dosis = txtDosis.Text.Trim();
@@ -103,5 +141,10 @@ public partial class MedicamentoForm : Form
     {
         _context.Dispose();
         base.OnFormClosing(e);
+    }
+
+    private string GetDebuggerDisplay()
+    {
+        return ToString();
     }
 }

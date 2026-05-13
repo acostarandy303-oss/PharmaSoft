@@ -11,6 +11,11 @@
 		<ProjectReference Include="..\PharmaSoft.Data\PharmaSoft.Data.csproj" />
 	</ItemGroup>
 	<ItemGroup>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="Aplicada1.Core" Version="1.0.0" />
 	</ItemGroup>
   <ItemGroup>
