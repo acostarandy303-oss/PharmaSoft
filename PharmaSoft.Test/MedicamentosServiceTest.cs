@@ -33,12 +33,10 @@ public class MedicamentoServiceTests
         var nuevoMedicamento = new Medicamento
         {
             Nombre = "Ibuprofeno 400mg",
-            PrincipioActivo = "Ibuprofeno",
             CategoriaId = categoriaGuardada.CategoriaId,
             ProveedorId = proveedorGuardado.ProveedorId,
             PrecioCompra = 50.00m,
             PrecioVenta = 75.00m,
-            RequiereReceta = false,
             StockMinimo = 20
         };
 
@@ -88,6 +86,6 @@ public class MedicamentoServiceTests
 
         // Assert
         Assert.True(resultadoEliminar);
-        Assert.Empty(context.Medicamentos);
+        Assert.Empty(context.Medicamentos.Where(m => m.Activo));
     }
 }

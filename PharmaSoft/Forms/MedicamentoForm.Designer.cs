@@ -201,6 +201,8 @@ namespace PharmaSoft.Forms
 
             this.cmbCategoria.Location = new System.Drawing.Point(140, y);
             this.cmbCategoria.Size = new System.Drawing.Size(240, 23);
+            this.cmbCategoria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            this.cmbCategoria.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
 
             y += 30;
             this.lblProveedor.Location = new System.Drawing.Point(20, y);
@@ -323,6 +325,7 @@ namespace PharmaSoft.Forms
             this.ClientSize = new System.Drawing.Size(780, 530);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Medicamento";
+            this.Load += MedicamentoForm_Load;
 
             ((System.ComponentModel.ISupportInitialize)(this.nudPrecioCompra)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPrecioVenta)).EndInit();

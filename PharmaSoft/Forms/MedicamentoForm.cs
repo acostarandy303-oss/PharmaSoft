@@ -17,7 +17,7 @@ public partial class MedicamentoForm : Form
     public Medicamento Medicamento { get; private set; }
     public LotesInventario? Lote { get; private set; }
 
-    public MedicamentoForm(Medicamento? medicamento = null) //CONSTRUCTOR
+    public MedicamentoForm(Medicamento? medicamento = null)
     {
         InitializeComponent();
         _context = new PharmaContext();
@@ -26,8 +26,6 @@ public partial class MedicamentoForm : Form
         _medicamentoService = new MedicamentoService(_context);
         _lotesService = new LotesInventarioService(_context);
 
-        this.Load += MedicamentoForm_Load;
-
         Medicamento = medicamento ?? new Medicamento();
         if (medicamento != null)
         {
@@ -35,7 +33,7 @@ public partial class MedicamentoForm : Form
         }
     }
 
-    private async void MedicamentoForm_Load(object sender, EventArgs e)
+    private async void MedicamentoForm_Load(object? sender, EventArgs e)
     {
         await CargarCombos();
 
@@ -44,7 +42,7 @@ public partial class MedicamentoForm : Form
 
     private async Task CargarInventario()
     {
-        var medicamentos = await _medicamentoService.GetList(m => true);
+        var medicamentos = await _medicamentoService.GetList(m => m.Activo);
         var lotes = await _lotesService.GetList(l => true);
 
         var inventario = medicamentos.Select(m => new
@@ -94,7 +92,7 @@ public partial class MedicamentoForm : Form
         
     }
 
-    private void btnGuardar_Click(object sender, EventArgs e)
+    private async void btnGuardar_Click(object sender, EventArgs e)
     {
         if (string.IsNullOrWhiteSpace(txtNombre.Text))
         {
@@ -102,7 +100,24 @@ public partial class MedicamentoForm : Form
             return;
         }
 
-      
+        string nombreCategoria = cmbCategoria.Text.Trim();
+        int categoriaId = 0;
+
+        if (!string.IsNullOrEmpty(nombreCategoria))
+        {
+            var categoriaExistente = await _categoriaService.GetList(c => c.Nombre.ToLower() == nombreCategoria.ToLower());
+            if (categoriaExistente.Any())
+            {
+                categoriaId = categoriaExistente.First().CategoriaId;
+            }
+            else
+            {
+                var nuevaCategoria = new Categoria { Nombre = nombreCategoria };
+                await _categoriaService.Guardar(nuevaCategoria);
+                var categoriasActualizadas = await _categoriaService.GetList(c => c.Nombre.ToLower() == nombreCategoria.ToLower());
+                categoriaId = categoriasActualizadas.First().CategoriaId;
+            }
+        }
 
         Medicamento.CodigoBarras = txtCodigoBarras.Text.Trim();
         Medicamento.Nombre = txtNombre.Text.Trim();
@@ -113,7 +128,7 @@ public partial class MedicamentoForm : Form
         Medicamento.Laboratorio = txtLaboratorio.Text.Trim();
         Medicamento.Descripcion = txtDescripcion.Text.Trim();
         Medicamento.StockMinimo = (int)nudStockMinimo.Value;
-        Medicamento.CategoriaId = cmbCategoria.SelectedValue is int catId ? catId : 0;
+        Medicamento.CategoriaId = categoriaId;
         Medicamento.ProveedorId = cmbProveedor.SelectedValue is int provId ? provId : 0;
 
         if (Medicamento.MedicamentoId == 0 && nudCantidadLote.Value > 0)

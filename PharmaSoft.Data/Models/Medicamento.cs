@@ -39,6 +39,8 @@ public partial class Medicamento
 
     public int? StockMinimo { get; set; }
 
+    public bool Activo { get; set; } = true;
+
     // --- Propiedades de Navegación (Relaciones) ---
 
     [ForeignKey("CategoriaId")]
@@ -54,4 +56,5 @@ public partial class Medicamento
 
     [InverseProperty("Medicamento")]
     public virtual ICollection<LotesInventario> LotesInventarios { get; set; } = new List<LotesInventario>();
+    
 }
