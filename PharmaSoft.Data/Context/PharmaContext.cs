@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PharmaSoft.Data.Models;
 
 namespace PharmaSoft.Data.Context;
@@ -41,13 +42,10 @@ public partial class PharmaContext : DbContext
     public virtual DbSet<Venta> Ventas { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["PharmaDb"]?.ConnectionString;
-            optionsBuilder.UseSqlServer(connectionString);
-        }
-    }
+
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=PharmaDb;Trusted_Connection=True;TrustServerCertificate=True;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Categoria>(entity =>
@@ -144,7 +142,7 @@ public partial class PharmaContext : DbContext
         {
             entity.HasKey(e => e.MedicamentoId).HasName("PK__Medicame__003D65F308DB0ECC");
 
-            entity.Property(e => e.RequiereReceta).HasDefaultValue(false);
+            //entity.Property(e => e.RequiereReceta).HasDefaultValue(false);
             entity.Property(e => e.StockMinimo).HasDefaultValue(10);
 
             entity.HasOne(d => d.Categoria).WithMany(p => p.Medicamentos)

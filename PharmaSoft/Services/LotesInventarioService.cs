@@ -52,7 +52,7 @@ public class LotesInventarioService(PharmaContext contexto) : IService<LotesInve
 
     public async Task<List<LotesInventario>> GetList(Expression<Func<LotesInventario, bool>> criterio)
     {
-        return await contexto.LotesInventarios
+      return await contexto.LotesInventarios
             .AsNoTracking()
             .Where(criterio)
             .ToListAsync();

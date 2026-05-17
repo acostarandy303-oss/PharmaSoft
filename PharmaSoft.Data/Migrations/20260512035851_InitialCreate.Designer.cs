@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmaSoft.Data.Context;
 
@@ -11,9 +12,11 @@ using PharmaSoft.Data.Context;
 namespace PharmaSoft.Data.Migrations
 {
     [DbContext(typeof(PharmaContext))]
-    partial class PharmaContextModelSnapshot : ModelSnapshot
+    [Migration("20260512035851_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -324,9 +327,6 @@ namespace PharmaSoft.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedicamentoId"));
 
-                    b.Property<bool>("Activo")
-                        .HasColumnType("bit");
-
                     b.Property<int>("CategoriaId")
                         .HasColumnType("int")
                         .HasColumnName("CategoriaID");
@@ -334,14 +334,6 @@ namespace PharmaSoft.Data.Migrations
                     b.Property<string>("CodigoBarras")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Descripcion")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Laboratorio")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -354,9 +346,18 @@ namespace PharmaSoft.Data.Migrations
                     b.Property<decimal>("PrecioVenta")
                         .HasColumnType("decimal(10, 2)");
 
+                    b.Property<string>("PrincipioActivo")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
                     b.Property<int>("ProveedorId")
                         .HasColumnType("int")
                         .HasColumnName("ProveedorID");
+
+                    b.Property<bool?>("RequiereReceta")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<int?>("StockMinimo")
                         .ValueGeneratedOnAdd()

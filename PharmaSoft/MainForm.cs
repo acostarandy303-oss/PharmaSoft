@@ -19,10 +19,6 @@ public partial class PharmaSoft : Form
         _medicamentoService = new MedicamentoService(_context);
         _lotesService = new LotesInventarioService(_context);
         CargarInventario();
-        btnAnadir.Click += btnAnadir_Click;
-        btnEditar.Click += btnEditar_Click;
-        btnEliminar.Click += btnEliminar_Click;
-        txtBuscar.TextChanged += txtBuscar_TextChanged;
     }
 
     private void btnInventario_Click(object? sender, EventArgs e)
@@ -39,6 +35,9 @@ public partial class PharmaSoft : Form
     private void btnVentas_Click(object sender, EventArgs e)
     {
         lblTituloSeccion.Text = "Punto de Venta";
+        using var form = new Forms.VentaForm();
+        form.ShowDialog();
+        CargarInventario();
     }
 
     private void btnClientes_Click(object sender, EventArgs e)
@@ -68,7 +67,7 @@ public partial class PharmaSoft : Form
 
     private async void CargarInventario()
     {
-        var medicamentos = await _medicamentoService.GetList(m => true);
+        var medicamentos = await _medicamentoService.GetList(m => m.Activo);
         var lotes = await _lotesService.GetList(l => true);
 
         var inventario = medicamentos.Select(m => new
@@ -178,9 +177,9 @@ public partial class PharmaSoft : Form
         }
 
         var medicamentos = await _medicamentoService.GetList(m =>
-            m.Nombre.Contains(criterio) ||
+            m.Activo && (m.Nombre.Contains(criterio) ||
             (m.CodigoBarras != null && m.CodigoBarras.Contains(criterio)) ||
-            (m.Laboratorio != null && m.Laboratorio.Contains(criterio)));
+            (m.Laboratorio != null && m.Laboratorio.Contains(criterio))));
 
         var lotes = await _lotesService.GetList(l => true);
 
