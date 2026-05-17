@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -29,6 +29,15 @@ public class MedicamentoService(PharmaContext contexto) : IService<Medicamento, 
 
     private async Task<bool> Modificar(Medicamento medicamento)
     {
+        var local = contexto.Set<Medicamento>()
+            .Local
+            .FirstOrDefault(entry => entry.MedicamentoId.Equals(medicamento.MedicamentoId));
+
+        if (local != null)
+        {
+            contexto.Entry(local).State = EntityState.Detached;
+        }
+
         contexto.Update(medicamento);
         return await contexto.SaveChangesAsync() > 0;
     }
@@ -39,9 +48,9 @@ public class MedicamentoService(PharmaContext contexto) : IService<Medicamento, 
         if (medicamento == null)
             return false;
 
-        contexto.Medicamentos.Remove(medicamento);
-        var eliminados = await contexto.SaveChangesAsync();
-        return eliminados > 0;
+        medicamento.Activo = false;
+        contexto.Medicamentos.Update(medicamento);
+        return await contexto.SaveChangesAsync() > 0;
     }
 
     public async Task<Medicamento?> Buscar(int id)

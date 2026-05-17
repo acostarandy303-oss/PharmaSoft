@@ -212,6 +212,11 @@
             btnInventario.TextAlign = ContentAlignment.MiddleLeft;
             btnInventario.UseVisualStyleBackColor = false;
             btnInventario.Click += btnInventario_Click;
+            btnVentas.Click += btnVentas_Click;
+            btnAnadir.Click += btnAnadir_Click;
+            btnEditar.Click += btnEditar_Click;
+            btnEliminar.Click += btnEliminar_Click;
+            txtBuscar.TextChanged += txtBuscar_TextChanged;
             // 
             // btnInicio
             // 
