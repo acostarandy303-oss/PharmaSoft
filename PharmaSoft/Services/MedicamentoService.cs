@@ -14,10 +14,15 @@ public class MedicamentoService(PharmaContext contexto) : IService<Medicamento, 
 {
     public async Task<bool> Guardar(Medicamento medicamento)
     {
-        if (medicamento.MedicamentoId == 0)
+        if (!await Existe(medicamento.MedicamentoId))
             return await Insertar(medicamento);
         else
             return await Modificar(medicamento);
+    }
+
+    public async Task<bool> Existe(int id)
+    {
+        return await contexto.Medicamentos.AnyAsync(m => m.MedicamentoId == id);
     }
 
     private async Task<bool> Insertar(Medicamento medicamento)
