@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -41,6 +41,11 @@ public class ProveedoreService(PharmaContext contexto) : IService<Proveedore, in
         contexto.Proveedores.Remove(proveedore);
         var eliminados = await contexto.SaveChangesAsync();
         return eliminados > 0;
+    }
+
+    public async Task<bool> Existe(int id)
+    {
+        return await contexto.Proveedores.AnyAsync(p => p.ProveedorId == id);
     }
 
     public async Task<Proveedore?> Buscar(int id)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -41,6 +41,11 @@ public class ClienteService(PharmaContext contexto) : IService<Cliente, int>
         contexto.Clientes.Remove(cliente   );
         var eliminados = await contexto.SaveChangesAsync();
         return eliminados > 0;
+    }
+
+    public async Task<bool> Existe(int id)
+    {
+        return await contexto.Clientes.AnyAsync(c => c.ClienteId == id);
     }
 
     public async Task<Cliente?> Buscar(int id)

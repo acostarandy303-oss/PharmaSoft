@@ -1,105 +1,223 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PharmaSoft.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
 using PharmaSoft.Data.Models;
 using PharmaSoft.Services;
+using System;
+using System.Threading.Tasks;
+using PharmaSoft.Test.Infraestructura;
+using Xunit;
 
-namespace PharmaSoft.Tests;
-
-public class DetalleVentaServiceTests
+namespace PharmaSoft.Test
 {
-    private DbContextOptions<PharmaContext> CrearOpciones()
+    public class DetalleVentaServiceTests
     {
-        // GitHub Actions automáticamente establece esta variable en "true"
-        bool enGitHub = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
-
-        // Si estamos en GitHub usa LocalDB, si estamos en tu PC usa SqlExpress
-        string servidor = enGitHub ? "(localdb)\\MSSQLLocalDB" : ".\\SqlExpress";
-
-        string connectionString = $"Data Source={servidor};Database=PharmaDb_Tests;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;";
-
-        return new DbContextOptionsBuilder<PharmaContext>()
-            .UseSqlServer(connectionString)
-            .Options;
-    }
-    public DetalleVentaServiceTests()
-    {
-        using var contexto = new PharmaContext(CrearOpciones());
-        contexto.Database.EnsureDeleted();
-        contexto.Database.EnsureCreated();
-    }
-
-    [Fact]
-    public async Task Guardar_NuevoDetalle_DebeInsertarCorrectamente()
-    {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
-
-        var categoria = new Categoria { Nombre = "Cat" };
-        var proveedor = new Proveedore { NombreEmpresa = "Prov" };
-        contexto.Categorias.Add(categoria);
-        contexto.Proveedores.Add(proveedor);
-        await contexto.SaveChangesAsync();
-
-        var medicamento = new Medicamento { Nombre = "Med", CategoriaId = categoria.CategoriaId, ProveedorId = proveedor.ProveedorId, PrecioCompra = 5, PrecioVenta = 10 };
-        var venta = new Venta { Total = 20m };
-        contexto.Medicamentos.Add(medicamento);
-        contexto.Ventas.Add(venta);
-        await contexto.SaveChangesAsync();
-
-        var lote = new LotesInventario { MedicamentoId = medicamento.MedicamentoId, NumeroLote = "L1", CantidadActual = 50, FechaVencimiento = DateOnly.FromDateTime(DateTime.Now) };
-        contexto.LotesInventarios.Add(lote);
-        await contexto.SaveChangesAsync();
-
-        var servicio = new DetalleVentaService(contexto);
-        var detalle = new DetalleVenta
+        [Fact]
+        public async Task Buscar_CuandoExisteDetalleVenta_RetornaEntidad()
         {
-            VentaId = venta.VentaId,
-            LoteId = lote.LoteId,
-            Cantidad = 2,
-            PrecioUnitario = 10m,
-            Subtotal = 20m
-        };
+            // Arrange
+            var dbName = TestDbContextFactory.NewDataBaseName();
+            await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+            {
+                seedContext.Clientes.Add(new Cliente { ClienteId = 1, Nombre = "C1" });
+                seedContext.Ventas.Add(new Venta { VentaId = 1, Total = 100m });
+                seedContext.Categorias.Add(new Categoria { CategoriaId = 1, Nombre = "Cat1" });
+                seedContext.Proveedores.Add(new Proveedore { ProveedorId = 1, NombreEmpresa = "Prov1" });
+                seedContext.Medicamentos.Add(new Medicamento { MedicamentoId = 1, CategoriaId = 1, ProveedorId = 1, Nombre = "Med1", PrecioCompra = 10m, PrecioVenta = 15m });
+                seedContext.LotesInventarios.Add(new LotesInventario { LoteId = 1, MedicamentoId = 1, NumeroLote = "L1", CantidadActual = 100, FechaVencimiento = DateOnly.FromDateTime(DateTime.Now.AddYears(1)) });
+                seedContext.DetalleVentas.Add(CreateDetalleVenta(id: 1, ventaId: 1, loteId: 1, cantidad: 5));
+                await seedContext.SaveChangesAsync();
+            }
 
-        var resultado = await servicio.Guardar(detalle);
+            await using var context = TestDbContextFactory.CreateContext(dbName);
+            var service = new DetalleVentaService(context);
 
-        Assert.True(resultado);
-        Assert.Equal(1, contexto.DetalleVentas.Count());
-        Assert.Equal(20m, contexto.DetalleVentas.First().Subtotal);
-    }
+            // Act
+            var result = await service.Buscar(1);
 
-    [Fact]
-    public async Task Eliminar_DetalleExistente_DebeRetornarTrue()
-    {
-        var opciones = CrearOpciones();
-        using var contexto = new PharmaContext(opciones);
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(1, result!.DetalleId);
+            Assert.Equal(5, result.Cantidad);
+            Assert.Empty(context.ChangeTracker.Entries());
+        }
 
-        var categoria = new Categoria { Nombre = "C" };
-        var proveedor = new Proveedore { NombreEmpresa = "P" };
-        contexto.Categorias.Add(categoria);
-        contexto.Proveedores.Add(proveedor);
-        await contexto.SaveChangesAsync();
+        [Fact]
+        public async Task Buscar_CuandoNoExisteDetalleVenta_RetornaNull()
+        {
+            // Arrange
+            await using var context = TestDbContextFactory.CreateContext(TestDbContextFactory.NewDataBaseName());
+            var service = new DetalleVentaService(context);
 
-        var medicamento = new Medicamento { Nombre = "M", CategoriaId = categoria.CategoriaId, ProveedorId = proveedor.ProveedorId, PrecioCompra = 1, PrecioVenta = 2 };
-        var venta = new Venta { Total = 2 };
-        contexto.Medicamentos.Add(medicamento);
-        contexto.Ventas.Add(venta);
-        await contexto.SaveChangesAsync();
+            // Act
+            var result = await service.Buscar(999);
 
-        var lote = new LotesInventario { MedicamentoId = medicamento.MedicamentoId, NumeroLote = "L", CantidadActual = 10, FechaVencimiento = DateOnly.FromDateTime(DateTime.Now) };
-        contexto.LotesInventarios.Add(lote);
-        await contexto.SaveChangesAsync();
+            // Assert
+            Assert.Null(result);
+        }
 
-        var detalle = new DetalleVenta { VentaId = venta.VentaId, LoteId = lote.LoteId, Cantidad = 1, PrecioUnitario = 2, Subtotal = 2 };
-        contexto.DetalleVentas.Add(detalle);
-        await contexto.SaveChangesAsync();
+        [Fact]
+        public async Task GetList_CuandoSeFiltraPorCantidad_RetornaCoincidencias()
+        {
+            // Arrange
+            var dbName = TestDbContextFactory.NewDataBaseName();
+            await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+            {
+                seedContext.Clientes.Add(new Cliente { ClienteId = 1, Nombre = "C1" });
+                seedContext.Ventas.Add(new Venta { VentaId = 1, Total = 100m });
+                seedContext.Categorias.Add(new Categoria { CategoriaId = 1, Nombre = "Cat1" });
+                seedContext.Proveedores.Add(new Proveedore { ProveedorId = 1, NombreEmpresa = "Prov1" });
+                seedContext.Medicamentos.Add(new Medicamento { MedicamentoId = 1, CategoriaId = 1, ProveedorId = 1, Nombre = "Med1", PrecioCompra = 10m, PrecioVenta = 15m });
+                seedContext.LotesInventarios.Add(new LotesInventario { LoteId = 1, MedicamentoId = 1, NumeroLote = "L1", CantidadActual = 100, FechaVencimiento = DateOnly.FromDateTime(DateTime.Now.AddYears(1)) });
+                seedContext.DetalleVentas.AddRange(
+                    CreateDetalleVenta(id: 1, ventaId: 1, loteId: 1, cantidad: 2),
+                    CreateDetalleVenta(id: 2, ventaId: 1, loteId: 1, cantidad: 5),
+                    CreateDetalleVenta(id: 3, ventaId: 1, loteId: 1, cantidad: 10)
+                );
+                await seedContext.SaveChangesAsync();
+            }
 
-        var servicio = new DetalleVentaService(contexto);
-        var resultadoEliminar = await servicio.Eliminar(detalle.DetalleId);
+            await using var context = TestDbContextFactory.CreateContext(dbName);
+            var service = new DetalleVentaService(context);
 
-        Assert.True(resultadoEliminar);
-        Assert.Empty(contexto.DetalleVentas);
+            // Act
+            var result = await service.GetList(d => d.Cantidad >= 5);
+
+            // Assert
+            Assert.Equal(2, result.Count);
+            Assert.Contains(result, d => d.DetalleId == 2);
+            Assert.Contains(result, d => d.DetalleId == 3);
+        }
+
+        [Fact]
+        public async Task Guardar_CuandoDetalleVentaNoExiste_InsertaYRetornaTrue()
+        {
+            // Arrange
+            var dbName = TestDbContextFactory.NewDataBaseName();
+            await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+            {
+                seedContext.Clientes.Add(new Cliente { ClienteId = 1, Nombre = "C1" });
+                seedContext.Ventas.Add(new Venta { VentaId = 1, Total = 100m });
+                seedContext.Categorias.Add(new Categoria { CategoriaId = 1, Nombre = "Cat1" });
+                seedContext.Proveedores.Add(new Proveedore { ProveedorId = 1, NombreEmpresa = "Prov1" });
+                seedContext.Medicamentos.Add(new Medicamento { MedicamentoId = 1, CategoriaId = 1, ProveedorId = 1, Nombre = "Med1", PrecioCompra = 10m, PrecioVenta = 15m });
+                seedContext.LotesInventarios.Add(new LotesInventario { LoteId = 1, MedicamentoId = 1, NumeroLote = "L1", CantidadActual = 100, FechaVencimiento = DateOnly.FromDateTime(DateTime.Now.AddYears(1)) });
+                await seedContext.SaveChangesAsync();
+            }
+
+            await using var context = TestDbContextFactory.CreateContext(dbName);
+            var service = new DetalleVentaService(context);
+            var nuevo = CreateDetalleVenta(id: 0, ventaId: 1, loteId: 1, cantidad: 20);
+
+            // Act
+            var result = await service.Guardar(nuevo);
+
+            // Assert
+            Assert.True(result);
+
+            var saved = await context.DetalleVentas.FirstOrDefaultAsync(d => d.DetalleId == nuevo.DetalleId);
+            Assert.NotNull(saved);
+            Assert.Equal(20, saved!.Cantidad);
+        }
+
+        [Fact]
+        public async Task Guardar_CuandoDetalleVentaExiste_ModificaYRetornaTrue()
+        {
+            // Arrange
+            var dbName = TestDbContextFactory.NewDataBaseName();
+            await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+            {
+                seedContext.Clientes.Add(new Cliente { ClienteId = 1, Nombre = "C1" });
+                seedContext.Ventas.Add(new Venta { VentaId = 1, Total = 100m });
+                seedContext.Categorias.Add(new Categoria { CategoriaId = 1, Nombre = "Cat1" });
+                seedContext.Proveedores.Add(new Proveedore { ProveedorId = 1, NombreEmpresa = "Prov1" });
+                seedContext.Medicamentos.Add(new Medicamento { MedicamentoId = 1, CategoriaId = 1, ProveedorId = 1, Nombre = "Med1", PrecioCompra = 10m, PrecioVenta = 15m });
+                seedContext.LotesInventarios.Add(new LotesInventario { LoteId = 1, MedicamentoId = 1, NumeroLote = "L1", CantidadActual = 100, FechaVencimiento = DateOnly.FromDateTime(DateTime.Now.AddYears(1)) });
+                seedContext.DetalleVentas.Add(CreateDetalleVenta(id: 20, ventaId: 1, loteId: 1, cantidad: 5));
+                await seedContext.SaveChangesAsync();
+            }
+
+            await using var context = TestDbContextFactory.CreateContext(dbName);
+            var service = new DetalleVentaService(context);
+
+            var updated = CreateDetalleVenta(id: 20, ventaId: 1, loteId: 1, cantidad: 15);
+
+            // Act
+            var result = await service.Guardar(updated);
+
+            // Assert
+            Assert.True(result);
+
+            var saved = await context.DetalleVentas.FirstOrDefaultAsync(d => d.DetalleId == 20);
+            Assert.NotNull(saved);
+            Assert.Equal(15, saved!.Cantidad);
+        }
+
+        [Fact]
+        public async Task Existe_CuandoDetalleVentaExiste_RetornaTrue()
+        {
+            // Arrange
+            var dbName = TestDbContextFactory.NewDataBaseName();
+            await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+            {
+                seedContext.Clientes.Add(new Cliente { ClienteId = 1, Nombre = "C1" });
+                seedContext.Ventas.Add(new Venta { VentaId = 1, Total = 100m });
+                seedContext.Categorias.Add(new Categoria { CategoriaId = 1, Nombre = "Cat1" });
+                seedContext.Proveedores.Add(new Proveedore { ProveedorId = 1, NombreEmpresa = "Prov1" });
+                seedContext.Medicamentos.Add(new Medicamento { MedicamentoId = 1, CategoriaId = 1, ProveedorId = 1, Nombre = "Med1", PrecioCompra = 10m, PrecioVenta = 15m });
+                seedContext.LotesInventarios.Add(new LotesInventario { LoteId = 1, MedicamentoId = 1, NumeroLote = "L1", CantidadActual = 100, FechaVencimiento = DateOnly.FromDateTime(DateTime.Now.AddYears(1)) });
+                seedContext.DetalleVentas.Add(CreateDetalleVenta(id: 50, ventaId: 1, loteId: 1, cantidad: 5));
+                await seedContext.SaveChangesAsync();
+            }
+
+            await using var context = TestDbContextFactory.CreateContext(dbName);
+            var service = new DetalleVentaService(context);
+
+            // Act
+            var result = await service.Existe(50);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task Eliminar_CuandoExisteDetalleVenta_LoBorraYRetornaTrue()
+        {
+            // Arrange
+            var dbName = TestDbContextFactory.NewDataBaseName();
+            await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+            {
+                seedContext.Clientes.Add(new Cliente { ClienteId = 1, Nombre = "C1" });
+                seedContext.Ventas.Add(new Venta { VentaId = 1, Total = 100m });
+                seedContext.Categorias.Add(new Categoria { CategoriaId = 1, Nombre = "Cat1" });
+                seedContext.Proveedores.Add(new Proveedore { ProveedorId = 1, NombreEmpresa = "Prov1" });
+                seedContext.Medicamentos.Add(new Medicamento { MedicamentoId = 1, CategoriaId = 1, ProveedorId = 1, Nombre = "Med1", PrecioCompra = 10m, PrecioVenta = 15m });
+                seedContext.LotesInventarios.Add(new LotesInventario { LoteId = 1, MedicamentoId = 1, NumeroLote = "L1", CantidadActual = 100, FechaVencimiento = DateOnly.FromDateTime(DateTime.Now.AddYears(1)) });
+                seedContext.DetalleVentas.Add(CreateDetalleVenta(id: 80, ventaId: 1, loteId: 1, cantidad: 5));
+                await seedContext.SaveChangesAsync();
+            }
+
+            await using var context = TestDbContextFactory.CreateContext(dbName);
+            var service = new DetalleVentaService(context);
+
+            // Act
+            var result = await service.Eliminar(80);
+
+            // Assert
+            Assert.True(result);
+            var eliminado = await context.DetalleVentas.FindAsync(80);
+            Assert.Null(eliminado);
+        }
+
+        private static DetalleVenta CreateDetalleVenta(int id, int ventaId, int loteId, int cantidad)
+        {
+            return new DetalleVenta
+            {
+                DetalleId = id,
+                VentaId = ventaId,
+                LoteId = loteId,
+                Cantidad = cantidad,
+                PrecioUnitario = 15m,
+                Subtotal = 15m * cantidad
+            };
+        }
     }
 }

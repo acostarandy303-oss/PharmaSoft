@@ -1,100 +1,205 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PharmaSoft.Data.Models;
 using PharmaSoft.Services;
+using System;
+using System.Threading.Tasks;
 using PharmaSoft.Test.Infraestructura;
 using Xunit;
 
-namespace PharmaSoft.Test;
-
-public class PagosClienteServiceTests
+namespace PharmaSoft.Test
 {
-    [Fact]
-    public async Task Guardar_NuevoPago_DebeInsertarCorrectamente()
+    public class PagosClienteServiceTests
     {
-        // Arrange
-        var dbName = TestDbContextFactory.NewDataBaseName();
-        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+        [Fact]
+        public async Task Buscar_CuandoExistePago_RetornaEntidad()
         {
-            var cliente = new Cliente { Nombre = "Deudor" };
-            var venta = new Venta { Total = 1000m };
-            seedContext.Clientes.Add(cliente);
-            seedContext.Ventas.Add(venta);
-            await seedContext.SaveChangesAsync();
-
-            var cxc = new CuentasPorCobrar
+            // Arrange
+            var dbName = TestDbContextFactory.NewDataBaseName();
+            await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
             {
-                ClienteId = cliente.ClienteId,
-                VentaId = venta.VentaId,
-                MontoInicial = 1000m,
-                SaldoPendiente = 1000m,
-                FechaVencimiento = DateOnly.FromDateTime(DateTime.Now)
-            };
-            seedContext.CuentasPorCobrars.Add(cxc);
-            await seedContext.SaveChangesAsync();
+                seedContext.Clientes.Add(new Cliente { ClienteId = 1, Nombre = "C1" });
+                seedContext.Ventas.Add(new Venta { VentaId = 1, Total = 100m });
+                seedContext.CuentasPorCobrars.Add(new CuentasPorCobrar { CxCid = 1, VentaId = 1, ClienteId = 1, MontoInicial = 100m, SaldoPendiente = 50m });
+                seedContext.PagosClientes.Add(CreatePago(id: 1, cxcId: 1, monto: 50m));
+                await seedContext.SaveChangesAsync();
+            }
+
+            await using var context = TestDbContextFactory.CreateContext(dbName);
+            var service = new PagosClienteService(context);
+
+            // Act
+            var result = await service.Buscar(1);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(1, result!.PagoClienteId);
+            Assert.Equal(50m, result.MontoPagado);
+            Assert.Empty(context.ChangeTracker.Entries());
         }
 
-        await using var context = TestDbContextFactory.CreateContext(dbName);
-        var cxcGuardada = await context.CuentasPorCobrars.FirstAsync();
-        var servicio = new PagosClienteService(context);
-
-        var nuevoPago = new PagosCliente
+        [Fact]
+        public async Task Buscar_CuandoNoExistePago_RetornaNull()
         {
-            CxCid = cxcGuardada.CxCid,
-            FechaPago = DateTime.Now,
-            MontoPagado = 500m,
-            MetodoPago = "Transferencia"
-        };
+            // Arrange
+            await using var context = TestDbContextFactory.CreateContext(TestDbContextFactory.NewDataBaseName());
+            var service = new PagosClienteService(context);
 
-        // Act
-        var resultado = await servicio.Guardar(nuevoPago);
+            // Act
+            var result = await service.Buscar(999);
 
-        // Assert
-        Assert.True(resultado);
-        Assert.Equal(1, context.PagosClientes.Count());
-        Assert.Equal(500m, context.PagosClientes.First().MontoPagado);
-    }
-
-    [Fact]
-    public async Task Eliminar_PagoExistente_DebeRetornarTrue()
-    {
-        // Arrange
-        var dbName = TestDbContextFactory.NewDataBaseName();
-        await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
-        {
-            var cliente = new Cliente { Nombre = "C" };
-            var venta = new Venta { Total = 100m };
-            seedContext.Clientes.Add(cliente);
-            seedContext.Ventas.Add(venta);
-            await seedContext.SaveChangesAsync();
-
-            var cxc = new CuentasPorCobrar
-            {
-                ClienteId = cliente.ClienteId,
-                VentaId = venta.VentaId,
-                MontoInicial = 100m,
-                SaldoPendiente = 100m,
-                FechaVencimiento = DateOnly.FromDateTime(DateTime.Now)
-            };
-            seedContext.CuentasPorCobrars.Add(cxc);
-            await seedContext.SaveChangesAsync();
-
-            var pago = new PagosCliente { CxCid = cxc.CxCid, MontoPagado = 50m };
-            seedContext.PagosClientes.Add(pago);
-            await seedContext.SaveChangesAsync();
+            // Assert
+            Assert.Null(result);
         }
 
-        await using var context = TestDbContextFactory.CreateContext(dbName);
-        var servicio = new PagosClienteService(context);
-        var pagoGuardado = await context.PagosClientes.FirstAsync();
+        [Fact]
+        public async Task GetList_CuandoSeFiltraPorMonto_RetornaCoincidencias()
+        {
+            // Arrange
+            var dbName = TestDbContextFactory.NewDataBaseName();
+            await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+            {
+                seedContext.Clientes.Add(new Cliente { ClienteId = 1, Nombre = "C1" });
+                seedContext.Ventas.Add(new Venta { VentaId = 1, Total = 100m });
+                seedContext.CuentasPorCobrars.Add(new CuentasPorCobrar { CxCid = 1, VentaId = 1, ClienteId = 1, MontoInicial = 100m, SaldoPendiente = 50m });
+                seedContext.PagosClientes.AddRange(
+                    CreatePago(id: 1, cxcId: 1, monto: 10m),
+                    CreatePago(id: 2, cxcId: 1, monto: 20m),
+                    CreatePago(id: 3, cxcId: 1, monto: 30m)
+                );
+                await seedContext.SaveChangesAsync();
+            }
 
-        // Act
-        var resultadoEliminar = await servicio.Eliminar(pagoGuardado.PagoClienteId);
+            await using var context = TestDbContextFactory.CreateContext(dbName);
+            var service = new PagosClienteService(context);
 
-        // Assert
-        Assert.True(resultadoEliminar);
-        Assert.Empty(context.PagosClientes);
+            // Act
+            var result = await service.GetList(p => p.MontoPagado >= 20m);
+
+            // Assert
+            Assert.Equal(2, result.Count);
+            Assert.Contains(result, p => p.PagoClienteId == 2);
+            Assert.Contains(result, p => p.PagoClienteId == 3);
+        }
+
+        [Fact]
+        public async Task Guardar_CuandoPagoNoExiste_InsertaYRetornaTrue()
+        {
+            // Arrange
+            var dbName = TestDbContextFactory.NewDataBaseName();
+            await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+            {
+                seedContext.Clientes.Add(new Cliente { ClienteId = 1, Nombre = "C1" });
+                seedContext.Ventas.Add(new Venta { VentaId = 1, Total = 100m });
+                seedContext.CuentasPorCobrars.Add(new CuentasPorCobrar { CxCid = 1, VentaId = 1, ClienteId = 1, MontoInicial = 100m, SaldoPendiente = 50m });
+                await seedContext.SaveChangesAsync();
+            }
+
+            await using var context = TestDbContextFactory.CreateContext(dbName);
+            var service = new PagosClienteService(context);
+            var nuevo = CreatePago(id: 0, cxcId: 1, monto: 25m);
+
+            // Act
+            var result = await service.Guardar(nuevo);
+
+            // Assert
+            Assert.True(result);
+
+            var saved = await context.PagosClientes.FirstOrDefaultAsync(p => p.PagoClienteId == nuevo.PagoClienteId);
+            Assert.NotNull(saved);
+            Assert.Equal(25m, saved!.MontoPagado);
+        }
+
+        [Fact]
+        public async Task Guardar_CuandoPagoExiste_ModificaYRetornaTrue()
+        {
+            // Arrange
+            var dbName = TestDbContextFactory.NewDataBaseName();
+            await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+            {
+                seedContext.Clientes.Add(new Cliente { ClienteId = 1, Nombre = "C1" });
+                seedContext.Ventas.Add(new Venta { VentaId = 1, Total = 100m });
+                seedContext.CuentasPorCobrars.Add(new CuentasPorCobrar { CxCid = 1, VentaId = 1, ClienteId = 1, MontoInicial = 100m, SaldoPendiente = 50m });
+                seedContext.PagosClientes.Add(CreatePago(id: 20, cxcId: 1, monto: 15m));
+                await seedContext.SaveChangesAsync();
+            }
+
+            await using var context = TestDbContextFactory.CreateContext(dbName);
+            var service = new PagosClienteService(context);
+
+            var updated = CreatePago(id: 20, cxcId: 1, monto: 35m);
+
+            // Act
+            var result = await service.Guardar(updated);
+
+            // Assert
+            Assert.True(result);
+
+            var saved = await context.PagosClientes.FirstOrDefaultAsync(p => p.PagoClienteId == 20);
+            Assert.NotNull(saved);
+            Assert.Equal(35m, saved!.MontoPagado);
+        }
+
+        [Fact]
+        public async Task Existe_CuandoPagoExiste_RetornaTrue()
+        {
+            // Arrange
+            var dbName = TestDbContextFactory.NewDataBaseName();
+            await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+            {
+                seedContext.Clientes.Add(new Cliente { ClienteId = 1, Nombre = "C1" });
+                seedContext.Ventas.Add(new Venta { VentaId = 1, Total = 100m });
+                seedContext.CuentasPorCobrars.Add(new CuentasPorCobrar { CxCid = 1, VentaId = 1, ClienteId = 1, MontoInicial = 100m, SaldoPendiente = 50m });
+                seedContext.PagosClientes.Add(CreatePago(id: 50, cxcId: 1, monto: 50m));
+                await seedContext.SaveChangesAsync();
+            }
+
+            await using var context = TestDbContextFactory.CreateContext(dbName);
+            var service = new PagosClienteService(context);
+
+            // Act
+            var result = await service.Existe(50);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task Eliminar_CuandoExistePago_LoBorraYRetornaTrue()
+        {
+            // Arrange
+            var dbName = TestDbContextFactory.NewDataBaseName();
+            await using (var seedContext = TestDbContextFactory.CreateContext(dbName))
+            {
+                seedContext.Clientes.Add(new Cliente { ClienteId = 1, Nombre = "C1" });
+                seedContext.Ventas.Add(new Venta { VentaId = 1, Total = 100m });
+                seedContext.CuentasPorCobrars.Add(new CuentasPorCobrar { CxCid = 1, VentaId = 1, ClienteId = 1, MontoInicial = 100m, SaldoPendiente = 50m });
+                seedContext.PagosClientes.Add(CreatePago(id: 80, cxcId: 1, monto: 50m));
+                await seedContext.SaveChangesAsync();
+            }
+
+            await using var context = TestDbContextFactory.CreateContext(dbName);
+            var service = new PagosClienteService(context);
+
+            // Act
+            var result = await service.Eliminar(80);
+
+            // Assert
+            Assert.True(result);
+            var eliminado = await context.PagosClientes.FindAsync(80);
+            Assert.Null(eliminado);
+        }
+
+        private static PagosCliente CreatePago(int id, int cxcId, decimal monto)
+        {
+            return new PagosCliente
+            {
+                PagoClienteId = id,
+                CxCid = cxcId,
+                MontoPagado = monto,
+                FechaPago = DateTime.Now,
+                MetodoPago = "Efectivo"
+            };
+        }
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using Aplicada1.Core;
+using Aplicada1.Core;
 using Microsoft.EntityFrameworkCore;
 using PharmaSoft.Data.Context;
 using PharmaSoft.Data.Models;
@@ -40,8 +40,11 @@ public class CategoriaService(PharmaContext contexto) : IService<Categoria, int>
         contexto.Categorias.Remove(categoria);
         var eliminados = await contexto.SaveChangesAsync();
         return eliminados > 0;
+    }
 
-        
+    public async Task<bool> Existe(int id)
+    {
+        return await contexto.Categorias.AnyAsync(c => c.CategoriaId == id);
     }
 
     public async Task<Categoria?> Buscar(int id)
