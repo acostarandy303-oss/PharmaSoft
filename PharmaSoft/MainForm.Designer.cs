@@ -24,20 +24,6 @@
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Label lblTotalProductos;
 
-        private System.Windows.Forms.Label lblTituloSeccion;
-        private System.Windows.Forms.TextBox txtBuscar;
-        private System.Windows.Forms.Button btnAnadir;
-        private System.Windows.Forms.Button btnEditar;
-        private System.Windows.Forms.Button btnEliminar;
-        private System.Windows.Forms.DataGridView dgvInventario;
-
-        private System.Windows.Forms.DataGridViewTextBoxColumn CodigoBarras;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Nombre;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Laboratorio;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cantidad;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PrecioVenta;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Caducidad;
-
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -51,7 +37,6 @@
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panelLateral = new Panel();
             btnConfiguracion = new Button();
             btnReportes = new Button();
@@ -68,23 +53,9 @@
             lblTotalProductos = new Label();
             lblUsuario = new Label();
             panelContenido = new Panel();
-            dgvInventario = new DataGridView();
-            CodigoBarras = new DataGridViewTextBoxColumn();
-            Nombre = new DataGridViewTextBoxColumn();
-            Laboratorio = new DataGridViewTextBoxColumn();
-            Cantidad = new DataGridViewTextBoxColumn();
-            PrecioVenta = new DataGridViewTextBoxColumn();
-            Caducidad = new DataGridViewTextBoxColumn();
-            btnEliminar = new Button();
-            btnEditar = new Button();
-            btnAnadir = new Button();
-            txtBuscar = new TextBox();
-            lblTituloSeccion = new Label();
             panelLateral.SuspendLayout();
             panelCabecera.SuspendLayout();
             panelEstado.SuspendLayout();
-            panelContenido.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvInventario).BeginInit();
             SuspendLayout();
             // 
             // panelLateral
@@ -194,6 +165,7 @@
             btnVentas.Text = "  Ventas (Point of Sale)";
             btnVentas.TextAlign = ContentAlignment.MiddleLeft;
             btnVentas.UseVisualStyleBackColor = true;
+            btnVentas.Click += btnVentas_Click;
             // 
             // btnInventario
             // 
@@ -212,11 +184,6 @@
             btnInventario.TextAlign = ContentAlignment.MiddleLeft;
             btnInventario.UseVisualStyleBackColor = false;
             btnInventario.Click += btnInventario_Click;
-            btnVentas.Click += btnVentas_Click;
-            btnAnadir.Click += btnAnadir_Click;
-            btnEditar.Click += btnEditar_Click;
-            btnEliminar.Click += btnEliminar_Click;
-            txtBuscar.TextChanged += txtBuscar_TextChanged;
             // 
             // btnInicio
             // 
@@ -232,6 +199,7 @@
             btnInicio.Text = "  Inicio";
             btnInicio.TextAlign = ContentAlignment.MiddleLeft;
             btnInicio.UseVisualStyleBackColor = true;
+            btnInicio.Click += btnInicio_Click;
             // 
             // lblLogo
             // 
@@ -301,145 +269,12 @@
             // panelContenido
             // 
             panelContenido.BackColor = Color.White;
-            panelContenido.Controls.Add(dgvInventario);
-            panelContenido.Controls.Add(btnEliminar);
-            panelContenido.Controls.Add(btnEditar);
-            panelContenido.Controls.Add(btnAnadir);
-            panelContenido.Controls.Add(txtBuscar);
-            panelContenido.Controls.Add(lblTituloSeccion);
             panelContenido.Dock = DockStyle.Fill;
             panelContenido.Location = new Point(220, 60);
             panelContenido.Name = "panelContenido";
             panelContenido.Padding = new Padding(20);
             panelContenido.Size = new Size(830, 540);
             panelContenido.TabIndex = 0;
-            // 
-            // dgvInventario
-            // 
-            dgvInventario.AllowUserToAddRows = false;
-            dgvInventario.AllowUserToDeleteRows = false;
-            dgvInventario.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvInventario.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvInventario.BackgroundColor = Color.White;
-            dgvInventario.BorderStyle = BorderStyle.Fixed3D;
-            dgvInventario.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dgvInventario.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(240, 240, 240);
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = Color.Black;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvInventario.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dgvInventario.ColumnHeadersHeight = 35;
-            dgvInventario.Columns.AddRange(new DataGridViewColumn[] { CodigoBarras, Nombre, Laboratorio, Cantidad, PrecioVenta, Caducidad });
-            dgvInventario.EnableHeadersVisualStyles = false;
-            dgvInventario.Location = new Point(23, 110);
-            dgvInventario.Name = "dgvInventario";
-            dgvInventario.ReadOnly = true;
-            dgvInventario.RowHeadersVisible = false;
-            dgvInventario.RowTemplate.Height = 30;
-            dgvInventario.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvInventario.Size = new Size(784, 407);
-            dgvInventario.TabIndex = 0;
-            // 
-            // CodigoBarras
-            // 
-            CodigoBarras.HeaderText = "Código";
-            CodigoBarras.Name = "CodigoBarras";
-            CodigoBarras.ReadOnly = true;
-            // 
-            // Nombre
-            // 
-            Nombre.HeaderText = "Nombre";
-            Nombre.Name = "Nombre";
-            Nombre.ReadOnly = true;
-            // 
-            // Laboratorio
-            // 
-            Laboratorio.HeaderText = "Laboratorio";
-            Laboratorio.Name = "Laboratorio";
-            Laboratorio.ReadOnly = true;
-            // 
-            // Cantidad
-            // 
-            Cantidad.HeaderText = "Cantidad";
-            Cantidad.Name = "Cantidad";
-            Cantidad.ReadOnly = true;
-            // 
-            // PrecioVenta
-            // 
-            PrecioVenta.HeaderText = "Precio Venta";
-            PrecioVenta.Name = "PrecioVenta";
-            PrecioVenta.ReadOnly = true;
-            // 
-            // Caducidad
-            // 
-            Caducidad.HeaderText = "Caducidad";
-            Caducidad.Name = "Caducidad";
-            Caducidad.ReadOnly = true;
-            // 
-            // btnEliminar
-            // 
-            btnEliminar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnEliminar.BackColor = Color.FromArgb(220, 53, 69);
-            btnEliminar.FlatAppearance.BorderSize = 0;
-            btnEliminar.FlatStyle = FlatStyle.Flat;
-            btnEliminar.ForeColor = Color.White;
-            btnEliminar.Location = new Point(717, 65);
-            btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(90, 30);
-            btnEliminar.TabIndex = 1;
-            btnEliminar.Text = "Eliminar";
-            btnEliminar.UseVisualStyleBackColor = false;
-            // 
-            // btnEditar
-            // 
-            btnEditar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnEditar.BackColor = Color.FromArgb(40, 167, 69);
-            btnEditar.FlatAppearance.BorderSize = 0;
-            btnEditar.FlatStyle = FlatStyle.Flat;
-            btnEditar.ForeColor = Color.White;
-            btnEditar.Location = new Point(621, 65);
-            btnEditar.Name = "btnEditar";
-            btnEditar.Size = new Size(90, 30);
-            btnEditar.TabIndex = 2;
-            btnEditar.Text = "Editar";
-            btnEditar.UseVisualStyleBackColor = false;
-            // 
-            // btnAnadir
-            // 
-            btnAnadir.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnAnadir.BackColor = Color.FromArgb(25, 118, 210);
-            btnAnadir.FlatAppearance.BorderSize = 0;
-            btnAnadir.FlatStyle = FlatStyle.Flat;
-            btnAnadir.ForeColor = Color.White;
-            btnAnadir.Location = new Point(525, 65);
-            btnAnadir.Name = "btnAnadir";
-            btnAnadir.Size = new Size(90, 30);
-            btnAnadir.TabIndex = 3;
-            btnAnadir.Text = "Añadir";
-            btnAnadir.UseVisualStyleBackColor = false;
-            // 
-            // txtBuscar
-            // 
-            txtBuscar.Font = new Font("Segoe UI", 11F);
-            txtBuscar.Location = new Point(23, 67);
-            txtBuscar.Name = "txtBuscar";
-            txtBuscar.PlaceholderText = " Buscar...";
-            txtBuscar.Size = new Size(300, 27);
-            txtBuscar.TabIndex = 4;
-            // 
-            // lblTituloSeccion
-            // 
-            lblTituloSeccion.AutoSize = true;
-            lblTituloSeccion.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblTituloSeccion.Location = new Point(18, 20);
-            lblTituloSeccion.Name = "lblTituloSeccion";
-            lblTituloSeccion.Size = new Size(228, 25);
-            lblTituloSeccion.TabIndex = 5;
-            lblTituloSeccion.Text = "Inventario de Productos";
             // 
             // PharmaSoft
             // 
@@ -454,14 +289,12 @@
             Name = "PharmaSoft";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "PharmaSoft - Gestión de Farmacia [v1.0]";
+            Load += PharmaSoft_Load;
             panelLateral.ResumeLayout(false);
             panelCabecera.ResumeLayout(false);
             panelCabecera.PerformLayout();
             panelEstado.ResumeLayout(false);
             panelEstado.PerformLayout();
-            panelContenido.ResumeLayout(false);
-            panelContenido.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvInventario).EndInit();
             ResumeLayout(false);
 
         }
