@@ -29,8 +29,24 @@ public class CuentasPorCobrarService(PharmaContext contexto) : IService<CuentasP
 
     private async Task<bool> Modificar(CuentasPorCobrar cxc)
     {
-        contexto.Update(cxc);
-        return await contexto.SaveChangesAsync() > 0;
+        try
+        {
+            var tracked = contexto.CuentasPorCobrars.Local.FirstOrDefault(c => c.CxCid == cxc.CxCid);
+            if (tracked != null)
+            {
+                contexto.Entry(tracked).CurrentValues.SetValues(cxc);
+            }
+            else
+            {
+                contexto.Entry(cxc).State = EntityState.Modified;
+            }
+            return await contexto.SaveChangesAsync() > 0;
+        }
+        catch (DbUpdateException ex)
+        {
+            contexto.ChangeTracker.Clear();
+            throw new Exception($"Error al modificar: {ex.InnerException?.Message ?? ex.Message}");
+        }
     }
 
     public async Task<bool> Eliminar(int id)

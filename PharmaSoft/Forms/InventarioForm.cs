@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PharmaSoft
 {
@@ -15,12 +16,15 @@ namespace PharmaSoft
         private readonly PharmaContext _context;
         private readonly MedicamentoService _medicamentoService;
         private readonly LotesInventarioService _lotesService;
-        public InventarioForm()
+        public InventarioForm(
+            PharmaContext context,
+            MedicamentoService medicamentoService,
+            LotesInventarioService lotesService)
         {
             InitializeComponent();
-            _context = new PharmaContext();
-            _medicamentoService = new MedicamentoService(_context);
-            _lotesService = new LotesInventarioService(_context);
+            _context = context;
+            _medicamentoService = medicamentoService;
+            _lotesService = lotesService;
             CargarInventario();
         }
 
@@ -95,7 +99,7 @@ namespace PharmaSoft
 
         private async void button3_Click(object sender, EventArgs e)
         {
-            var form = new Forms.MedicamentoForm();
+            var form = Program.ServiceProvider.GetRequiredService<Forms.MedicamentoForm>();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 var medicamento = form.Medicamento;
@@ -125,7 +129,8 @@ namespace PharmaSoft
 
             if (medicamento != null)
             {
-                var form = new Forms.MedicamentoForm(medicamento);
+                var form = Program.ServiceProvider.GetRequiredService<Forms.MedicamentoForm>();
+                form.SetMedicamento(medicamento);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     if (await _medicamentoService.Guardar(form.Medicamento))

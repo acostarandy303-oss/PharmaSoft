@@ -28,7 +28,15 @@ public class PagosClienteService(PharmaContext contexto) : IService<PagosCliente
 
     private async Task<bool> Modificar(PagosCliente pago)
     {
-        contexto.Update(pago);
+        var existing = contexto.PagosClientes.Local.FirstOrDefault(p => p.PagoClienteId == pago.PagoClienteId);
+        if (existing != null)
+        {
+            contexto.Entry(existing).CurrentValues.SetValues(pago);
+        }
+        else
+        {
+            contexto.PagosClientes.Update(pago);
+        }
         return await contexto.SaveChangesAsync() > 0;
     }
 

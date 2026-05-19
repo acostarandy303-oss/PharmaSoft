@@ -28,7 +28,15 @@ public class ClienteService(PharmaContext contexto) : IService<Cliente, int>
 
     private async Task<bool> Modificar(Cliente cliente)
     {
-        contexto.Update(cliente);
+        var tracked = contexto.Clientes.Local.FirstOrDefault(c => c.ClienteId == cliente.ClienteId);
+        if (tracked != null)
+        {
+            contexto.Entry(tracked).CurrentValues.SetValues(cliente);
+        }
+        else
+        {
+            contexto.Clientes.Update(cliente);
+        }
         return await contexto.SaveChangesAsync() > 0;
     }
 

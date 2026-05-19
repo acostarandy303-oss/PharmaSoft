@@ -29,7 +29,15 @@ public class CompraService(PharmaContext contexto) : IService<Compra, int>
 
     private async Task<bool> Modificar(Compra compra)
     {
-        contexto.Update(compra);
+        var tracked = contexto.Compras.Local.FirstOrDefault(c => c.CompraId == compra.CompraId);
+        if (tracked != null)
+        {
+            contexto.Entry(tracked).CurrentValues.SetValues(compra);
+        }
+        else
+        {
+            contexto.Compras.Update(compra);
+        }
         return await contexto.SaveChangesAsync() > 0;
     }
 
