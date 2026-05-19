@@ -1,4 +1,4 @@
-﻿using Aplicada1.Core;
+using Aplicada1.Core;
 using Microsoft.EntityFrameworkCore;
 using PharmaSoft.Data.Context;
 using PharmaSoft.Data.Models;
@@ -26,7 +26,15 @@ public class CategoriaService(PharmaContext contexto) : IService<Categoria, int>
 
     private async Task<bool> Modificar(Categoria categoria)
     {
-        contexto.Update(categoria);
+        var tracked = contexto.Categorias.Local.FirstOrDefault(c => c.CategoriaId == categoria.CategoriaId);
+        if (tracked != null)
+        {
+            contexto.Entry(tracked).CurrentValues.SetValues(categoria);
+        }
+        else
+        {
+            contexto.Categorias.Update(categoria);
+        }
         return await contexto.SaveChangesAsync() > 0;
     }
 
@@ -40,8 +48,11 @@ public class CategoriaService(PharmaContext contexto) : IService<Categoria, int>
         contexto.Categorias.Remove(categoria);
         var eliminados = await contexto.SaveChangesAsync();
         return eliminados > 0;
+    }
 
-        
+    public async Task<bool> Existe(int id)
+    {
+        return await contexto.Categorias.AnyAsync(c => c.CategoriaId == id);
     }
 
     public async Task<Categoria?> Buscar(int id)

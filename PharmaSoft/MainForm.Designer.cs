@@ -14,29 +14,16 @@
         private System.Windows.Forms.Button btnInventario;
         private System.Windows.Forms.Button btnVentas;
         private System.Windows.Forms.Button btnClientes;
-        private System.Windows.Forms.Button btnRecetas;
         private System.Windows.Forms.Button btnCompras;
         private System.Windows.Forms.Button btnReportes;
         private System.Windows.Forms.Button btnConfiguracion;
+        private System.Windows.Forms.Button btnCuentasCobrar;
+        private System.Windows.Forms.Button btnCuentasPagar;
 
         private System.Windows.Forms.Label lblTituloCabecera;
 
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Label lblTotalProductos;
-
-        private System.Windows.Forms.Label lblTituloSeccion;
-        private System.Windows.Forms.TextBox txtBuscar;
-        private System.Windows.Forms.Button btnAnadir;
-        private System.Windows.Forms.Button btnEditar;
-        private System.Windows.Forms.Button btnEliminar;
-        private System.Windows.Forms.DataGridView dgvInventario;
-
-        private System.Windows.Forms.DataGridViewTextBoxColumn CodigoBarras;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Nombre;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Laboratorio;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cantidad;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PrecioVenta;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Caducidad;
 
         protected override void Dispose(bool disposing)
         {
@@ -51,12 +38,12 @@
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panelLateral = new Panel();
             btnConfiguracion = new Button();
             btnReportes = new Button();
+            btnCuentasPagar = new Button();
+            btnCuentasCobrar = new Button();
             btnCompras = new Button();
-            btnRecetas = new Button();
             btnClientes = new Button();
             btnVentas = new Button();
             btnInventario = new Button();
@@ -68,32 +55,28 @@
             lblTotalProductos = new Label();
             lblUsuario = new Label();
             panelContenido = new Panel();
-            dgvInventario = new DataGridView();
-            CodigoBarras = new DataGridViewTextBoxColumn();
-            Nombre = new DataGridViewTextBoxColumn();
-            Laboratorio = new DataGridViewTextBoxColumn();
-            Cantidad = new DataGridViewTextBoxColumn();
-            PrecioVenta = new DataGridViewTextBoxColumn();
-            Caducidad = new DataGridViewTextBoxColumn();
-            btnEliminar = new Button();
-            btnEditar = new Button();
-            btnAnadir = new Button();
-            txtBuscar = new TextBox();
-            lblTituloSeccion = new Label();
+            lbTotalCxCobrar = new Label();
+            lbCuentasXCobrar = new Label();
+            lbCatidadVentas = new Label();
+            lbVentasDiarias = new Label();
+            lbCantidadStock = new Label();
+            lbStock = new Label();
+            lbTitulo = new Label();
+            lbStockDisp = new Label();
             panelLateral.SuspendLayout();
             panelCabecera.SuspendLayout();
             panelEstado.SuspendLayout();
             panelContenido.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvInventario).BeginInit();
             SuspendLayout();
             // 
             // panelLateral
             // 
             panelLateral.BackColor = Color.FromArgb(248, 249, 250);
             panelLateral.Controls.Add(btnConfiguracion);
+            panelLateral.Controls.Add(btnCuentasPagar);
+            panelLateral.Controls.Add(btnCuentasCobrar);
             panelLateral.Controls.Add(btnReportes);
             panelLateral.Controls.Add(btnCompras);
-            panelLateral.Controls.Add(btnRecetas);
             panelLateral.Controls.Add(btnClientes);
             panelLateral.Controls.Add(btnVentas);
             panelLateral.Controls.Add(btnInventario);
@@ -111,7 +94,7 @@
             btnConfiguracion.FlatAppearance.BorderSize = 0;
             btnConfiguracion.FlatStyle = FlatStyle.Flat;
             btnConfiguracion.Font = new Font("Segoe UI", 10F);
-            btnConfiguracion.Location = new Point(0, 430);
+            btnConfiguracion.Location = new Point(0, 385);
             btnConfiguracion.Name = "btnConfiguracion";
             btnConfiguracion.Padding = new Padding(20, 0, 0, 0);
             btnConfiguracion.Size = new Size(220, 45);
@@ -119,6 +102,7 @@
             btnConfiguracion.Text = "  Configuración";
             btnConfiguracion.TextAlign = ContentAlignment.MiddleLeft;
             btnConfiguracion.UseVisualStyleBackColor = true;
+            btnConfiguracion.Click += btnConfiguracion_Click;
             // 
             // btnReportes
             // 
@@ -126,7 +110,7 @@
             btnReportes.FlatAppearance.BorderSize = 0;
             btnReportes.FlatStyle = FlatStyle.Flat;
             btnReportes.Font = new Font("Segoe UI", 10F);
-            btnReportes.Location = new Point(0, 385);
+            btnReportes.Location = new Point(0, 340);
             btnReportes.Name = "btnReportes";
             btnReportes.Padding = new Padding(20, 0, 0, 0);
             btnReportes.Size = new Size(220, 45);
@@ -134,6 +118,39 @@
             btnReportes.Text = "  Reportes";
             btnReportes.TextAlign = ContentAlignment.MiddleLeft;
             btnReportes.UseVisualStyleBackColor = true;
+            btnReportes.Click += btnReportes_Click;
+            // 
+            // btnCuentasPagar
+            // 
+            btnCuentasPagar.Dock = DockStyle.Top;
+            btnCuentasPagar.FlatAppearance.BorderSize = 0;
+            btnCuentasPagar.FlatStyle = FlatStyle.Flat;
+            btnCuentasPagar.Font = new Font("Segoe UI", 10F);
+            btnCuentasPagar.Location = new Point(0, 385);
+            btnCuentasPagar.Name = "btnCuentasPagar";
+            btnCuentasPagar.Padding = new Padding(20, 0, 0, 0);
+            btnCuentasPagar.Size = new Size(220, 45);
+            btnCuentasPagar.TabIndex = 17;
+            btnCuentasPagar.Text = "  Cuentas por Pagar";
+            btnCuentasPagar.TextAlign = ContentAlignment.MiddleLeft;
+            btnCuentasPagar.UseVisualStyleBackColor = true;
+            btnCuentasPagar.Click += btnCuentasPagar_Click;
+            // 
+            // btnCuentasCobrar
+            // 
+            btnCuentasCobrar.Dock = DockStyle.Top;
+            btnCuentasCobrar.FlatAppearance.BorderSize = 0;
+            btnCuentasCobrar.FlatStyle = FlatStyle.Flat;
+            btnCuentasCobrar.Font = new Font("Segoe UI", 10F);
+            btnCuentasCobrar.Location = new Point(0, 430);
+            btnCuentasCobrar.Name = "btnCuentasCobrar";
+            btnCuentasCobrar.Padding = new Padding(20, 0, 0, 0);
+            btnCuentasCobrar.Size = new Size(220, 45);
+            btnCuentasCobrar.TabIndex = 18;
+            btnCuentasCobrar.Text = "  Cuentas por Cobrar";
+            btnCuentasCobrar.TextAlign = ContentAlignment.MiddleLeft;
+            btnCuentasCobrar.UseVisualStyleBackColor = true;
+            btnCuentasCobrar.Click += btnCuentasCobrar_Click;
             // 
             // btnCompras
             // 
@@ -141,7 +158,7 @@
             btnCompras.FlatAppearance.BorderSize = 0;
             btnCompras.FlatStyle = FlatStyle.Flat;
             btnCompras.Font = new Font("Segoe UI", 10F);
-            btnCompras.Location = new Point(0, 340);
+            btnCompras.Location = new Point(0, 295);
             btnCompras.Name = "btnCompras";
             btnCompras.Padding = new Padding(20, 0, 0, 0);
             btnCompras.Size = new Size(220, 45);
@@ -149,21 +166,7 @@
             btnCompras.Text = "  Compras";
             btnCompras.TextAlign = ContentAlignment.MiddleLeft;
             btnCompras.UseVisualStyleBackColor = true;
-            // 
-            // btnRecetas
-            // 
-            btnRecetas.Dock = DockStyle.Top;
-            btnRecetas.FlatAppearance.BorderSize = 0;
-            btnRecetas.FlatStyle = FlatStyle.Flat;
-            btnRecetas.Font = new Font("Segoe UI", 10F);
-            btnRecetas.Location = new Point(0, 295);
-            btnRecetas.Name = "btnRecetas";
-            btnRecetas.Padding = new Padding(20, 0, 0, 0);
-            btnRecetas.Size = new Size(220, 45);
-            btnRecetas.TabIndex = 3;
-            btnRecetas.Text = "  Recetas";
-            btnRecetas.TextAlign = ContentAlignment.MiddleLeft;
-            btnRecetas.UseVisualStyleBackColor = true;
+            btnCompras.Click += btnCompras_Click;
             // 
             // btnClientes
             // 
@@ -179,6 +182,7 @@
             btnClientes.Text = "  Clientes";
             btnClientes.TextAlign = ContentAlignment.MiddleLeft;
             btnClientes.UseVisualStyleBackColor = true;
+            btnClientes.Click += btnClientes_Click;
             // 
             // btnVentas
             // 
@@ -194,6 +198,7 @@
             btnVentas.Text = "  Ventas (Point of Sale)";
             btnVentas.TextAlign = ContentAlignment.MiddleLeft;
             btnVentas.UseVisualStyleBackColor = true;
+            btnVentas.Click += btnVentas_Click;
             // 
             // btnInventario
             // 
@@ -212,11 +217,6 @@
             btnInventario.TextAlign = ContentAlignment.MiddleLeft;
             btnInventario.UseVisualStyleBackColor = false;
             btnInventario.Click += btnInventario_Click;
-            btnVentas.Click += btnVentas_Click;
-            btnAnadir.Click += btnAnadir_Click;
-            btnEditar.Click += btnEditar_Click;
-            btnEliminar.Click += btnEliminar_Click;
-            txtBuscar.TextChanged += txtBuscar_TextChanged;
             // 
             // btnInicio
             // 
@@ -232,6 +232,7 @@
             btnInicio.Text = "  Inicio";
             btnInicio.TextAlign = ContentAlignment.MiddleLeft;
             btnInicio.UseVisualStyleBackColor = true;
+            btnInicio.Click += btnInicio_Click;
             // 
             // lblLogo
             // 
@@ -301,159 +302,109 @@
             // panelContenido
             // 
             panelContenido.BackColor = Color.White;
-            panelContenido.Controls.Add(dgvInventario);
-            panelContenido.Controls.Add(btnEliminar);
-            panelContenido.Controls.Add(btnEditar);
-            panelContenido.Controls.Add(btnAnadir);
-            panelContenido.Controls.Add(txtBuscar);
-            panelContenido.Controls.Add(lblTituloSeccion);
+            panelContenido.Controls.Add(lbTotalCxCobrar);
+            panelContenido.Controls.Add(lbCuentasXCobrar);
+            panelContenido.Controls.Add(lbCatidadVentas);
+            panelContenido.Controls.Add(lbVentasDiarias);
+            panelContenido.Controls.Add(lbCantidadStock);
+            panelContenido.Controls.Add(lbStock);
+            panelContenido.Controls.Add(lbTitulo);
+            panelContenido.Controls.Add(lbStockDisp);
             panelContenido.Dock = DockStyle.Fill;
-            panelContenido.Location = new Point(220, 60);
+            panelContenido.Location = new Point(0, 0);
             panelContenido.Name = "panelContenido";
             panelContenido.Padding = new Padding(20);
-            panelContenido.Size = new Size(830, 540);
+            panelContenido.Size = new Size(1050, 630);
             panelContenido.TabIndex = 0;
             // 
-            // dgvInventario
+            // lbTotalCxCobrar
             // 
-            dgvInventario.AllowUserToAddRows = false;
-            dgvInventario.AllowUserToDeleteRows = false;
-            dgvInventario.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvInventario.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvInventario.BackgroundColor = Color.White;
-            dgvInventario.BorderStyle = BorderStyle.Fixed3D;
-            dgvInventario.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dgvInventario.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(240, 240, 240);
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = Color.Black;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvInventario.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dgvInventario.ColumnHeadersHeight = 35;
-            dgvInventario.Columns.AddRange(new DataGridViewColumn[] { CodigoBarras, Nombre, Laboratorio, Cantidad, PrecioVenta, Caducidad });
-            dgvInventario.EnableHeadersVisualStyles = false;
-            dgvInventario.Location = new Point(23, 110);
-            dgvInventario.Name = "dgvInventario";
-            dgvInventario.ReadOnly = true;
-            dgvInventario.RowHeadersVisible = false;
-            dgvInventario.RowTemplate.Height = 30;
-            dgvInventario.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvInventario.Size = new Size(784, 407);
-            dgvInventario.TabIndex = 0;
+            lbTotalCxCobrar.AutoSize = true;
+            lbTotalCxCobrar.Location = new Point(757, 190);
+            lbTotalCxCobrar.Name = "lbTotalCxCobrar";
+            lbTotalCxCobrar.Size = new Size(13, 15);
+            lbTotalCxCobrar.TabIndex = 7;
+            lbTotalCxCobrar.Text = "0";
             // 
-            // CodigoBarras
+            // lbCuentasXCobrar
             // 
-            CodigoBarras.HeaderText = "Código";
-            CodigoBarras.Name = "CodigoBarras";
-            CodigoBarras.ReadOnly = true;
+            lbCuentasXCobrar.AutoSize = true;
+            lbCuentasXCobrar.Location = new Point(707, 160);
+            lbCuentasXCobrar.Name = "lbCuentasXCobrar";
+            lbCuentasXCobrar.Size = new Size(110, 15);
+            lbCuentasXCobrar.TabIndex = 6;
+            lbCuentasXCobrar.Text = "Cuentas por Cobrar";
             // 
-            // Nombre
+            // lbCatidadVentas
             // 
-            Nombre.HeaderText = "Nombre";
-            Nombre.Name = "Nombre";
-            Nombre.ReadOnly = true;
+            lbCatidadVentas.AutoSize = true;
+            lbCatidadVentas.Location = new Point(541, 190);
+            lbCatidadVentas.Name = "lbCatidadVentas";
+            lbCatidadVentas.Size = new Size(13, 15);
+            lbCatidadVentas.TabIndex = 5;
+            lbCatidadVentas.Text = "0";
             // 
-            // Laboratorio
+            // lbVentasDiarias
             // 
-            Laboratorio.HeaderText = "Laboratorio";
-            Laboratorio.Name = "Laboratorio";
-            Laboratorio.ReadOnly = true;
+            lbVentasDiarias.AutoSize = true;
+            lbVentasDiarias.Location = new Point(514, 160);
+            lbVentasDiarias.Name = "lbVentasDiarias";
+            lbVentasDiarias.Size = new Size(69, 15);
+            lbVentasDiarias.TabIndex = 4;
+            lbVentasDiarias.Text = "Total Ventas";
             // 
-            // Cantidad
+            // lbCantidadStock
             // 
-            Cantidad.HeaderText = "Cantidad";
-            Cantidad.Name = "Cantidad";
-            Cantidad.ReadOnly = true;
+            lbCantidadStock.AutoSize = true;
+            lbCantidadStock.Location = new Point(305, 190);
+            lbCantidadStock.Name = "lbCantidadStock";
+            lbCantidadStock.Size = new Size(13, 15);
+            lbCantidadStock.TabIndex = 3;
+            lbCantidadStock.Text = "0";
             // 
-            // PrecioVenta
+            // lbStock
             // 
-            PrecioVenta.HeaderText = "Precio Venta";
-            PrecioVenta.Name = "PrecioVenta";
-            PrecioVenta.ReadOnly = true;
+            lbStock.AutoSize = true;
+            lbStock.Location = new Point(279, 160);
+            lbStock.Name = "lbStock";
+            lbStock.Size = new Size(73, 15);
+            lbStock.TabIndex = 2;
+            lbStock.Text = "Stock Actual";
             // 
-            // Caducidad
+            // lbTitulo
             // 
-            Caducidad.HeaderText = "Caducidad";
-            Caducidad.Name = "Caducidad";
-            Caducidad.ReadOnly = true;
+            lbTitulo.AutoSize = true;
+            lbTitulo.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbTitulo.ForeColor = Color.MidnightBlue;
+            lbTitulo.Location = new Point(240, 86);
+            lbTitulo.Name = "lbTitulo";
+            lbTitulo.Size = new Size(198, 45);
+            lbTitulo.TabIndex = 1;
+            lbTitulo.Text = "PharmaSoft";
             // 
-            // btnEliminar
+            // lbStockDisp
             // 
-            btnEliminar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnEliminar.BackColor = Color.FromArgb(220, 53, 69);
-            btnEliminar.FlatAppearance.BorderSize = 0;
-            btnEliminar.FlatStyle = FlatStyle.Flat;
-            btnEliminar.ForeColor = Color.White;
-            btnEliminar.Location = new Point(717, 65);
-            btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(90, 30);
-            btnEliminar.TabIndex = 1;
-            btnEliminar.Text = "Eliminar";
-            btnEliminar.UseVisualStyleBackColor = false;
-            // 
-            // btnEditar
-            // 
-            btnEditar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnEditar.BackColor = Color.FromArgb(40, 167, 69);
-            btnEditar.FlatAppearance.BorderSize = 0;
-            btnEditar.FlatStyle = FlatStyle.Flat;
-            btnEditar.ForeColor = Color.White;
-            btnEditar.Location = new Point(621, 65);
-            btnEditar.Name = "btnEditar";
-            btnEditar.Size = new Size(90, 30);
-            btnEditar.TabIndex = 2;
-            btnEditar.Text = "Editar";
-            btnEditar.UseVisualStyleBackColor = false;
-            // 
-            // btnAnadir
-            // 
-            btnAnadir.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnAnadir.BackColor = Color.FromArgb(25, 118, 210);
-            btnAnadir.FlatAppearance.BorderSize = 0;
-            btnAnadir.FlatStyle = FlatStyle.Flat;
-            btnAnadir.ForeColor = Color.White;
-            btnAnadir.Location = new Point(525, 65);
-            btnAnadir.Name = "btnAnadir";
-            btnAnadir.Size = new Size(90, 30);
-            btnAnadir.TabIndex = 3;
-            btnAnadir.Text = "Añadir";
-            btnAnadir.UseVisualStyleBackColor = false;
-            // 
-            // txtBuscar
-            // 
-            txtBuscar.Font = new Font("Segoe UI", 11F);
-            txtBuscar.Location = new Point(23, 67);
-            txtBuscar.Name = "txtBuscar";
-            txtBuscar.PlaceholderText = " Buscar...";
-            txtBuscar.Size = new Size(300, 27);
-            txtBuscar.TabIndex = 4;
-            // 
-            // lblTituloSeccion
-            // 
-            lblTituloSeccion.AutoSize = true;
-            lblTituloSeccion.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblTituloSeccion.Location = new Point(18, 20);
-            lblTituloSeccion.Name = "lblTituloSeccion";
-            lblTituloSeccion.Size = new Size(228, 25);
-            lblTituloSeccion.TabIndex = 5;
-            lblTituloSeccion.Text = "Inventario de Productos";
+            lbStockDisp.AutoSize = true;
+            lbStockDisp.Location = new Point(64, 116);
+            lbStockDisp.Name = "lbStockDisp";
+            lbStockDisp.Size = new Size(94, 15);
+            lbStockDisp.TabIndex = 0;
+            lbStockDisp.Text = "Stock disponible";
             // 
             // PharmaSoft
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1050, 630);
-            Controls.Add(panelContenido);
             Controls.Add(panelCabecera);
             Controls.Add(panelLateral);
             Controls.Add(panelEstado);
+            Controls.Add(panelContenido);
             MinimumSize = new Size(800, 500);
             Name = "PharmaSoft";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "PharmaSoft - Gestión de Farmacia [v1.0]";
+            Load += PharmaSoft_Load;
             panelLateral.ResumeLayout(false);
             panelCabecera.ResumeLayout(false);
             panelCabecera.PerformLayout();
@@ -461,11 +412,18 @@
             panelEstado.PerformLayout();
             panelContenido.ResumeLayout(false);
             panelContenido.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvInventario).EndInit();
             ResumeLayout(false);
 
         }
 
         #endregion
+        private Label lbStockDisp;
+        private Label lbTitulo;
+        private Label lbCantidadStock;
+        private Label lbStock;
+        private Label lbVentasDiarias;
+        private Label lbCatidadVentas;
+        private Label lbTotalCxCobrar;
+        private Label lbCuentasXCobrar;
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -29,8 +29,24 @@ public class CuentasPorCobrarService(PharmaContext contexto) : IService<CuentasP
 
     private async Task<bool> Modificar(CuentasPorCobrar cxc)
     {
-        contexto.Update(cxc);
-        return await contexto.SaveChangesAsync() > 0;
+        try
+        {
+            var tracked = contexto.CuentasPorCobrars.Local.FirstOrDefault(c => c.CxCid == cxc.CxCid);
+            if (tracked != null)
+            {
+                contexto.Entry(tracked).CurrentValues.SetValues(cxc);
+            }
+            else
+            {
+                contexto.Entry(cxc).State = EntityState.Modified;
+            }
+            return await contexto.SaveChangesAsync() > 0;
+        }
+        catch (DbUpdateException ex)
+        {
+            contexto.ChangeTracker.Clear();
+            throw new Exception($"Error al modificar: {ex.InnerException?.Message ?? ex.Message}");
+        }
     }
 
     public async Task<bool> Eliminar(int id)
@@ -42,6 +58,11 @@ public class CuentasPorCobrarService(PharmaContext contexto) : IService<CuentasP
         contexto.CuentasPorCobrars.Remove(cuentas);
         var eliminados = await contexto.SaveChangesAsync();
         return eliminados > 0;
+    }
+
+    public async Task<bool> Existe(int id)
+    {
+        return await contexto.CuentasPorCobrars.AnyAsync(c => c.CxCid == id);
     }
 
     public async Task<CuentasPorCobrar?> Buscar(int id)

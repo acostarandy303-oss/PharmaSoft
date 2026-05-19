@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -29,7 +29,15 @@ public class DetalleVentaService(PharmaContext contexto) : IService<DetalleVenta
 
     private async Task<bool> Modificar(DetalleVenta detalle)
     {
-        contexto.Update(detalle);
+        var tracked = contexto.DetalleVentas.Local.FirstOrDefault(d => d.DetalleId == detalle.DetalleId);
+        if (tracked != null)
+        {
+            contexto.Entry(tracked).CurrentValues.SetValues(detalle);
+        }
+        else
+        {
+            contexto.DetalleVentas.Update(detalle);
+        }
         return await contexto.SaveChangesAsync() > 0;
     }
 
@@ -42,6 +50,11 @@ public class DetalleVentaService(PharmaContext contexto) : IService<DetalleVenta
         contexto.DetalleVentas.Remove(detalleVentas );
         var eliminados = await contexto.SaveChangesAsync();
         return eliminados > 0;
+    }
+
+    public async Task<bool> Existe(int id)
+    {
+        return await contexto.DetalleVentas.AnyAsync(d => d.DetalleId == id);
     }
 
     public async Task<DetalleVenta?> Buscar(int id)

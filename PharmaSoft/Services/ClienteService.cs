@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -28,7 +28,15 @@ public class ClienteService(PharmaContext contexto) : IService<Cliente, int>
 
     private async Task<bool> Modificar(Cliente cliente)
     {
-        contexto.Update(cliente);
+        var tracked = contexto.Clientes.Local.FirstOrDefault(c => c.ClienteId == cliente.ClienteId);
+        if (tracked != null)
+        {
+            contexto.Entry(tracked).CurrentValues.SetValues(cliente);
+        }
+        else
+        {
+            contexto.Clientes.Update(cliente);
+        }
         return await contexto.SaveChangesAsync() > 0;
     }
 
@@ -41,6 +49,11 @@ public class ClienteService(PharmaContext contexto) : IService<Cliente, int>
         contexto.Clientes.Remove(cliente   );
         var eliminados = await contexto.SaveChangesAsync();
         return eliminados > 0;
+    }
+
+    public async Task<bool> Existe(int id)
+    {
+        return await contexto.Clientes.AnyAsync(c => c.ClienteId == id);
     }
 
     public async Task<Cliente?> Buscar(int id)

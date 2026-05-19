@@ -6,18 +6,14 @@ namespace PharmaSoft.Forms
         private System.Windows.Forms.FlowLayoutPanel flowToolbar;
         private System.Windows.Forms.Panel pnlTotales;
         private System.Windows.Forms.Panel pnlAcciones;
-        private System.Windows.Forms.DataGridView dgvProductos;
         private System.Windows.Forms.Label lblBuscar;
-        private System.Windows.Forms.TextBox txtBuscar;
         private System.Windows.Forms.Label lblTitulo;
-        private System.Windows.Forms.Button btnNuevaVenta;
         private System.Windows.Forms.Label lblTotal;
         private System.Windows.Forms.Label lblMontoTotal;
         private System.Windows.Forms.Label lblSubtotal;
         private System.Windows.Forms.Label lblSubtotalValue;
         private System.Windows.Forms.Label lblCarrito;
-        private System.Windows.Forms.DataGridView dgvCarrito;
-        private System.Windows.Forms.Button btnAgregar;
+
         private System.Windows.Forms.Button btnQuitar;
         private System.Windows.Forms.Label lblMetodoPago;
         private System.Windows.Forms.ComboBox cmbMetodoPago;
@@ -27,9 +23,6 @@ namespace PharmaSoft.Forms
         private System.Windows.Forms.Label lblMontoCambio;
         private System.Windows.Forms.Button btnFinalizarVenta;
         private System.Windows.Forms.Button btnCancelar;
-        private System.Windows.Forms.Button btnPreFactura;
-        private System.Windows.Forms.Button btnCobrar;
-        private System.Windows.Forms.Button btnAddCuentas;
 
         protected override void Dispose(bool disposing)
         {
@@ -42,271 +35,431 @@ namespace PharmaSoft.Forms
 
         private void InitializeComponent()
         {
-            this.flowToolbar = new System.Windows.Forms.FlowLayoutPanel();
-            this.pnlTotales = new System.Windows.Forms.Panel();
-            this.pnlAcciones = new System.Windows.Forms.Panel();
-            this.dgvProductos = new System.Windows.Forms.DataGridView();
-            this.lblBuscar = new System.Windows.Forms.Label();
-            this.txtBuscar = new System.Windows.Forms.TextBox();
-            this.lblTitulo = new System.Windows.Forms.Label();
-            this.btnNuevaVenta = new System.Windows.Forms.Button();
-            this.lblTotal = new System.Windows.Forms.Label();
-            this.lblMontoTotal = new System.Windows.Forms.Label();
-            this.lblSubtotal = new System.Windows.Forms.Label();
-            this.lblSubtotalValue = new System.Windows.Forms.Label();
-            this.lblCarrito = new System.Windows.Forms.Label();
-            this.dgvCarrito = new System.Windows.Forms.DataGridView();
-            this.btnAgregar = new System.Windows.Forms.Button();
-            this.btnQuitar = new System.Windows.Forms.Button();
-            this.lblMetodoPago = new System.Windows.Forms.Label();
-            this.cmbMetodoPago = new System.Windows.Forms.ComboBox();
-            this.lblPagoCon = new System.Windows.Forms.Label();
-            this.nudPagoCon = new System.Windows.Forms.NumericUpDown();
-            this.lblCambio = new System.Windows.Forms.Label();
-            this.lblMontoCambio = new System.Windows.Forms.Label();
-            this.btnFinalizarVenta = new System.Windows.Forms.Button();
-            this.btnCancelar = new System.Windows.Forms.Button();
-            this.btnPreFactura = new System.Windows.Forms.Button();
-            this.btnCobrar = new System.Windows.Forms.Button();
-            this.btnAddCuentas = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCarrito)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPagoCon)).BeginInit();
-            this.SuspendLayout();
-
-            this.flowToolbar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowToolbar.BackColor = System.Drawing.SystemColors.Control;
-            this.flowToolbar.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowToolbar.Location = new System.Drawing.Point(0, 0);
-            this.flowToolbar.Name = "flowToolbar";
-            this.flowToolbar.Size = new System.Drawing.Size(900, 120);
-            this.flowToolbar.TabIndex = 0;
-
-            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.lblTitulo.Location = new System.Drawing.Point(20, 15);
-            this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(300, 30);
-            this.lblTitulo.Text = "Nueva Venta";
-            this.flowToolbar.Controls.Add(this.lblTitulo);
-
-            this.lblBuscar.Location = new System.Drawing.Point(20, 60);
-            this.lblBuscar.Name = "lblBuscar";
-            this.lblBuscar.Size = new System.Drawing.Size(80, 20);
-            this.lblBuscar.Text = "Buscar:*";
-            this.flowToolbar.Controls.Add(this.lblBuscar);
-
-            this.txtBuscar.Location = new System.Drawing.Point(100, 58);
-            this.txtBuscar.Name = "txtBuscar";
-            this.txtBuscar.Size = new System.Drawing.Size(250, 23);
-            this.flowToolbar.Controls.Add(this.txtBuscar);
-
-            this.btnNuevaVenta.Location = new System.Drawing.Point(370, 58);
-            this.btnNuevaVenta.Name = "btnNuevaVenta";
-            this.btnNuevaVenta.Size = new System.Drawing.Size(120, 28);
-            this.btnNuevaVenta.Text = "Nueva Venta";
-            this.btnNuevaVenta.BackColor = System.Drawing.Color.FromArgb(40, 167, 69);
-            this.btnNuevaVenta.ForeColor = System.Drawing.Color.White;
-            this.btnNuevaVenta.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.flowToolbar.Controls.Add(this.btnNuevaVenta);
-
-            this.pnlTotales.BackColor = System.Drawing.Color.FromArgb(220, 53, 69);
-            this.pnlTotales.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTotales.Location = new System.Drawing.Point(0, 120);
-            this.pnlTotales.Name = "pnlTotales";
-            this.pnlTotales.Size = new System.Drawing.Size(900, 40);
-            this.pnlTotales.TabIndex = 1;
-
-            this.lblSubtotal.Location = new System.Drawing.Point(30, 10);
-            this.lblSubtotal.Name = "lblSubtotal";
-            this.lblSubtotal.Size = new System.Drawing.Size(80, 20);
-            this.lblSubtotal.Text = "Subtotal:";
-            this.lblSubtotal.ForeColor = System.Drawing.Color.White;
-            this.pnlTotales.Controls.Add(this.lblSubtotal);
-
-            this.lblSubtotalValue.Location = new System.Drawing.Point(110, 10);
-            this.lblSubtotalValue.Name = "lblSubtotalValue";
-            this.lblSubtotalValue.Size = new System.Drawing.Size(100, 20);
-            this.lblSubtotalValue.Text = "RD$ 0.00";
-            this.lblSubtotalValue.ForeColor = System.Drawing.Color.White;
-            this.lblSubtotalValue.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.pnlTotales.Controls.Add(this.lblSubtotalValue);
-
-            this.lblTotal.Location = new System.Drawing.Point(250, 10);
-            this.lblTotal.Name = "lblTotal";
-            this.lblTotal.Size = new System.Drawing.Size(60, 20);
-            this.lblTotal.Text = "Total:";
-            this.lblTotal.ForeColor = System.Drawing.Color.White;
-            this.lblTotal.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.pnlTotales.Controls.Add(this.lblTotal);
-
-            this.lblMontoTotal.Location = new System.Drawing.Point(310, 10);
-            this.lblMontoTotal.Name = "lblMontoTotal";
-            this.lblMontoTotal.Size = new System.Drawing.Size(150, 20);
-            this.lblMontoTotal.Text = "RD$ 0.00";
-            this.lblMontoTotal.ForeColor = System.Drawing.Color.White;
-            this.lblMontoTotal.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            this.pnlTotales.Controls.Add(this.lblMontoTotal);
-
-            this.pnlAcciones.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlAcciones.Location = new System.Drawing.Point(650, 160);
-            this.pnlAcciones.Name = "pnlAcciones";
-            this.pnlAcciones.Size = new System.Drawing.Size(250, 460);
-            this.pnlAcciones.TabIndex = 3;
-
-            this.btnPreFactura.BackColor = System.Drawing.Color.FromArgb(25, 118, 210);
-            this.btnPreFactura.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnPreFactura.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPreFactura.ForeColor = System.Drawing.Color.White;
-            this.btnPreFactura.Location = new System.Drawing.Point(0, 0);
-            this.btnPreFactura.Name = "btnPreFactura";
-            this.btnPreFactura.Size = new System.Drawing.Size(250, 50);
-            this.btnPreFactura.TabIndex = 0;
-            this.btnPreFactura.Text = "Pre-Factura";
-            this.pnlAcciones.Controls.Add(this.btnPreFactura);
-
-            this.btnCobrar.BackColor = System.Drawing.Color.FromArgb(40, 167, 69);
-            this.btnCobrar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnCobrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCobrar.ForeColor = System.Drawing.Color.White;
-            this.btnCobrar.Location = new System.Drawing.Point(0, 50);
-            this.btnCobrar.Name = "btnCobrar";
-            this.btnCobrar.Size = new System.Drawing.Size(250, 50);
-            this.btnCobrar.TabIndex = 1;
-            this.btnCobrar.Text = "Cobrar";
-            this.pnlAcciones.Controls.Add(this.btnCobrar);
-
-            this.btnAddCuentas.BackColor = System.Drawing.Color.FromArgb(220, 53, 69);
-            this.btnAddCuentas.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnAddCuentas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAddCuentas.ForeColor = System.Drawing.Color.White;
-            this.btnAddCuentas.Location = new System.Drawing.Point(0, 100);
-            this.btnAddCuentas.Name = "btnAddCuentas";
-            this.btnAddCuentas.Size = new System.Drawing.Size(250, 50);
-            this.btnAddCuentas.TabIndex = 2;
-            this.btnAddCuentas.Text = "Add Cuentas";
-            this.pnlAcciones.Controls.Add(this.btnAddCuentas);
-
-            this.dgvProductos.AllowUserToAddRows = false;
-            this.dgvProductos.AllowUserToDeleteRows = false;
-            this.dgvProductos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvProductos.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvProductos.Location = new System.Drawing.Point(0, 160);
-            this.dgvProductos.Name = "dgvProductos";
-            this.dgvProductos.ReadOnly = true;
-            this.dgvProductos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvProductos.MultiSelect = false;
-            this.dgvProductos.Size = new System.Drawing.Size(650, 460);
-            this.dgvProductos.TabIndex = 2;
-
-            this.lblCarrito.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblCarrito.Location = new System.Drawing.Point(20, 170);
-            this.lblCarrito.Name = "lblCarrito";
-            this.lblCarrito.Size = new System.Drawing.Size(150, 20);
-            this.lblCarrito.Text = "Carrito de Compras";
-
-            this.dgvCarrito.AllowUserToAddRows = false;
-            this.dgvCarrito.AllowUserToDeleteRows = false;
-            this.dgvCarrito.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvCarrito.Location = new System.Drawing.Point(20, 200);
-            this.dgvCarrito.Name = "dgvCarrito";
-            this.dgvCarrito.ReadOnly = true;
-            this.dgvCarrito.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCarrito.MultiSelect = false;
-            this.dgvCarrito.Size = new System.Drawing.Size(350, 150);
-
-            this.btnAgregar.Location = new System.Drawing.Point(150, 470);
-            this.btnAgregar.Size = new System.Drawing.Size(100, 30);
-            this.btnAgregar.Text = "Agregar →";
-            this.btnAgregar.BackColor = System.Drawing.Color.FromArgb(25, 118, 210);
-            this.btnAgregar.ForeColor = System.Drawing.Color.White;
-            this.btnAgregar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-
-            this.btnQuitar.Location = new System.Drawing.Point(260, 470);
-            this.btnQuitar.Size = new System.Drawing.Size(100, 30);
-            this.btnQuitar.Text = "← Quitar";
-            this.btnQuitar.BackColor = System.Drawing.Color.FromArgb(220, 53, 69);
-            this.btnQuitar.ForeColor = System.Drawing.Color.White;
-            this.btnQuitar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-
-            this.lblMetodoPago.Location = new System.Drawing.Point(20, 530);
-            this.lblMetodoPago.Name = "lblMetodoPago";
-            this.lblMetodoPago.Size = new System.Drawing.Size(100, 20);
-            this.lblMetodoPago.Text = "Método Pago:*";
-
-            this.cmbMetodoPago.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMetodoPago.Location = new System.Drawing.Point(130, 530);
-            this.cmbMetodoPago.Name = "cmbMetodoPago";
-            this.cmbMetodoPago.Size = new System.Drawing.Size(150, 23);
-
-            this.lblPagoCon.Location = new System.Drawing.Point(20, 560);
-            this.lblPagoCon.Name = "lblPagoCon";
-            this.lblPagoCon.Size = new System.Drawing.Size(100, 20);
-            this.lblPagoCon.Text = "Pago con:*";
-
-            this.nudPagoCon.DecimalPlaces = 2;
-            this.nudPagoCon.Location = new System.Drawing.Point(130, 560);
-            this.nudPagoCon.Maximum = 999999;
-            this.nudPagoCon.Minimum = 0;
-            this.nudPagoCon.Name = "nudPagoCon";
-            this.nudPagoCon.Size = new System.Drawing.Size(120, 23);
-
-            this.lblCambio.Location = new System.Drawing.Point(20, 590);
-            this.lblCambio.Name = "lblCambio";
-            this.lblCambio.Size = new System.Drawing.Size(100, 20);
-            this.lblCambio.Text = "Cambio:";
-
-            this.lblMontoCambio.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblMontoCambio.ForeColor = System.Drawing.Color.FromArgb(40, 167, 69);
-            this.lblMontoCambio.Location = new System.Drawing.Point(130, 590);
-            this.lblMontoCambio.Name = "lblMontoCambio";
-            this.lblMontoCambio.Size = new System.Drawing.Size(120, 20);
-            this.lblMontoCambio.Text = "RD$ 0.00";
-
-            this.btnFinalizarVenta.BackColor = System.Drawing.Color.FromArgb(40, 167, 69);
-            this.btnFinalizarVenta.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFinalizarVenta.ForeColor = System.Drawing.Color.White;
-            this.btnFinalizarVenta.Location = new System.Drawing.Point(380, 530);
-            this.btnFinalizarVenta.Name = "btnFinalizarVenta";
-            this.btnFinalizarVenta.Size = new System.Drawing.Size(160, 35);
-            this.btnFinalizarVenta.Text = "Finalizar Venta";
-
-            this.btnCancelar.BackColor = System.Drawing.Color.FromArgb(108, 117, 125);
-            this.btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCancelar.ForeColor = System.Drawing.Color.White;
-            this.btnCancelar.Location = new System.Drawing.Point(380, 570);
-            this.btnCancelar.Name = "btnCancelar";
-            this.btnCancelar.Size = new System.Drawing.Size(100, 35);
-            this.btnCancelar.Text = "Cancelar";
-
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(900, 620);
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Nueva Venta";
-            this.Load += VentaForm_Load;
-            this.txtBuscar.TextChanged += txtBuscar_TextChanged;
-
-            this.Controls.Add(this.dgvProductos);
-            this.Controls.Add(this.pnlTotales);
-            this.Controls.Add(this.flowToolbar);
-            this.Controls.Add(this.pnlAcciones);
-            this.Controls.Add(this.lblCarrito);
-            this.Controls.Add(this.dgvCarrito);
-            this.Controls.Add(this.btnAgregar);
-            this.Controls.Add(this.btnQuitar);
-            this.Controls.Add(this.lblMetodoPago);
-            this.Controls.Add(this.cmbMetodoPago);
-            this.Controls.Add(this.lblPagoCon);
-            this.Controls.Add(this.nudPagoCon);
-            this.Controls.Add(this.lblCambio);
-            this.Controls.Add(this.lblMontoCambio);
-            this.Controls.Add(this.btnFinalizarVenta);
-            this.Controls.Add(this.btnCancelar);
-
-            ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCarrito)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPagoCon)).EndInit();
-            this.ResumeLayout(false);
+            flowToolbar = new FlowLayoutPanel();
+            lblTitulo = new Label();
+            lblBuscar = new Label();
+            pnlTotales = new Panel();
+            lblSubtotal = new Label();
+            lblSubtotalValue = new Label();
+            lblTotal = new Label();
+            lblMontoTotal = new Label();
+            pnlAcciones = new Panel();
+            btnCobrar = new Button();
+            btnAddCuenta = new Button();
+            btnPreCompra = new Button();
+            panel1 = new Panel();
+            cmbComprobante = new ComboBox();
+            lbCliente = new Label();
+            cmbTFactura = new ComboBox();
+            lbTFactura = new Label();
+            cmbCliente = new ComboBox();
+            lbTipoComprobantes = new Label();
+            lblCarrito = new Label();
+            btnQuitar = new Button();
+            lblMetodoPago = new Label();
+            cmbMetodoPago = new ComboBox();
+            lblPagoCon = new Label();
+            nudPagoCon = new NumericUpDown();
+            lblCambio = new Label();
+            lblMontoCambio = new Label();
+            btnFinalizarVenta = new Button();
+            btnCancelar = new Button();
+            dgvCarrito = new DataGridView();
+            lbDinero = new Label();
+            numDowDinero = new NumericUpDown();
+            txtBuscar = new ComboBox();
+            flowToolbar.SuspendLayout();
+            pnlTotales.SuspendLayout();
+            pnlAcciones.SuspendLayout();
+            panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nudPagoCon).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvCarrito).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numDowDinero).BeginInit();
+            SuspendLayout();
+            // 
+            // flowToolbar
+            // 
+            flowToolbar.BackColor = SystemColors.Control;
+            flowToolbar.Controls.Add(lblTitulo);
+            flowToolbar.Controls.Add(lblBuscar);
+            flowToolbar.Controls.Add(txtBuscar);
+            flowToolbar.Dock = DockStyle.Top;
+            flowToolbar.FlowDirection = FlowDirection.TopDown;
+            flowToolbar.Location = new Point(0, 0);
+            flowToolbar.Name = "flowToolbar";
+            flowToolbar.Size = new Size(650, 94);
+            flowToolbar.TabIndex = 0;
+            // 
+            // lblTitulo
+            // 
+            lblTitulo.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblTitulo.Location = new Point(3, 0);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(300, 30);
+            lblTitulo.TabIndex = 0;
+            lblTitulo.Text = "Nueva Venta";
+            // 
+            // lblBuscar
+            // 
+            lblBuscar.Location = new Point(3, 30);
+            lblBuscar.Name = "lblBuscar";
+            lblBuscar.Size = new Size(80, 20);
+            lblBuscar.TabIndex = 1;
+            lblBuscar.Text = "Buscar:";
+            // 
+            // pnlTotales
+            // 
+            pnlTotales.BackColor = Color.FromArgb(220, 53, 69);
+            pnlTotales.Controls.Add(lblSubtotal);
+            pnlTotales.Controls.Add(lblSubtotalValue);
+            pnlTotales.Controls.Add(lblTotal);
+            pnlTotales.Controls.Add(lblMontoTotal);
+            pnlTotales.Dock = DockStyle.Top;
+            pnlTotales.Location = new Point(0, 94);
+            pnlTotales.Name = "pnlTotales";
+            pnlTotales.Size = new Size(650, 40);
+            pnlTotales.TabIndex = 1;
+            // 
+            // lblSubtotal
+            // 
+            lblSubtotal.ForeColor = Color.White;
+            lblSubtotal.Location = new Point(30, 10);
+            lblSubtotal.Name = "lblSubtotal";
+            lblSubtotal.Size = new Size(80, 20);
+            lblSubtotal.TabIndex = 0;
+            lblSubtotal.Text = "Subtotal:";
+            // 
+            // lblSubtotalValue
+            // 
+            lblSubtotalValue.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblSubtotalValue.ForeColor = Color.White;
+            lblSubtotalValue.Location = new Point(110, 10);
+            lblSubtotalValue.Name = "lblSubtotalValue";
+            lblSubtotalValue.Size = new Size(100, 20);
+            lblSubtotalValue.TabIndex = 1;
+            lblSubtotalValue.Text = "RD$ 0.00";
+            // 
+            // lblTotal
+            // 
+            lblTotal.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblTotal.ForeColor = Color.White;
+            lblTotal.Location = new Point(250, 10);
+            lblTotal.Name = "lblTotal";
+            lblTotal.Size = new Size(60, 20);
+            lblTotal.TabIndex = 2;
+            lblTotal.Text = "Total:";
+            // 
+            // lblMontoTotal
+            // 
+            lblMontoTotal.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblMontoTotal.ForeColor = Color.White;
+            lblMontoTotal.Location = new Point(310, 10);
+            lblMontoTotal.Name = "lblMontoTotal";
+            lblMontoTotal.Size = new Size(150, 20);
+            lblMontoTotal.TabIndex = 3;
+            lblMontoTotal.Text = "RD$ 0.00";
+            // 
+            // pnlAcciones
+            // 
+            pnlAcciones.BackColor = Color.FromArgb(224, 224, 224);
+            pnlAcciones.Controls.Add(btnCobrar);
+            pnlAcciones.Controls.Add(btnAddCuenta);
+            pnlAcciones.Controls.Add(btnPreCompra);
+            pnlAcciones.Controls.Add(panel1);
+            pnlAcciones.Dock = DockStyle.Right;
+            pnlAcciones.Location = new Point(650, 0);
+            pnlAcciones.Name = "pnlAcciones";
+            pnlAcciones.Size = new Size(250, 620);
+            pnlAcciones.TabIndex = 3;
+            pnlAcciones.Paint += pnlAcciones_Paint;
+            // 
+            // btnCobrar
+            // 
+            btnCobrar.BackColor = Color.LimeGreen;
+            btnCobrar.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnCobrar.Location = new Point(16, 499);
+            btnCobrar.Name = "btnCobrar";
+            btnCobrar.Size = new Size(222, 60);
+            btnCobrar.TabIndex = 9;
+            btnCobrar.Text = "Cobrar";
+            btnCobrar.UseVisualStyleBackColor = false;
+            btnCobrar.Click += btnCobrar_Click;
+            // 
+            // btnAddCuenta
+            // 
+            btnAddCuenta.BackColor = SystemColors.HotTrack;
+            btnAddCuenta.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnAddCuenta.Location = new Point(16, 420);
+            btnAddCuenta.Name = "btnAddCuenta";
+            btnAddCuenta.Size = new Size(222, 60);
+            btnAddCuenta.TabIndex = 8;
+            btnAddCuenta.Text = "Add Cuenta";
+            btnAddCuenta.UseVisualStyleBackColor = false;
+            btnAddCuenta.Click += btnAddCuenta_Click;
+            // 
+            // btnPreCompra
+            // 
+            btnPreCompra.BackColor = Color.Gold;
+            btnPreCompra.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnPreCompra.ForeColor = Color.Black;
+            btnPreCompra.Location = new Point(16, 341);
+            btnPreCompra.Name = "btnPreCompra";
+            btnPreCompra.Size = new Size(222, 60);
+            btnPreCompra.TabIndex = 7;
+            btnPreCompra.Text = "Pre-Factura";
+            btnPreCompra.UseVisualStyleBackColor = false;
+            btnPreCompra.Click += btnPreCompra_Click;
+            // 
+            // panel1
+            // 
+            panel1.BackColor = Color.Silver;
+            panel1.Controls.Add(cmbComprobante);
+            panel1.Controls.Add(lbCliente);
+            panel1.Controls.Add(cmbTFactura);
+            panel1.Controls.Add(lbTFactura);
+            panel1.Controls.Add(cmbCliente);
+            panel1.Controls.Add(lbTipoComprobantes);
+            panel1.Location = new Point(7, 12);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(240, 221);
+            panel1.TabIndex = 6;
+            // 
+            // cmbComprobante
+            // 
+            cmbComprobante.FormattingEnabled = true;
+            cmbComprobante.Location = new Point(9, 175);
+            cmbComprobante.Name = "cmbComprobante";
+            cmbComprobante.Size = new Size(222, 23);
+            cmbComprobante.TabIndex = 5;
+            // 
+            // lbCliente
+            // 
+            lbCliente.AutoSize = true;
+            lbCliente.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbCliente.Location = new Point(88, 21);
+            lbCliente.Name = "lbCliente";
+            lbCliente.Size = new Size(64, 21);
+            lbCliente.TabIndex = 0;
+            lbCliente.Text = "Cliente";
+            // 
+            // cmbTFactura
+            // 
+            cmbTFactura.FormattingEnabled = true;
+            cmbTFactura.Location = new Point(9, 108);
+            cmbTFactura.Name = "cmbTFactura";
+            cmbTFactura.Size = new Size(222, 23);
+            cmbTFactura.TabIndex = 4;
+            // 
+            // lbTFactura
+            // 
+            lbTFactura.AutoSize = true;
+            lbTFactura.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbTFactura.Location = new Point(55, 80);
+            lbTFactura.Name = "lbTFactura";
+            lbTFactura.Size = new Size(127, 21);
+            lbTFactura.TabIndex = 1;
+            lbTFactura.Text = "Tipo de Factura";
+            // 
+            // cmbCliente
+            // 
+            cmbCliente.FormattingEnabled = true;
+            cmbCliente.Location = new Point(9, 45);
+            cmbCliente.Name = "cmbCliente";
+            cmbCliente.Size = new Size(222, 23);
+            cmbCliente.TabIndex = 3;
+            // 
+            // lbTipoComprobantes
+            // 
+            lbTipoComprobantes.AutoSize = true;
+            lbTipoComprobantes.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbTipoComprobantes.Location = new Point(38, 151);
+            lbTipoComprobantes.Name = "lbTipoComprobantes";
+            lbTipoComprobantes.Size = new Size(160, 21);
+            lbTipoComprobantes.TabIndex = 2;
+            lbTipoComprobantes.Text = "Tipo Comprobantes";
+            // 
+            // lblCarrito
+            // 
+            lblCarrito.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblCarrito.Location = new Point(0, 147);
+            lblCarrito.Name = "lblCarrito";
+            lblCarrito.Size = new Size(150, 20);
+            lblCarrito.TabIndex = 4;
+            lblCarrito.Text = "Productos en Carrito";
+            // 
+            // btnQuitar
+            // 
+            btnQuitar.BackColor = Color.FromArgb(220, 53, 69);
+            btnQuitar.FlatStyle = FlatStyle.Flat;
+            btnQuitar.ForeColor = Color.White;
+            btnQuitar.Location = new Point(3, 459);
+            btnQuitar.Name = "btnQuitar";
+            btnQuitar.Size = new Size(100, 30);
+            btnQuitar.TabIndex = 7;
+            btnQuitar.Text = "← Quitar";
+            btnQuitar.UseVisualStyleBackColor = false;
+            btnQuitar.Click += btnQuitar_Click;
+            // 
+            // lblMetodoPago
+            // 
+            lblMetodoPago.Location = new Point(3, 351);
+            lblMetodoPago.Name = "lblMetodoPago";
+            lblMetodoPago.Size = new Size(100, 20);
+            lblMetodoPago.TabIndex = 8;
+            lblMetodoPago.Text = "Método Pago:*";
+            // 
+            // cmbMetodoPago
+            // 
+            cmbMetodoPago.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMetodoPago.Location = new Point(113, 351);
+            cmbMetodoPago.Name = "cmbMetodoPago";
+            cmbMetodoPago.Size = new Size(150, 23);
+            cmbMetodoPago.TabIndex = 9;
+            // 
+            // lblPagoCon
+            // 
+            lblPagoCon.Location = new Point(3, 381);
+            lblPagoCon.Name = "lblPagoCon";
+            lblPagoCon.Size = new Size(100, 20);
+            lblPagoCon.TabIndex = 10;
+            lblPagoCon.Text = "Pago con:*";
+            // 
+            // nudPagoCon
+            // 
+            nudPagoCon.DecimalPlaces = 2;
+            nudPagoCon.Location = new Point(113, 381);
+            nudPagoCon.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
+            nudPagoCon.Name = "nudPagoCon";
+            nudPagoCon.Size = new Size(120, 23);
+            nudPagoCon.TabIndex = 11;
+            // 
+            // lblCambio
+            // 
+            lblCambio.Location = new Point(3, 411);
+            lblCambio.Name = "lblCambio";
+            lblCambio.Size = new Size(100, 20);
+            lblCambio.TabIndex = 12;
+            lblCambio.Text = "Cambio:";
+            // 
+            // lblMontoCambio
+            // 
+            lblMontoCambio.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblMontoCambio.ForeColor = Color.FromArgb(40, 167, 69);
+            lblMontoCambio.Location = new Point(113, 411);
+            lblMontoCambio.Name = "lblMontoCambio";
+            lblMontoCambio.Size = new Size(120, 20);
+            lblMontoCambio.TabIndex = 13;
+            lblMontoCambio.Text = "RD$ 0.00";
+            // 
+            // btnFinalizarVenta
+            // 
+            btnFinalizarVenta.Location = new Point(0, 0);
+            btnFinalizarVenta.Name = "btnFinalizarVenta";
+            btnFinalizarVenta.Size = new Size(75, 23);
+            btnFinalizarVenta.TabIndex = 0;
+            // 
+            // btnCancelar
+            // 
+            btnCancelar.BackColor = Color.FromArgb(108, 117, 125);
+            btnCancelar.FlatStyle = FlatStyle.Flat;
+            btnCancelar.ForeColor = Color.White;
+            btnCancelar.Location = new Point(113, 459);
+            btnCancelar.Name = "btnCancelar";
+            btnCancelar.Size = new Size(100, 30);
+            btnCancelar.TabIndex = 15;
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.UseVisualStyleBackColor = false;
+            btnCancelar.Click += btnCancelar_Click;
+            // 
+            // dgvCarrito
+            // 
+            dgvCarrito.AllowUserToAddRows = false;
+            dgvCarrito.AllowUserToDeleteRows = false;
+            dgvCarrito.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvCarrito.Location = new Point(3, 170);
+            dgvCarrito.MultiSelect = false;
+            dgvCarrito.Name = "dgvCarrito";
+            dgvCarrito.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvCarrito.Size = new Size(640, 280);
+            dgvCarrito.TabIndex = 5;
+            dgvCarrito.SelectionChanged += dgvCarrito_SelectionChanged;
+            // 
+            // lbDinero
+            // 
+            lbDinero.AutoSize = true;
+            lbDinero.Location = new Point(250, 467);
+            lbDinero.Name = "lbDinero";
+            lbDinero.Size = new Size(87, 15);
+            lbDinero.TabIndex = 16;
+            lbDinero.Text = "Total Recibido: ";
+            // 
+            // numDowDinero
+            // 
+            numDowDinero.Location = new Point(340, 466);
+            numDowDinero.Name = "numDowDinero";
+            numDowDinero.Size = new Size(120, 23);
+            numDowDinero.TabIndex = 17;
+            // 
+            // txtBuscar
+            // 
+            txtBuscar.FormattingEnabled = true;
+            txtBuscar.Location = new Point(3, 53);
+            txtBuscar.Name = "txtBuscar";
+            txtBuscar.Size = new Size(640, 23);
+            txtBuscar.TabIndex = 2;
+            // 
+            // VentaForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(900, 620);
+            Controls.Add(numDowDinero);
+            Controls.Add(lbDinero);
+            Controls.Add(pnlTotales);
+            Controls.Add(flowToolbar);
+            Controls.Add(pnlAcciones);
+            Controls.Add(lblCarrito);
+            Controls.Add(dgvCarrito);
+            Controls.Add(btnQuitar);
+            Controls.Add(lblMetodoPago);
+            Controls.Add(cmbMetodoPago);
+            Controls.Add(lblPagoCon);
+            Controls.Add(nudPagoCon);
+            Controls.Add(lblCambio);
+            Controls.Add(lblMontoCambio);
+            Controls.Add(btnCancelar);
+            Name = "VentaForm";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Nueva Venta";
+            Load += VentaForm_Load;
+            flowToolbar.ResumeLayout(false);
+            pnlTotales.ResumeLayout(false);
+            pnlAcciones.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudPagoCon).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvCarrito).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numDowDinero).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
+
+        private Label lbTFactura;
+        private Label lbCliente;
+        private Label lbTipoComprobantes;
+        private ComboBox cmbCliente;
+        private Panel panel1;
+        private ComboBox cmbComprobante;
+        private ComboBox cmbTFactura;
+        private Button btnAddCuenta;
+        private Button btnPreCompra;
+        private Button btnCobrar;
+
+        private DataGridView dgvCarrito;
+        private Label lbDinero;
+        private NumericUpDown numDowDinero;
+        private ComboBox txtBuscar;
     }
 }
+
+

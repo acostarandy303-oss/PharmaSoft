@@ -14,10 +14,15 @@ public class MedicamentoService(PharmaContext contexto) : IService<Medicamento, 
 {
     public async Task<bool> Guardar(Medicamento medicamento)
     {
-        if (medicamento.MedicamentoId == 0)
+        if (!await Existe(medicamento.MedicamentoId))
             return await Insertar(medicamento);
         else
             return await Modificar(medicamento);
+    }
+
+    public async Task<bool> Existe(int id)
+    {
+        return await contexto.Medicamentos.AnyAsync(m => m.MedicamentoId == id);
     }
 
     private async Task<bool> Insertar(Medicamento medicamento)
@@ -29,16 +34,15 @@ public class MedicamentoService(PharmaContext contexto) : IService<Medicamento, 
 
     private async Task<bool> Modificar(Medicamento medicamento)
     {
-        var local = contexto.Set<Medicamento>()
-            .Local
-            .FirstOrDefault(entry => entry.MedicamentoId.Equals(medicamento.MedicamentoId));
-
-        if (local != null)
+        var tracked = contexto.Medicamentos.Local.FirstOrDefault(m => m.MedicamentoId == medicamento.MedicamentoId);
+        if (tracked != null)
         {
-            contexto.Entry(local).State = EntityState.Detached;
+            contexto.Entry(tracked).CurrentValues.SetValues(medicamento);
         }
-
-        contexto.Update(medicamento);
+        else
+        {
+            contexto.Medicamentos.Update(medicamento);
+        }
         return await contexto.SaveChangesAsync() > 0;
     }
 

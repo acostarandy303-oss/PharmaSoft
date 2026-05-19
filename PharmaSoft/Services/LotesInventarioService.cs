@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -28,7 +28,15 @@ public class LotesInventarioService(PharmaContext contexto) : IService<LotesInve
 
     private async Task<bool> Modificar(LotesInventario lote)
     {
-        contexto.Update(lote);
+        var tracked = contexto.LotesInventarios.Local.FirstOrDefault(l => l.LoteId == lote.LoteId);
+        if (tracked != null)
+        {
+            contexto.Entry(tracked).CurrentValues.SetValues(lote);
+        }
+        else
+        {
+            contexto.LotesInventarios.Update(lote);
+        }
         return await contexto.SaveChangesAsync() > 0;
     }
 
@@ -41,6 +49,11 @@ public class LotesInventarioService(PharmaContext contexto) : IService<LotesInve
         contexto.LotesInventarios.Remove(loteInventario);
         var eliminados = await contexto.SaveChangesAsync();
         return eliminados > 0;
+    }
+
+    public async Task<bool> Existe(int id)
+    {
+        return await contexto.LotesInventarios.AnyAsync(l => l.LoteId == id);
     }
 
     public async Task<LotesInventario?> Buscar(int id)
