@@ -17,14 +17,29 @@ public partial class MedicamentoForm : Form
     public Medicamento Medicamento { get; private set; }
     public LotesInventario? Lote { get; private set; }
 
-    public MedicamentoForm(Medicamento? medicamento = null)
+    public void SetMedicamento(Medicamento medication)
+    {
+        Medicamento = medication;
+        if (medication != null && medication.MedicamentoId > 0)
+        {
+            CargarDatos(medication);
+        }
+    }
+
+    public MedicamentoForm(
+        PharmaContext context,
+        CategoriaService categoriaService,
+        ProveedoreService proveedorService,
+        MedicamentoService medicamentoService,
+        LotesInventarioService lotesService,
+        Medicamento? medicamento = null)
     {
         InitializeComponent();
-        _context = new PharmaContext();
-        _categoriaService = new CategoriaService(_context);
-        _proveedorService = new ProveedoreService(_context);
-        _medicamentoService = new MedicamentoService(_context);
-        _lotesService = new LotesInventarioService(_context);
+        _context = context;
+        _categoriaService = categoriaService;
+        _proveedorService = proveedorService;
+        _medicamentoService = medicamentoService;
+        _lotesService = lotesService;
 
         Medicamento = medicamento ?? new Medicamento();
         if (medicamento != null)

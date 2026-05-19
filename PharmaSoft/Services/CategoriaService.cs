@@ -26,7 +26,15 @@ public class CategoriaService(PharmaContext contexto) : IService<Categoria, int>
 
     private async Task<bool> Modificar(Categoria categoria)
     {
-        contexto.Update(categoria);
+        var tracked = contexto.Categorias.Local.FirstOrDefault(c => c.CategoriaId == categoria.CategoriaId);
+        if (tracked != null)
+        {
+            contexto.Entry(tracked).CurrentValues.SetValues(categoria);
+        }
+        else
+        {
+            contexto.Categorias.Update(categoria);
+        }
         return await contexto.SaveChangesAsync() > 0;
     }
 

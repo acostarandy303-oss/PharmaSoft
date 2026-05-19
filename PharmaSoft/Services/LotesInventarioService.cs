@@ -28,7 +28,15 @@ public class LotesInventarioService(PharmaContext contexto) : IService<LotesInve
 
     private async Task<bool> Modificar(LotesInventario lote)
     {
-        contexto.Update(lote);
+        var tracked = contexto.LotesInventarios.Local.FirstOrDefault(l => l.LoteId == lote.LoteId);
+        if (tracked != null)
+        {
+            contexto.Entry(tracked).CurrentValues.SetValues(lote);
+        }
+        else
+        {
+            contexto.LotesInventarios.Update(lote);
+        }
         return await contexto.SaveChangesAsync() > 0;
     }
 

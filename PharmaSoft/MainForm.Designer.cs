@@ -14,10 +14,11 @@
         private System.Windows.Forms.Button btnInventario;
         private System.Windows.Forms.Button btnVentas;
         private System.Windows.Forms.Button btnClientes;
-        private System.Windows.Forms.Button btnRecetas;
         private System.Windows.Forms.Button btnCompras;
         private System.Windows.Forms.Button btnReportes;
         private System.Windows.Forms.Button btnConfiguracion;
+        private System.Windows.Forms.Button btnCuentasCobrar;
+        private System.Windows.Forms.Button btnCuentasPagar;
 
         private System.Windows.Forms.Label lblTituloCabecera;
 
@@ -40,8 +41,9 @@
             panelLateral = new Panel();
             btnConfiguracion = new Button();
             btnReportes = new Button();
+            btnCuentasPagar = new Button();
+            btnCuentasCobrar = new Button();
             btnCompras = new Button();
-            btnRecetas = new Button();
             btnClientes = new Button();
             btnVentas = new Button();
             btnInventario = new Button();
@@ -53,18 +55,28 @@
             lblTotalProductos = new Label();
             lblUsuario = new Label();
             panelContenido = new Panel();
+            lbTotalCxCobrar = new Label();
+            lbCuentasXCobrar = new Label();
+            lbCatidadVentas = new Label();
+            lbVentasDiarias = new Label();
+            lbCantidadStock = new Label();
+            lbStock = new Label();
+            lbTitulo = new Label();
+            lbStockDisp = new Label();
             panelLateral.SuspendLayout();
             panelCabecera.SuspendLayout();
             panelEstado.SuspendLayout();
+            panelContenido.SuspendLayout();
             SuspendLayout();
             // 
             // panelLateral
             // 
             panelLateral.BackColor = Color.FromArgb(248, 249, 250);
             panelLateral.Controls.Add(btnConfiguracion);
+            panelLateral.Controls.Add(btnCuentasPagar);
+            panelLateral.Controls.Add(btnCuentasCobrar);
             panelLateral.Controls.Add(btnReportes);
             panelLateral.Controls.Add(btnCompras);
-            panelLateral.Controls.Add(btnRecetas);
             panelLateral.Controls.Add(btnClientes);
             panelLateral.Controls.Add(btnVentas);
             panelLateral.Controls.Add(btnInventario);
@@ -82,7 +94,7 @@
             btnConfiguracion.FlatAppearance.BorderSize = 0;
             btnConfiguracion.FlatStyle = FlatStyle.Flat;
             btnConfiguracion.Font = new Font("Segoe UI", 10F);
-            btnConfiguracion.Location = new Point(0, 430);
+            btnConfiguracion.Location = new Point(0, 385);
             btnConfiguracion.Name = "btnConfiguracion";
             btnConfiguracion.Padding = new Padding(20, 0, 0, 0);
             btnConfiguracion.Size = new Size(220, 45);
@@ -90,6 +102,7 @@
             btnConfiguracion.Text = "  Configuración";
             btnConfiguracion.TextAlign = ContentAlignment.MiddleLeft;
             btnConfiguracion.UseVisualStyleBackColor = true;
+            btnConfiguracion.Click += btnConfiguracion_Click;
             // 
             // btnReportes
             // 
@@ -97,7 +110,7 @@
             btnReportes.FlatAppearance.BorderSize = 0;
             btnReportes.FlatStyle = FlatStyle.Flat;
             btnReportes.Font = new Font("Segoe UI", 10F);
-            btnReportes.Location = new Point(0, 385);
+            btnReportes.Location = new Point(0, 340);
             btnReportes.Name = "btnReportes";
             btnReportes.Padding = new Padding(20, 0, 0, 0);
             btnReportes.Size = new Size(220, 45);
@@ -105,6 +118,39 @@
             btnReportes.Text = "  Reportes";
             btnReportes.TextAlign = ContentAlignment.MiddleLeft;
             btnReportes.UseVisualStyleBackColor = true;
+            btnReportes.Click += btnReportes_Click;
+            // 
+            // btnCuentasPagar
+            // 
+            btnCuentasPagar.Dock = DockStyle.Top;
+            btnCuentasPagar.FlatAppearance.BorderSize = 0;
+            btnCuentasPagar.FlatStyle = FlatStyle.Flat;
+            btnCuentasPagar.Font = new Font("Segoe UI", 10F);
+            btnCuentasPagar.Location = new Point(0, 385);
+            btnCuentasPagar.Name = "btnCuentasPagar";
+            btnCuentasPagar.Padding = new Padding(20, 0, 0, 0);
+            btnCuentasPagar.Size = new Size(220, 45);
+            btnCuentasPagar.TabIndex = 17;
+            btnCuentasPagar.Text = "  Cuentas por Pagar";
+            btnCuentasPagar.TextAlign = ContentAlignment.MiddleLeft;
+            btnCuentasPagar.UseVisualStyleBackColor = true;
+            btnCuentasPagar.Click += btnCuentasPagar_Click;
+            // 
+            // btnCuentasCobrar
+            // 
+            btnCuentasCobrar.Dock = DockStyle.Top;
+            btnCuentasCobrar.FlatAppearance.BorderSize = 0;
+            btnCuentasCobrar.FlatStyle = FlatStyle.Flat;
+            btnCuentasCobrar.Font = new Font("Segoe UI", 10F);
+            btnCuentasCobrar.Location = new Point(0, 430);
+            btnCuentasCobrar.Name = "btnCuentasCobrar";
+            btnCuentasCobrar.Padding = new Padding(20, 0, 0, 0);
+            btnCuentasCobrar.Size = new Size(220, 45);
+            btnCuentasCobrar.TabIndex = 18;
+            btnCuentasCobrar.Text = "  Cuentas por Cobrar";
+            btnCuentasCobrar.TextAlign = ContentAlignment.MiddleLeft;
+            btnCuentasCobrar.UseVisualStyleBackColor = true;
+            btnCuentasCobrar.Click += btnCuentasCobrar_Click;
             // 
             // btnCompras
             // 
@@ -112,7 +158,7 @@
             btnCompras.FlatAppearance.BorderSize = 0;
             btnCompras.FlatStyle = FlatStyle.Flat;
             btnCompras.Font = new Font("Segoe UI", 10F);
-            btnCompras.Location = new Point(0, 340);
+            btnCompras.Location = new Point(0, 295);
             btnCompras.Name = "btnCompras";
             btnCompras.Padding = new Padding(20, 0, 0, 0);
             btnCompras.Size = new Size(220, 45);
@@ -120,21 +166,7 @@
             btnCompras.Text = "  Compras";
             btnCompras.TextAlign = ContentAlignment.MiddleLeft;
             btnCompras.UseVisualStyleBackColor = true;
-            // 
-            // btnRecetas
-            // 
-            btnRecetas.Dock = DockStyle.Top;
-            btnRecetas.FlatAppearance.BorderSize = 0;
-            btnRecetas.FlatStyle = FlatStyle.Flat;
-            btnRecetas.Font = new Font("Segoe UI", 10F);
-            btnRecetas.Location = new Point(0, 295);
-            btnRecetas.Name = "btnRecetas";
-            btnRecetas.Padding = new Padding(20, 0, 0, 0);
-            btnRecetas.Size = new Size(220, 45);
-            btnRecetas.TabIndex = 3;
-            btnRecetas.Text = "  Recetas";
-            btnRecetas.TextAlign = ContentAlignment.MiddleLeft;
-            btnRecetas.UseVisualStyleBackColor = true;
+            btnCompras.Click += btnCompras_Click;
             // 
             // btnClientes
             // 
@@ -150,6 +182,7 @@
             btnClientes.Text = "  Clientes";
             btnClientes.TextAlign = ContentAlignment.MiddleLeft;
             btnClientes.UseVisualStyleBackColor = true;
+            btnClientes.Click += btnClientes_Click;
             // 
             // btnVentas
             // 
@@ -269,22 +302,104 @@
             // panelContenido
             // 
             panelContenido.BackColor = Color.White;
+            panelContenido.Controls.Add(lbTotalCxCobrar);
+            panelContenido.Controls.Add(lbCuentasXCobrar);
+            panelContenido.Controls.Add(lbCatidadVentas);
+            panelContenido.Controls.Add(lbVentasDiarias);
+            panelContenido.Controls.Add(lbCantidadStock);
+            panelContenido.Controls.Add(lbStock);
+            panelContenido.Controls.Add(lbTitulo);
+            panelContenido.Controls.Add(lbStockDisp);
             panelContenido.Dock = DockStyle.Fill;
-            panelContenido.Location = new Point(220, 60);
+            panelContenido.Location = new Point(0, 0);
             panelContenido.Name = "panelContenido";
             panelContenido.Padding = new Padding(20);
-            panelContenido.Size = new Size(830, 540);
+            panelContenido.Size = new Size(1050, 630);
             panelContenido.TabIndex = 0;
+            // 
+            // lbTotalCxCobrar
+            // 
+            lbTotalCxCobrar.AutoSize = true;
+            lbTotalCxCobrar.Location = new Point(757, 190);
+            lbTotalCxCobrar.Name = "lbTotalCxCobrar";
+            lbTotalCxCobrar.Size = new Size(13, 15);
+            lbTotalCxCobrar.TabIndex = 7;
+            lbTotalCxCobrar.Text = "0";
+            // 
+            // lbCuentasXCobrar
+            // 
+            lbCuentasXCobrar.AutoSize = true;
+            lbCuentasXCobrar.Location = new Point(707, 160);
+            lbCuentasXCobrar.Name = "lbCuentasXCobrar";
+            lbCuentasXCobrar.Size = new Size(110, 15);
+            lbCuentasXCobrar.TabIndex = 6;
+            lbCuentasXCobrar.Text = "Cuentas por Cobrar";
+            // 
+            // lbCatidadVentas
+            // 
+            lbCatidadVentas.AutoSize = true;
+            lbCatidadVentas.Location = new Point(541, 190);
+            lbCatidadVentas.Name = "lbCatidadVentas";
+            lbCatidadVentas.Size = new Size(13, 15);
+            lbCatidadVentas.TabIndex = 5;
+            lbCatidadVentas.Text = "0";
+            // 
+            // lbVentasDiarias
+            // 
+            lbVentasDiarias.AutoSize = true;
+            lbVentasDiarias.Location = new Point(514, 160);
+            lbVentasDiarias.Name = "lbVentasDiarias";
+            lbVentasDiarias.Size = new Size(69, 15);
+            lbVentasDiarias.TabIndex = 4;
+            lbVentasDiarias.Text = "Total Ventas";
+            // 
+            // lbCantidadStock
+            // 
+            lbCantidadStock.AutoSize = true;
+            lbCantidadStock.Location = new Point(305, 190);
+            lbCantidadStock.Name = "lbCantidadStock";
+            lbCantidadStock.Size = new Size(13, 15);
+            lbCantidadStock.TabIndex = 3;
+            lbCantidadStock.Text = "0";
+            // 
+            // lbStock
+            // 
+            lbStock.AutoSize = true;
+            lbStock.Location = new Point(279, 160);
+            lbStock.Name = "lbStock";
+            lbStock.Size = new Size(73, 15);
+            lbStock.TabIndex = 2;
+            lbStock.Text = "Stock Actual";
+            // 
+            // lbTitulo
+            // 
+            lbTitulo.AutoSize = true;
+            lbTitulo.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbTitulo.ForeColor = Color.MidnightBlue;
+            lbTitulo.Location = new Point(240, 86);
+            lbTitulo.Name = "lbTitulo";
+            lbTitulo.Size = new Size(198, 45);
+            lbTitulo.TabIndex = 1;
+            lbTitulo.Text = "PharmaSoft";
+            // 
+            // lbStockDisp
+            // 
+            lbStockDisp.AutoSize = true;
+            lbStockDisp.Location = new Point(64, 116);
+            lbStockDisp.Name = "lbStockDisp";
+            lbStockDisp.Size = new Size(94, 15);
+            lbStockDisp.TabIndex = 0;
+            lbStockDisp.Text = "Stock disponible";
             // 
             // PharmaSoft
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1050, 630);
-            Controls.Add(panelContenido);
             Controls.Add(panelCabecera);
             Controls.Add(panelLateral);
             Controls.Add(panelEstado);
+            Controls.Add(panelContenido);
             MinimumSize = new Size(800, 500);
             Name = "PharmaSoft";
             StartPosition = FormStartPosition.CenterScreen;
@@ -295,10 +410,20 @@
             panelCabecera.PerformLayout();
             panelEstado.ResumeLayout(false);
             panelEstado.PerformLayout();
+            panelContenido.ResumeLayout(false);
+            panelContenido.PerformLayout();
             ResumeLayout(false);
 
         }
 
         #endregion
+        private Label lbStockDisp;
+        private Label lbTitulo;
+        private Label lbCantidadStock;
+        private Label lbStock;
+        private Label lbVentasDiarias;
+        private Label lbCatidadVentas;
+        private Label lbTotalCxCobrar;
+        private Label lbCuentasXCobrar;
     }
 }

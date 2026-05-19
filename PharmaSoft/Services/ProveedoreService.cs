@@ -28,7 +28,15 @@ public class ProveedoreService(PharmaContext contexto) : IService<Proveedore, in
 
     private async Task<bool> Modificar(Proveedore proveedor)
     {
-        contexto.Update(proveedor);
+        var tracked = contexto.Proveedores.Local.FirstOrDefault(p => p.ProveedorId == proveedor.ProveedorId);
+        if (tracked != null)
+        {
+            contexto.Entry(tracked).CurrentValues.SetValues(proveedor);
+        }
+        else
+        {
+            contexto.Proveedores.Update(proveedor);
+        }
         return await contexto.SaveChangesAsync() > 0;
     }
 
