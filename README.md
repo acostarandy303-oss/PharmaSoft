@@ -3,6 +3,13 @@
 - Randy Joel Acosta Tejada
 - Diana Carolina Hidalgo
 
+
+
+
+
+<img src="img/Test.jpeg" width="750" alt="Captura de PharmaSoft"/>
+
+
 # 💊 PharmaSoft - Sistema de Gestión Farmacéutica
 
 
@@ -17,6 +24,8 @@
 * Opción para visibilizar la contraseña ingresada para mejorar la experiencia de usuario.
 * Restricción de funciones según el rol asignado (ej: Administrador en Farmacia Central).
 
+<img src="img/5.jpeg" width="750" alt="Captura de PharmaSoft"/>
+
 
 ### 2. Panel de Control (Dashboard)
 * Vista general inmediata de la salud del negocio.
@@ -30,6 +39,7 @@
 * Control de existencias exactas y precios de venta al público.
 * **Alerta de Caducidad:** Registro y monitoreo estricto de las fechas de vencimiento de cada lote para evitar pérdidas y garantizar la seguridad sanitaria.
 
+<img src="img/1.jpeg" width="750" alt="Captura de PharmaSoft"/>
 
 
 ### 4. Punto de Venta (Point of Sale - POS)
@@ -46,7 +56,7 @@
 * Cómputo automático de la cantidad de ventas del periodo y los ingresos brutos generados.
 * **Módulo de impresión:** Capacidad de exportar e imprimir facturas directamente en formato PDF.
 
-
+<img src="img/4.jpeg" width="750" alt="Captura de PharmaSoft"/>
 
 ### 6. Cuentas por Cobrar y Clientes
 * Módulo financiero para el seguimiento de ventas a crédito.
@@ -54,7 +64,8 @@
 * Gestión completa de clientes que incluye registro de datos personales (Nombre, RNC/Cédula, Teléfono, Dirección).
 * **Control de Riesgo:** Asignación y validación paramétrica de límites de crédito por cliente para proteger el flujo de caja del negocio.
 
-
+<img src="img/2.jpeg" width="750" alt="Captura de PharmaSoft"/>
+<img src="img/3.jpeg" width="750" alt="Captura de PharmaSoft"/>
 
 ## 🗂️ Arquitectura del Proyecto
 
@@ -62,25 +73,4 @@ El proyecto está estructurado de manera limpia utilizando el patrón de diseño
 
 
 
-PharmaSoft/
-│
-├── 📂 PharmaSoft.Data (Capa de Acceso a Datos)
-│   ├── 📂 Entities/
-│   │   ├── Usuario.cs
-│   │   ├── Medicamento.cs
-│   │   ├── Cliente.cs
-│   │   ├── Venta.cs
-│   │   ├── DetalleVenta.cs
-│   │   └── CuentaPorCobrar.cs
-│   │
-│   ├── PharmaSoftContext.cs (Contexto de EF Core)
-│   └── App.config
-│
-└── 📂 PharmaSoft.UI (Capa de Presentación)
-    └── 📂 Forms/
-        ├── LoginForm.cs
-        ├── MainMenu.cs (Panel de Control)
-        ├── InventarioForm.cs
-        ├── NuevaVentaForm.cs
-        ├── ReportesForm.cs
-        └── ClientesForm.cs
+<img src="img/10.jpeg" width="750" alt="Captura de PharmaSoft"/>
