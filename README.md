@@ -5,7 +5,6 @@
 
 # 💊 PharmaSoft - Sistema de Gestión Farmacéutica
 
-<img src="img/panel_control.png" alt="PharmaSoft Panel de Control" width="900"/>
 
 **PharmaSoft** es una aplicación de escritorio integral y moderna diseñada para automatizar y optimizar las operaciones diarias de una farmacia. Desarrollado en **Windows Forms (.NET)** bajo una arquitectura sólida por capas y utilizando **Entity Framework Core**, el sistema permite centralizar desde el control de inventarios críticos y alertas de caducidad hasta la facturación al detalle, cuentas por cobrar y análisis financiero en pesos dominicanos (RD$).
 
@@ -24,12 +23,14 @@
 * Indicadores clave en tiempo real: volumen total de stock actual, monto total acumulado en ventas y balance de cuentas pendientes por cobrar.
 * Menú de navegación lateral intuitivo para acceder rápidamente a todas las operaciones.
 
+
+
 ### 3. Gestión de Inventario y Productos
 * Catálogo detallado de medicamentos con codificación única (código de barras/SKU), nombre comercial y laboratorio fabricante (Genfar, Sanofi, etc.).
 * Control de existencias exactas y precios de venta al público.
 * **Alerta de Caducidad:** Registro y monitoreo estricto de las fechas de vencimiento de cada lote para evitar pérdidas y garantizar la seguridad sanitaria.
 
-<img src="img/inventario.png" alt="Inventario de Productos" width="800"/>
+
 
 ### 4. Punto de Venta (Point of Sale - POS)
 * Interfaz ágil para la facturación y procesamiento de ventas.
@@ -37,7 +38,7 @@
 * Soporte para múltiples tipos de factura (Al Contado, Crédito) y tipos de comprobantes fiscales (Consumidor Final, entre otros).
 * Cálculo automatizado de subtotales y totales generales.
 
-<img src="img/punto_venta.png" alt="Punto de Venta" width="800"/>
+
 
 ### 5. Reportes de Ventas e Impresión
 * Filtro avanzado de transacciones por rango de fechas.
@@ -45,7 +46,7 @@
 * Cómputo automático de la cantidad de ventas del periodo y los ingresos brutos generados.
 * **Módulo de impresión:** Capacidad de exportar e imprimir facturas directamente en formato PDF.
 
-<img src="img/reportes.png" alt="Reportes de Ventas" width="800"/>
+
 
 ### 6. Cuentas por Cobrar y Clientes
 * Módulo financiero para el seguimiento de ventas a crédito.
@@ -53,25 +54,14 @@
 * Gestión completa de clientes que incluye registro de datos personales (Nombre, RNC/Cédula, Teléfono, Dirección).
 * **Control de Riesgo:** Asignación y validación paramétrica de límites de crédito por cliente para proteger el flujo de caja del negocio.
 
-<img src="img/cuentas_cobrar.png" alt="Cuentas por Cobrar" width="800"/>
 
----
-
-## 🛠️ Tecnologías Utilizadas
-
-* **Lenguaje:** C# (.NET)
-* **Interfaz Gráfica:** Windows Forms (WinForms)
-* **Persistencia de Datos:** Entity Framework Core
-* **Base de Datos:** SQL Server / T-SQL
-* **Herramientas:** Visual Studio Community
-
----
 
 ## 🗂️ Arquitectura del Proyecto
 
 El proyecto está estructurado de manera limpia utilizando el patrón de diseño por capas para separar las responsabilidades de datos, lógica de negocio y presentación:
 
-```text
+
+
 PharmaSoft/
 │
 ├── 📂 PharmaSoft.Data (Capa de Acceso a Datos)
